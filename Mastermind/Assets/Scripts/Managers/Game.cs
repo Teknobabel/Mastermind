@@ -1,0 +1,94 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class Game : ScriptableObject {
+
+	private Director m_director;
+
+	private List<Region> m_regions = new List<Region>();
+	private Dictionary<RegionData.RegionGroup, List<Region>> m_regionsByGroup = new Dictionary<RegionData.RegionGroup, List<Region>>();
+
+	private List<Henchmen> m_henchmen = new List<Henchmen>();
+	private Dictionary<int, List<Henchmen>> m_henchmenByRank = new Dictionary<int, List<Henchmen>>();
+
+	private int 
+	m_randomSeed = 0,
+	m_turnNumber = 0;
+
+	private Organization m_player;
+
+	public void Initialize ()
+	{
+		m_randomSeed = (int)System.DateTime.Now.Ticks;
+		Random.InitState(m_randomSeed);
+	}
+
+	public void AddOrganizationToGame (Organization o)
+	{
+		m_player = o;
+	}
+
+	public void AddDirectorToGame (Director d)
+	{
+		m_director = d;
+	}
+
+	public void AddRegionToGame (Region r)
+	{
+		m_regions.Add (r);
+
+		if (m_regionsByGroup.ContainsKey(r.regionGroup)){
+			List<Region> rList = m_regionsByGroup [r.regionGroup];
+			rList.Add (r);
+			m_regionsByGroup [r.regionGroup] = rList;
+		} else {
+			List<Region> rList = new List<Region> ();
+			rList.Add (r);
+			m_regionsByGroup.Add (r.regionGroup, rList);
+		}
+	}
+
+	public void AddHenchmanToGame (Henchmen h)
+	{
+		m_henchmen.Add (h);
+		if (m_henchmenByRank.ContainsKey (h.rank)) {
+			List<Henchmen> l = m_henchmenByRank [h.rank];
+			l.Add (h);
+			m_henchmenByRank [h.rank] = l;
+		} else {
+			List<Henchmen> l = new List<Henchmen> ();
+			l.Add (h);
+			m_henchmenByRank.Add (h.rank, l);
+		}
+	}
+
+	public List<Henchmen> GetHenchmenByRank (int rank)
+	{
+		List<Henchmen> l = new List<Henchmen> ();
+
+		if (m_henchmenByRank.ContainsKey (rank)) {
+			List<Henchmen> hList = m_henchmenByRank [rank];
+			foreach (Henchmen h in hList) {
+				l.Add (h);
+			}
+		}
+
+		return l;
+	}
+
+	public Dictionary<RegionData.RegionGroup, List<Region>> GetAllRegionsByGroup ()
+	{
+		return m_regionsByGroup;
+	}
+
+	public List<Region> GetAllRegions ()
+	{
+		return m_regions;
+	}
+
+	public Organization player {get{return m_player; }}
+	public Director director {get{return m_director;}}
+	public List<Henchmen> henchmen {get{return m_henchmen; }}
+	public int turnNumber {get{return m_turnNumber;}set{m_turnNumber = value; }}
+}
