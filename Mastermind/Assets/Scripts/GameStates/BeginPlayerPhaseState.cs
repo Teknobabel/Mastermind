@@ -14,6 +14,13 @@ public class BeginPlayerPhaseState : IGameState {
 		player.RefillCommandPool ();
 		player.UseCommandPoints (player.costPerTurn);
 
+		// update infamy
+
+		int infamyGain = GameManager.instance.game.director.m_infamyGainPerTurn;
+		if (infamyGain > 0) {
+			player.GainInfamy (infamyGain);
+		}
+
 		// refill any empty henchmen for hire slots
 
 		if (player.availableHenchmen.Count < player.maxAvailableHenchmen) {

@@ -8,16 +8,22 @@ public class WorldMenu : MenuState {
 	public GameObject m_sectionHeader;
 	public GameObject m_scrollView;
 	public GameObject m_scrollViewContent;
+	public GameObject m_sortPanelParent;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
 
-	public override void OnActivate()
+	public override void OnActivate(MenuTab tabInfo)
 	{
 		Debug.Log ("Starting Lair Menu");
-		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-		t.m_tabButton.ChangeState (TabButton.State.Selected);
+//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
+//		t.m_tabButton.ChangeState (TabButton.State.Selected);
+		m_tabInfo = tabInfo;
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
+		}
 
 		m_scrollView.gameObject.SetActive (true);
+		m_sortPanelParent.gameObject.SetActive (true);
 
 		Dictionary<RegionData.RegionGroup, List<Region>> regionsByGroup = GameManager.instance.game.GetAllRegionsByGroup ();
 
@@ -54,8 +60,12 @@ public class WorldMenu : MenuState {
 			Destroy (g);
 		}
 
-		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-		t.m_tabButton.ChangeState (TabButton.State.Unselected);
+//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
+//		t.m_tabButton.ChangeState (TabButton.State.Unselected);
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
+			m_tabInfo = null;
+		}
 	}
 
 	public override void OnUpdate()

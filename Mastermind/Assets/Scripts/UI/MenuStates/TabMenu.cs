@@ -22,12 +22,12 @@ public class TabMenu : MenuState, IObserver {
 		}
 	}
 
-	public override void OnActivate()
+	public override void OnActivate(MenuTab tabInfo)
 	{
 		// set up tabs
-		Dictionary<MenuState.State, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
+		Dictionary<int, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
 		List<MenuTab> tabList = new List<MenuTab> ();
-		foreach (KeyValuePair<MenuState.State, MenuTab> pair in tabDict) {
+		foreach (KeyValuePair<int, MenuTab> pair in tabDict) {
 			tabList.Add (pair.Value);
 		}
 
@@ -46,7 +46,7 @@ public class TabMenu : MenuState, IObserver {
 
 		if (tabList.Count > 0) {
 			MenuTab firstTab = tabList [0];
-			GameManager.instance.PushMenuState(firstTab.m_menuState);
+			GameManager.instance.PushMenuState(firstTab);
 		}
 	}
 

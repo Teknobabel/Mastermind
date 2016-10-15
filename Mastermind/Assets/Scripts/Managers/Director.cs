@@ -8,11 +8,20 @@ public class Director : ScriptableObject {
 
 	public int 
 	m_maxInfamy = 100,
+	m_infamyGainPerTurn = 5,
 	m_startingWantedLevel = 0,
+	m_maxWantedLevel = 0,
 	m_startingOmegaPlans = 3,
 	m_startingRevealedOmegaPlans = 1,
 	m_startingHenchmen = 3,
 	m_maxStartingHenchmenLevel = 1,
-	m_startingCommandPool = 10;
+	m_startingCommandPool = 10,
+	m_startingIntel = 0,
+	m_maxIntel = 5;
+
+	public Asset[] m_startingAssets;
+
+
+	// TODO: starting player upgrades
 
 }

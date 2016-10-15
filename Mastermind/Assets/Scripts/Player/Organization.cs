@@ -9,14 +9,20 @@ public class Organization : ScriptableObject, ISubject {
 	private int m_currentInfamy = 0;
 	private int m_maxInfamy = 0;
 	private int m_currentWantedLevel = 0;
+	private int m_maxWantedLevel = 1;
 	private int m_commandPool = 0;
 	private int m_currentCommandPool = 0;
 	private int m_maxAvailableHenchmen = 1;
+	private int m_currentIntel = 0;
+	private int m_maxIntel = 1;
 
 	private List<Henchmen> m_currentHenchmen;
 	private List<Henchmen> m_availableHenchmen;
 	private List<OmegaPlan> m_omegaPlans;
-	private Dictionary<MenuState.State, MenuTab> m_menuTabs;
+	private List<Asset> m_currentAssets;
+
+	private Dictionary<int, OmegaPlan> m_omegaPlansByID = new Dictionary<int, OmegaPlan> ();
+	private Dictionary<int, MenuTab> m_menuTabs;
 
 	private List<IObserver>
 	m_observers = new List<IObserver> ();
@@ -53,12 +59,53 @@ public class Organization : ScriptableObject, ISubject {
 		Notify (this, GameEvent.Organization_CommandPoolChanged);
 	}
 
-	public void Initialize (Director d, Game g)
+	private void AddOmegaPlan (OmegaPlan op)
 	{
+		m_omegaPlans.Add (op);
+		m_omegaPlansByID.Add (op.id, op);
+	}
+
+	public void GainWantedLevel (int amount)
+	{
+		if (m_currentWantedLevel < m_maxWantedLevel) {
+			m_currentWantedLevel++;
+		}
+	}
+
+	public void GainInfamy (int amount)
+	{
+		m_currentInfamy += amount;
+
+		if (m_currentInfamy >= m_maxInfamy && m_currentWantedLevel < m_maxWantedLevel) {
+			m_currentInfamy -= m_maxInfamy;
+			GainWantedLevel (1);
+		}
+
+	}
+
+	public void AddAsset (Asset a)
+	{
+		m_currentAssets.Add (a);
+	}
+
+	public void Initialize (Director d, Game g, string orgName)
+	{
+		m_name = orgName;
 		m_currentWantedLevel = d.m_startingWantedLevel;
+		m_maxWantedLevel = d.m_maxWantedLevel;
 		m_maxInfamy = d.m_maxInfamy;
 		m_commandPool = d.m_startingCommandPool;
 		m_maxAvailableHenchmen = d.m_startingHenchmen;
+		m_currentIntel = d.m_startingIntel;
+		m_maxIntel = d.m_maxIntel;
+
+		// add any starting assets
+
+		m_currentAssets = new List<Asset> ();
+
+		foreach (Asset a in d.m_startingAssets) {
+			AddAsset (a);
+		}
 
 		// select Omega Plans
 
@@ -84,7 +131,7 @@ public class Organization : ScriptableObject, ISubject {
 					newOP.Initialize (newOPData, OmegaPlan.State.Hidden);
 				}
 
-				m_omegaPlans.Add (newOP);
+				AddOmegaPlan (newOP);
 			}
 		}
 
@@ -121,34 +168,41 @@ public class Organization : ScriptableObject, ISubject {
 
 		// set up menu tabs
 
-		m_menuTabs = new Dictionary<MenuState.State, MenuTab> ();
+		m_menuTabs = new Dictionary<int, MenuTab> ();
+
 		MenuTab henchTab = new MenuTab ();
 		henchTab.m_name = "HENCHMEN";
 		henchTab.m_menuState = MenuState.State.HenchmenMenu;
-		m_menuTabs.Add (henchTab.m_menuState, henchTab);
+		henchTab.Initialize ();
+		m_menuTabs.Add (henchTab.id, henchTab);
 
 		MenuTab lairTab = new MenuTab ();
 		lairTab.m_name = "LAIR";
 		lairTab.m_menuState = MenuState.State.LairMenu;
-		m_menuTabs.Add (lairTab.m_menuState, lairTab);
+		lairTab.Initialize ();
+		m_menuTabs.Add (lairTab.id, lairTab);
 
 		MenuTab worldTab = new MenuTab ();
 		worldTab.m_name = "WORLD";
 		worldTab.m_menuState = MenuState.State.WorldMenu;
-		m_menuTabs.Add (worldTab.m_menuState, worldTab);
+		worldTab.Initialize ();
+		m_menuTabs.Add (worldTab.id, worldTab);
 
 		MenuTab activityTab = new MenuTab ();
 		activityTab.m_name = "ACTIVITY";
 		activityTab.m_menuState = MenuState.State.ActivityMenu;
-		m_menuTabs.Add (activityTab.m_menuState, activityTab);
+		activityTab.Initialize ();
+		m_menuTabs.Add (activityTab.id, activityTab);
 
-//		foreach (OmegaPlan op in m_omegaPlans) {
+		foreach (OmegaPlan op in m_omegaPlans) {
 
 			MenuTab opTab = new MenuTab ();
 			opTab.m_name = "OMEGA PLAN";
+			opTab.objectID = op.id;
 			opTab.m_menuState = MenuState.State.OmegaPlanMenu;
-			m_menuTabs.Add (opTab.m_menuState, opTab);
-//		}
+			opTab.Initialize ();
+			m_menuTabs.Add (opTab.id, opTab);
+		}
 
 		AddObserver (TabMenu.instance);
 
@@ -192,7 +246,8 @@ public class Organization : ScriptableObject, ISubject {
 		return cost;
 	}
 
-	public Dictionary<MenuState.State, MenuTab> menuTabs {get{return m_menuTabs; }}
+	public Dictionary<int, MenuTab> menuTabs {get{return m_menuTabs; }}
+	public Dictionary<int, OmegaPlan> omegaPlansByID {get{return m_omegaPlansByID; }}
 	public List<Henchmen> availableHenchmen {get{return m_availableHenchmen; }}
 	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen; }}
 	public int currentCommandPool {get{return m_currentCommandPool; }}
@@ -200,4 +255,9 @@ public class Organization : ScriptableObject, ISubject {
 	public int costPerTurn {get{return GetCostPerTurn();}}
 	public int maxAvailableHenchmen {get{return m_maxAvailableHenchmen;}}
 	public int currentWantedLevel {get{return m_currentWantedLevel; }}
+	public int currentInfamy {get{return m_currentInfamy; }}
+	public int currentIntel {get{return m_currentIntel; }}
+	public int maxIntel {get{return m_maxIntel; }}
+	public string orgName {get{return m_name;}}
+	public List<Asset> currentAssets {get{return m_currentAssets;}}
 }

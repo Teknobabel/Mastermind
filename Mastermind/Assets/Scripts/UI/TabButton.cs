@@ -57,9 +57,10 @@ public class TabButton : MonoBehaviour {
 
 	public void TabButtonClicked ()
 	{
-		if (GameManager.instance.currentMenuState != m_menuTab.m_menuState) {
+		if (GameManager.instance.currentTabID != m_menuTab.id) {
 			GameManager.instance.PopMenuState ();
-			GameManager.instance.PushMenuState (m_menuTab.m_menuState);
+
+			GameManager.instance.PushMenuState (m_menuTab);
 		}
 	}
 }

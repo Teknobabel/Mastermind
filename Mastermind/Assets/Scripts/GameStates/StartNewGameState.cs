@@ -28,7 +28,7 @@ public class StartNewGameState : IGameState {
 		// initialize player
 
 		Organization player = Organization.CreateInstance<Organization> ();
-		player.Initialize (newDirector, newGame);
+		player.Initialize (newDirector, newGame, MainMenu.instance.orgName);
 		newGame.AddOrganizationToGame (player);
 
 		GameManager.instance.game = newGame;

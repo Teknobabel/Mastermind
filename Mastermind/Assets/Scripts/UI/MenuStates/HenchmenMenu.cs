@@ -3,24 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class HenchmenMenu : MenuState, IObserver {
+	public static HenchmenMenu instance;
 
 	public GameObject m_henchmanForHireListViewItem;
 	public GameObject m_henchmenListViewItem;
 	public GameObject m_sectionHeader;
 	public GameObject m_scrollView;
 	public GameObject m_scrollViewContent;
+	public GameObject m_sortPanelParent;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
 
-	public override void OnActivate()
+	void Awake ()
+	{
+		if (!instance) {
+			instance = this;
+		} else {
+			Destroy (gameObject);
+		}
+	}
+
+	public override void OnActivate(MenuTab tabInfo)
 	{
 		GameManager.instance.game.player.AddObserver (this);
 
 		Debug.Log ("Starting Henchmen Menu");
-		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-		t.m_tabButton.ChangeState (TabButton.State.Selected);
+//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
+//		t.m_tabButton.ChangeState (TabButton.State.Selected);
+		m_tabInfo = tabInfo;
+//		Debug.Log(m_tabInfo);
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
+		}
 
 		m_scrollView.gameObject.SetActive (true);
+		m_sortPanelParent.gameObject.SetActive (true);
 
 		UpdateHenchmenList ();
 	}
@@ -86,15 +103,18 @@ public class HenchmenMenu : MenuState, IObserver {
 	public override void OnDeactivate()
 	{
 		GameManager.instance.game.player.RemoveObserver (this);
-
 		while (m_listViewItems.Count > 0) {
 			GameObject g = m_listViewItems [0];
 			m_listViewItems.RemoveAt (0);
 			Destroy (g);
 		}
 
-		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-		t.m_tabButton.ChangeState (TabButton.State.Unselected);
+//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
+//		t.m_tabButton.ChangeState (TabButton.State.Unselected);
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
+			m_tabInfo = null;
+		}
 	}
 
 	public override void OnUpdate()

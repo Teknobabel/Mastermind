@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	public HenchmenData[] m_henchmenBank;
 	public RegionData[] m_regionBank;
 	public Director[] m_directorBank;
+	public MissionBase[] m_missionBank;
 	public MenuState[] m_menuStates;
 
 	private StartNewGameState m_startNewGame;
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour {
 
 	private int m_currentID = 0;
 
-	private string m_currentVersion = "Ver 0.0.1";
+	private string m_currentVersion = "VER 0.0.1";
 
 	void Awake ()
 	{
@@ -74,7 +75,6 @@ public class GameManager : MonoBehaviour {
 	{
 		Debug.Log ("Push State: " + newState);
 
-//		MenuState menuState = this.GetComponentInChildren(newStateType) as MenuState;
 		MenuState menuState = null;
 		foreach (MenuState m in m_menuStates) {
 			if (m.state == newState) {
@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour {
 
 		if (m_menuState != null)
 		{
-//			m_previousState = m_gameState.state;
 			m_menuState.OnHold();
 		}
 
@@ -94,7 +93,34 @@ public class GameManager : MonoBehaviour {
 		if (m_menuState != null)
 		{
 			m_menuStateStack.Add (m_menuState);
-			m_menuState.OnActivate();
+			m_menuState.OnActivate(null);
+		}
+	}
+
+	public void PushMenuState (MenuTab newTab)
+	{
+		Debug.Log ("Push State: " + newTab.m_menuState);
+
+//		MenuState menuState = this.GetComponentInChildren(newStateType) as MenuState;
+		MenuState menuState = null;
+		foreach (MenuState m in m_menuStates) {
+			if (m.state == newTab.m_menuState) {
+				menuState = m;
+				break;
+			}
+		}
+
+		if (m_menuState != null)
+		{
+			m_menuState.OnHold();
+		}
+
+		m_menuState = menuState;
+
+		if (m_menuState != null)
+		{
+			m_menuStateStack.Add (m_menuState);
+			m_menuState.OnActivate(newTab);
 		}
 	}
 
@@ -128,6 +154,7 @@ public class GameManager : MonoBehaviour {
 	public AgentPhaseState agentPhase {get{return m_agentPhase; }}
 	public Game game {get{return m_game; } set {m_game = value; }}
 	public MenuState.State currentMenuState {get{return m_menuState.m_state;}}
+	public int currentTabID {get{return m_menuState.tabInfo.id;}}
 	public string currentVersion {get{return m_currentVersion; }}
 	public int newID {get{m_currentID++; return m_currentID;}}
 }
