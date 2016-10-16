@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class OPGoalButton : MonoBehaviour {
 
-	public Text m_buttonText;
+	public TextMeshProUGUI m_buttonText;
 	public Image m_buttonImage;
 
 	// Use this for initialization

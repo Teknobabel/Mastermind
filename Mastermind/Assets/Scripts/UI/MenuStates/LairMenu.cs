@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class LairMenu : MenuState {
 
 	public GameObject m_lairMenu;
 
-	public Text m_lairText;
+	public TextMeshProUGUI m_lairText;
 
 	public override void OnActivate(MenuTab tabInfo)
 	{

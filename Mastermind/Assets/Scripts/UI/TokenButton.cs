@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class TokenButton : MonoBehaviour {
 
-	public Text m_tokenText;
+	public TextMeshProUGUI m_tokenText;
 	public Image m_tokenImage;
 
 	private TokenBase.State m_state = TokenBase.State.None;

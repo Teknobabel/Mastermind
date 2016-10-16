@@ -2,11 +2,12 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class Region_ListViewItem : MonoBehaviour {
 
-	public Text m_regionName;
-	public Text m_regionRank;
+	public TextMeshProUGUI m_regionName;
+	public TextMeshProUGUI m_regionRank;
 	public Image m_regionPortrait;
 
 	public TokenButton[] m_policyTokens;

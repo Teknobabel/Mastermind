@@ -2,13 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class Henchmen_ListViewItem : MonoBehaviour {
 
-	public Text m_henchmenName;
-	public Text m_currentMission;
-	public Text m_currentLocation;
-	public Text m_turnCost;
+	public TextMeshProUGUI m_henchmenName;
+	public TextMeshProUGUI m_currentMission;
+	public TextMeshProUGUI m_currentLocation;
+	public TextMeshProUGUI m_turnCost;
 	public Image m_henchmenPortrait;
 
 	public TraitButton[] m_traits;

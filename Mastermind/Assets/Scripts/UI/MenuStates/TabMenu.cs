@@ -2,13 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class TabMenu : MenuState, IObserver {
 	public static TabMenu instance;
 
 	public TabButton[] m_tabButtons;
 
-	public Text
+	public TextMeshProUGUI
 		m_currentCommandPoints,
 		m_commandPoolHeader,
 		m_costPerTurn;

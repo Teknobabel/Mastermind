@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class OmegaPlanMenu : MenuState {
 	public static OmegaPlanMenu instance;
@@ -8,7 +9,7 @@ public class OmegaPlanMenu : MenuState {
 	public GameObject m_opPanelParent;
 	public GameObject m_sortPanelParent;
 
-	public Text m_opName;
+	public TextMeshProUGUI m_opName;
 
 	public OPGoalButton[] m_goalButtons;
 
@@ -36,7 +37,7 @@ public class OmegaPlanMenu : MenuState {
 
 		if (m_tabInfo != null && m_tabInfo.objectID > -1) {
 			OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [m_tabInfo.objectID];
-			m_opName.text = op.opName;
+			m_opName.text = op.opName.ToUpper();
 
 			for (int i=0; i < m_goalButtons.Length; i++){
 				

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class TabButton : MonoBehaviour {
 
@@ -10,7 +11,7 @@ public class TabButton : MonoBehaviour {
 		Unselected,
 	}
 
-	public Text m_buttonText;
+	public TextMeshProUGUI m_buttonText;
 	public Image m_buttonImage;
 	public Button m_button;
 	private State m_state = State.None;

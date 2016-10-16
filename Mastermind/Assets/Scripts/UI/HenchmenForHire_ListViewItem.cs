@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 public class HenchmenForHire_ListViewItem : MonoBehaviour {
 
-	public Text m_henchmenName;
-	public Text m_hireCost;
-	public Text m_costPerTurn;
+	public TextMeshProUGUI m_henchmenName;
+	public TextMeshProUGUI m_hireCost;
+	public TextMeshProUGUI m_costPerTurn;
 	public Image m_henchmenPortrait;
 
 	public TraitButton[] m_traits;
@@ -44,5 +45,10 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 		if (m_henchmenID > -1 && GameManager.instance.game.player.currentCommandPool >= m_cost ) {
 			GameManager.instance.game.player.HireHenchmen (m_henchmenID);
 		}
+	}
+
+	public void DismissButtonClicked ()
+	{
+
 	}
 }

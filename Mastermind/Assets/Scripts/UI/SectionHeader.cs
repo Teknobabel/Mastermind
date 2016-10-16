@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class SectionHeader : MonoBehaviour {
 
-	public Text m_sectionHeaderTitle;
+	public TextMeshProUGUI m_sectionHeaderTitle;
 
 	public void Initialize (string headerTitle)
 	{

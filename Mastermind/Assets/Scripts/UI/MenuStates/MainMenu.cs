@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,9 +9,9 @@ public class MainMenu : MenuState {
 
 	public GameObject m_mainMenu;
 
-	public Text 
-	m_versionText,
-	m_orgNameText;
+	public TextMeshProUGUI
+		m_currentVersionText,
+		m_orgNameText;
 
 	private string m_orgName = "Null";
 
@@ -26,7 +27,7 @@ public class MainMenu : MenuState {
 	public override void OnActivate(MenuTab newTab)
 	{
 		m_mainMenu.gameObject.SetActive (true);
-		m_versionText.text = GameManager.instance.currentVersion;
+		m_currentVersionText.text = GameManager.instance.currentVersion;
 
 		RandomizeOrgName ();
 	}

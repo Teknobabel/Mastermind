@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class TraitButton : MonoBehaviour {
 
-	public Text m_traitName;
+	public TextMeshProUGUI m_traitName;
 	public Image m_traitButtonImage;
 
 	private Color 
