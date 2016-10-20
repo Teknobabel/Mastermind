@@ -5,6 +5,13 @@ using System.Collections.Generic;
 [CreateAssetMenu()]
 public class Henchmen : ScriptableObject {
 
+	public enum state
+	{
+		None,
+		Idle,
+		OnMission,
+	}
+
 	private string m_name = "Null";
 
 	private int m_rank = 1;
@@ -18,10 +25,17 @@ public class Henchmen : ScriptableObject {
 
 	private Dictionary<TraitData.TraitClass, List<TraitData>> m_traitDict;
 
+	private Region m_currentRegion = null;
+
+//	private List<MissionBase> m_missions = new List<MissionBase>();
+
+	private state m_state = state.None;
+
 	public void Initialize (HenchmenData h)
 	{
 		m_id = GameManager.instance.newID;
 		m_traitDict = new Dictionary<TraitData.TraitClass, List<TraitData>> ();
+		m_state = state.Idle;
 
 		name = h.m_name;
 		m_name = h.m_name;
@@ -33,6 +47,11 @@ public class Henchmen : ScriptableObject {
 		foreach (TraitData t in h.m_startingTraits) {
 			AddTrait (t);
 		}
+	}
+
+	public void SetRegion (Region newRegion)
+	{
+		m_currentRegion = newRegion;
 	}
 
 	public void AddTrait (TraitData t)
@@ -75,10 +94,51 @@ public class Henchmen : ScriptableObject {
 		return t;
 	}
 
+	public bool HasTrait (TraitData t)
+	{
+		if (m_traitDict.ContainsKey(t.m_class))
+		{
+			List<TraitData> l = m_traitDict [t.m_class];
+
+			if (l.Contains (t)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public void ChangeState (state newState)
+	{
+		m_state = newState;
+	}
+
+//	public void AddMission(MissionBase m)
+//	{
+//		m_missions.Add (m);
+//
+//		if (m_state != state.OnMission) {
+//			ChangeState (state.OnMission);
+//		}
+//	}
+//
+//	public MissionBase GetMission ()
+//	{
+//		if (m_missions.Count > 0) {
+//			return m_missions [0];
+//		} else {
+//			return null;
+//		}
+//	}
+
 	public int rank {get{return m_rank; }}
 	public int hireCost {get{return m_hireCost; }}
 	public int costPerTurn {get{return m_costPerTurn; }}
 	public string henchmenName {get{return m_name; }}
 	public Sprite portrait {get{return m_portrait;}}
 	public int id {get{return m_id; }}
+	public state currentState {get{return m_state;}}
+	public Region currentRegion {get{return m_currentRegion; }}
 }

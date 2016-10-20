@@ -13,6 +13,9 @@ public class HenchmenMenu : MenuState, IObserver {
 	public GameObject m_sortPanelParent;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
+	private List<GameObject> m_activityPaneListViewItems = new List<GameObject> ();
+
+	private bool m_activityPaneOpen = false;
 
 	void Awake ()
 	{
@@ -54,6 +57,7 @@ public class HenchmenMenu : MenuState, IObserver {
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
 		switch (thisGameEvent) {
+		case GameEvent.Organization_HenchmenDismissed:
 		case GameEvent.Organization_HenchmenHired:
 			UpdateHenchmenList ();
 //			Organization o = (Organization)subject;
@@ -115,6 +119,48 @@ public class HenchmenMenu : MenuState, IObserver {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
 			m_tabInfo = null;
 		}
+
+		if (m_activityPaneOpen) {
+			HideActionPane ();
+		}
+	}
+
+	public override void DisplayActionPane (){
+
+		m_activityPaneOpen = true;
+
+		TabMenu.instance.m_activityPane.SetActive (true);
+
+		Organization player = GameManager.instance.game.player;
+		List<TurnResultsEntry> t = new List<TurnResultsEntry> ();
+
+		if (player.turnResultsByType.ContainsKey (GameEvent.Organization_HenchmenHired)) {
+			
+			t.AddRange (player.turnResultsByType [GameEvent.Organization_HenchmenHired]);
+		}
+
+		GameObject activityCell = TabMenu.instance.m_activityCell_Small;
+		GameObject activityPaneContents = TabMenu.instance.m_activityPaneScrollViewContent;
+
+		foreach (TurnResultsEntry e in t) {
+			GameObject g = (GameObject)(Instantiate (activityCell, activityPaneContents.transform));
+			g.transform.localScale = Vector3.one;
+			m_activityPaneListViewItems.Add (g);
+			g.GetComponent<ActivitySmall_ListViewItem> ().Initialize (e);
+		}
+	}
+
+	public override void HideActionPane (){
+
+		m_activityPaneOpen = true;
+
+		while (m_activityPaneListViewItems.Count > 0) {
+			GameObject g = m_activityPaneListViewItems [0];
+			m_activityPaneListViewItems.RemoveAt (0);
+			Destroy (g);
+		}
+
+		TabMenu.instance.m_activityPane.SetActive (false);
 	}
 
 	public override void OnUpdate()

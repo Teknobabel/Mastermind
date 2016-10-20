@@ -36,6 +36,7 @@ public class AlertView_ExecuteTurn : MenuState {
 		if (t >= m_duration) {
 			t = 0.0f;
 			GameManager.instance.PopMenuState ();
+			GameManager.instance.ChangeGameState (GameManager.instance.missionPhase);
 		}
 	}
 }

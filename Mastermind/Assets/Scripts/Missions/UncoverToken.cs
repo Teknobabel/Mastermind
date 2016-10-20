@@ -2,14 +2,14 @@
 using System.Collections;
 
 [CreateAssetMenu()]
-public class UncoverToken : MissionBase, IMission {
+public class UncoverToken : MissionBase {
 
-	public void ProcessTurn ()
+	public override void CompleteMission ()
 	{
 
 	}
 
-	public bool IsValid ()
+	public override bool IsValid ()
 	{
 		return true;
 	}

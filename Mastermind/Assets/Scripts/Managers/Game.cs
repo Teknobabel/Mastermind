@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Game : ScriptableObject {
+public class Game : ScriptableObject, ISubject {
 
 	private Director m_director;
 
@@ -11,12 +11,16 @@ public class Game : ScriptableObject {
 
 	private List<Henchmen> m_henchmen = new List<Henchmen>();
 	private Dictionary<int, List<Henchmen>> m_henchmenByRank = new Dictionary<int, List<Henchmen>>();
+	private Dictionary<int, Henchmen> m_henchmenByID = new Dictionary<int, Henchmen>();
 
 	private int 
 	m_randomSeed = 0,
 	m_turnNumber = 0;
 
 	private Organization m_player;
+
+	private List<IObserver>
+	m_observers = new List<IObserver> ();
 
 	public void Initialize ()
 	{
@@ -61,6 +65,11 @@ public class Game : ScriptableObject {
 			l.Add (h);
 			m_henchmenByRank.Add (h.rank, l);
 		}
+
+		if (!m_henchmenByID.ContainsKey (h.id)) {
+			m_henchmenByID.Add (h.id, h);
+		}
+
 	}
 
 	public List<Henchmen> GetHenchmenByRank (int rank)
@@ -77,6 +86,18 @@ public class Game : ScriptableObject {
 		return l;
 	}
 
+	public Henchmen GetHenchmenByID (int id)
+	{
+		Henchmen h = null;
+
+		if (m_henchmenByID.ContainsKey(id))
+		{
+			h = m_henchmenByID [id];
+		}
+
+		return h;
+	}
+
 	public Dictionary<RegionData.RegionGroup, List<Region>> GetAllRegionsByGroup ()
 	{
 		return m_regionsByGroup;
@@ -87,8 +108,34 @@ public class Game : ScriptableObject {
 		return m_regions;
 	}
 
+	public void AddObserver (IObserver observer)
+	{
+		if (!m_observers.Contains(observer))
+		{
+			m_observers.Add (observer);
+		}
+	}
+
+	public void RemoveObserver (IObserver observer)
+	{
+		if (m_observers.Contains(observer))
+		{
+			m_observers.Remove(observer);
+		}
+	}
+
+	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	{
+		List<IObserver> observers = new List<IObserver> (m_observers);
+
+		for (int i=0; i < observers.Count; i++)
+		{
+			observers[i].OnNotify(subject, thisGameEvent);
+		}
+	}
+
 	public Organization player {get{return m_player; }}
 	public Director director {get{return m_director;}}
 	public List<Henchmen> henchmen {get{return m_henchmen; }}
-	public int turnNumber {get{return m_turnNumber;}set{m_turnNumber = value; }}
+	public int turnNumber {get{return m_turnNumber;}set{m_turnNumber = value; Notify (this, GameEvent.GameState_TurnNumberChanged); }}
 }

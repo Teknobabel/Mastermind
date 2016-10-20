@@ -2,14 +2,14 @@
 using System.Collections;
 
 [CreateAssetMenu()]
-public class StealAsset : MissionBase, IMission {
+public class StealAsset : MissionBase {
 
-	public void ProcessTurn ()
+	public override void CompleteMission ()
 	{
-
+		Debug.Log ("Processing Steal Asset");
 	}
 
-	public bool IsValid ()
+	public override bool IsValid ()
 	{
 		return true;
 	}

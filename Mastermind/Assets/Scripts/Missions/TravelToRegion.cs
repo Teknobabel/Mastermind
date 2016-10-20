@@ -2,14 +2,14 @@
 using System.Collections;
 
 [CreateAssetMenu()]
-public class TravelToRegion : MissionBase, IMission {
+public class TravelToRegion : MissionBase {
 
-	public void ProcessTurn ()
+	public override void CompleteMission ()
 	{
 
 	}
 
-	public bool IsValid ()
+	public override bool IsValid ()
 	{
 		return true;
 	}

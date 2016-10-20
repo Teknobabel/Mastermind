@@ -21,38 +21,23 @@ public class BeginPlayerPhaseState : IGameState {
 			player.GainInfamy (infamyGain);
 		}
 
-		// refill any empty henchmen for hire slots
-
-		if (player.availableHenchmen.Count < player.maxAvailableHenchmen) {
-
-			int maxRank = GameManager.instance.game.director.m_maxStartingHenchmenLevel;
-			maxRank = Mathf.Clamp (maxRank + player.currentWantedLevel, 1, 3);
-
-			List<Henchmen> h = new List<Henchmen> ();
-
-			foreach (Henchmen thisH in GameManager.instance.game.henchmen) {
-
-				if (thisH.rank <= maxRank && !player.currentHenchmen.Contains (thisH) && !player.availableHenchmen.Contains (thisH)) {
-					h.Add (thisH);
-				}
-			}
-
-			int numToHire = player.maxAvailableHenchmen - player.availableHenchmen.Count;
-
-			for (int i = 0; i < numToHire; i++) {
-				if (h.Count > 0) {
-					int rand = Random.Range (0, h.Count);
-					Henchmen newH = h [rand];
-					player.AddHenchmenToAvailablePool (newH);
-					h.RemoveAt (rand);
-				}
-			}
-
-		}
-
 		// progress turn to next phase
 
+		if (GameManager.instance.game.turnNumber != 1) {
+			GameManager.instance.PopMenuState ();
+
+			foreach (KeyValuePair<int, MenuTab> pair in player.menuTabs)
+			{
+				if (pair.Value.m_menuState == MenuState.State.ActivityMenu) {
+					GameManager.instance.PushMenuState (pair.Value);
+					break;
+				}
+			}
+
+
+		}
 		GameManager.instance.ChangeGameState (GameManager.instance.playerPhase);
+
 	}
 
 	public void UpdateState () {

@@ -20,8 +20,20 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	{
 		m_henchmenID = h.id;
 		m_henchmenName.text = h.henchmenName.ToUpper();
-//		m_currentMission.text = 
-//		m_currentLocation.text = 
+
+		string mission = "MISSION:\n";
+		if (h.currentState == Henchmen.state.OnMission) {
+			MissionBase m = GameManager.instance.game.player.GetMission (h);
+			mission += m.m_name.ToUpper ();
+		} else {
+			mission += "NONE";
+		}
+		m_currentMission.text = mission;
+
+		string location = "REGION:\n";
+		location += h.currentRegion.regionName.ToUpper ();
+		m_currentLocation.text = location;
+
 		m_turnCost.text = h.costPerTurn.ToString() + "CP / TURN";
 		m_henchmenPortrait.sprite = h.portrait;
 
@@ -33,7 +45,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 
 			if (i < traits.Count) {
 				TraitData td = traits [i];
-				tb.Initialize (td);
+				tb.Initialize (td, true);
 			} else {
 				tb.Deactivate ();
 			}
@@ -42,6 +54,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 
 	public void CallButtonClicked ()
 	{
-
+		CallHenchmenMenu.instance.henchmenID = m_henchmenID;
+		GameManager.instance.PushMenuState (MenuState.State.CallHenchmenMenu);
 	}
 }

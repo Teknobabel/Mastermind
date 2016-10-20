@@ -14,6 +14,8 @@ public abstract class MenuState : MonoBehaviour {
 		TabMenu,
 		ActivityMenu,
 		AlertView_ExecuteTurn,
+		PauseMenu,
+		CallHenchmenMenu,
 	}
 
 	public State m_state = State.None;
@@ -24,6 +26,12 @@ public abstract class MenuState : MonoBehaviour {
 	public abstract void OnReturn();
 	public abstract void OnDeactivate(); // player leaves menu for previous state
 	public abstract void OnUpdate();
+
+	public virtual void DisplayActionPane (){
+	}
+
+	public virtual void HideActionPane (){
+	}
 
 	public State state {get{return m_state;}}
 	public MenuTab tabInfo {get{return m_tabInfo; } set{m_tabInfo = value; }}

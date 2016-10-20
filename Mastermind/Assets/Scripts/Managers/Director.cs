@@ -10,7 +10,7 @@ public class Director : ScriptableObject {
 	m_maxInfamy = 100,
 	m_infamyGainPerTurn = 5,
 	m_startingWantedLevel = 0,
-	m_maxWantedLevel = 0,
+	m_maxWantedLevel = 5,
 	m_startingOmegaPlans = 3,
 	m_startingRevealedOmegaPlans = 1,
 	m_startingHenchmen = 3,

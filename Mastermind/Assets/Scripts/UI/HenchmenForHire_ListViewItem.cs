@@ -21,7 +21,7 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 		m_henchmenID = h.id;
 		m_cost = h.hireCost;
 		m_henchmenName.text = h.henchmenName.ToUpper();
-		m_hireCost.text = h.hireCost.ToString();
+		m_hireCost.text = h.hireCost.ToString() + "<size=36>CP</size>";
 		m_costPerTurn.text = h.costPerTurn.ToString() + " CP / TURN";
 		m_henchmenPortrait.sprite = h.portrait;
 
@@ -33,7 +33,7 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 
 			if (i < traits.Count) {
 				TraitData td = traits [i];
-				tb.Initialize (td);
+				tb.Initialize (td, true);
 			} else {
 				tb.Deactivate ();
 			}
@@ -49,6 +49,8 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 
 	public void DismissButtonClicked ()
 	{
-
+		if (m_henchmenID > -1 && GameManager.instance.game.player.currentCommandPool >= m_cost ) {
+			GameManager.instance.game.player.DismissHenchmen (m_henchmenID);
+		}
 	}
 }

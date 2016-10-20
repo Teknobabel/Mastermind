@@ -15,25 +15,27 @@ public class TraitButton : MonoBehaviour {
 	m_giftColor = Color.green,
 	m_flawColor = Color.red;
 
-	public void Initialize (TraitData t)
+	public void Initialize (TraitData t, bool activeTrait)
 	{
 		m_traitName.text = t.m_name.ToUpper();
 
 		Color c = Color.gray;
 
-		switch (t.m_class) {
-		case TraitData.TraitClass.Skill:
-			c = m_skillColor;
-			break;
-		case TraitData.TraitClass.Resource:
-			c = m_resourceColor;
-			break;
-		case TraitData.TraitClass.Gift:
-			c = m_giftColor;
-			break;
-		case TraitData.TraitClass.Flaw:
-			c = m_flawColor;
-			break;
+		if (activeTrait) {
+			switch (t.m_class) {
+			case TraitData.TraitClass.Skill:
+				c = m_skillColor;
+				break;
+			case TraitData.TraitClass.Resource:
+				c = m_resourceColor;
+				break;
+			case TraitData.TraitClass.Gift:
+				c = m_giftColor;
+				break;
+			case TraitData.TraitClass.Flaw:
+				c = m_flawColor;
+				break;
+			}
 		}
 
 		m_traitButtonImage.color = c;

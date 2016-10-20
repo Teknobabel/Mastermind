@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 public class Organization : ScriptableObject, ISubject {
 
+	public class ActiveMission
+	{
+		public MissionBase m_mission = null;
+		public int m_turnsPassed = 0;
+		public List<Henchmen> m_henchmen = new List<Henchmen> ();
+	}
+
 	private string m_name = "Null";
 
 	private int m_currentInfamy = 0;
@@ -24,8 +31,15 @@ public class Organization : ScriptableObject, ISubject {
 	private Dictionary<int, OmegaPlan> m_omegaPlansByID = new Dictionary<int, OmegaPlan> ();
 	private Dictionary<int, MenuTab> m_menuTabs;
 
+	private Dictionary<int, List<TurnResultsEntry>> m_turnResults = new Dictionary<int, List<TurnResultsEntry>> (); // by turn number
+	private Dictionary<GameEvent, List<TurnResultsEntry>> m_turnResultsByType = new Dictionary<GameEvent, List<TurnResultsEntry>> ();
+
 	private List<IObserver>
 	m_observers = new List<IObserver> ();
+
+	private List<ActiveMission> m_activeMissions = new List<ActiveMission>();
+
+	private Region m_homeRegion = null;
 
 	public void RefillCommandPool ()
 	{
@@ -42,15 +56,91 @@ public class Organization : ScriptableObject, ISubject {
 				UseCommandPoints (h.hireCost);
 				m_currentHenchmen.Add (h);
 				m_availableHenchmen.RemoveAt (i);
+				h.SetRegion (m_homeRegion);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = h.henchmenName + " joins " + m_name;
+				t.m_resultType = GameEvent.Organization_HenchmenHired;
+				AddTurnResults (GameManager.instance.game.turnNumber, t);
+
 				Notify (this, GameEvent.Organization_HenchmenHired);
 				break;
 			}
 		}
 	}
 
+	public void DismissHenchmen (int henchmenID)
+	{
+		for (int i=0; i < m_availableHenchmen.Count; i++)
+		{
+			Henchmen h = m_availableHenchmen [i];
+			if (h.id == henchmenID) {
+				m_availableHenchmen.RemoveAt (i);
+				Notify (this, GameEvent.Organization_HenchmenDismissed);
+				break;
+			}
+		}
+	}
+
+	public void AddMission (MissionBase m, List<Henchmen> h)
+	{
+		ActiveMission a = new ActiveMission ();
+		a.m_mission = m;
+		a.m_henchmen = h;
+
+		foreach (Henchmen thisH in h) {
+			if (thisH.currentState != Henchmen.state.OnMission) {
+				thisH.ChangeState (Henchmen.state.OnMission);
+			}
+		}
+
+		m_activeMissions.Add (a);
+	}
+
+	public MissionBase GetMission (Henchmen h)
+	{
+		MissionBase m = null;
+
+		foreach (ActiveMission a in m_activeMissions) {
+			foreach (Henchmen thisH in a.m_henchmen)
+			{
+				if (h.id == thisH.id) {
+					return a.m_mission;
+				}
+			}
+		}
+
+		return m;
+	}
+
 	public void AddHenchmenToAvailablePool (Henchmen h)
 	{
 		m_availableHenchmen.Add (h);
+	}
+
+	public void AddTurnResults (int turn, TurnResultsEntry t)
+	{
+		t.m_turnNumber = turn;
+
+		if (m_turnResults.ContainsKey (turn)) {
+			List<TurnResultsEntry> tRE = m_turnResults [turn];
+			tRE.Add (t);
+			m_turnResults [turn] = tRE;
+		} else {
+			List<TurnResultsEntry> newTRE = new List<TurnResultsEntry> ();
+			newTRE.Add (t);
+			m_turnResults.Add (turn, newTRE);
+		}
+
+		if (m_turnResultsByType.ContainsKey (t.m_resultType)) {
+			List<TurnResultsEntry> tRE = m_turnResultsByType [t.m_resultType];
+			tRE.Add (t);
+			m_turnResultsByType [t.m_resultType] = tRE;
+		} else {
+			List<TurnResultsEntry> newTRE = new List<TurnResultsEntry> ();
+			newTRE.Add (t);
+			m_turnResultsByType.Add (t.m_resultType, newTRE);
+		}
 	}
 
 	public void UseCommandPoints (int points)
@@ -74,11 +164,14 @@ public class Organization : ScriptableObject, ISubject {
 
 	public void GainInfamy (int amount)
 	{
-		m_currentInfamy += amount;
+		if (m_currentWantedLevel < m_maxWantedLevel)
+		{
+			m_currentInfamy += amount;
 
-		if (m_currentInfamy >= m_maxInfamy && m_currentWantedLevel < m_maxWantedLevel) {
-			m_currentInfamy -= m_maxInfamy;
-			GainWantedLevel (1);
+			if (m_currentInfamy >= m_maxInfamy) {
+				m_currentInfamy -= m_maxInfamy;
+				GainWantedLevel (1);
+			}
 		}
 
 	}
@@ -134,6 +227,13 @@ public class Organization : ScriptableObject, ISubject {
 				AddOmegaPlan (newOP);
 			}
 		}
+
+		// initialize home region (Lair)
+
+		Region newRegion = Region.CreateInstance<Region> ();
+		newRegion.Initialize (GameManager.instance.m_lairRegion);
+		m_homeRegion = newRegion;
+
 
 		// select starting Henchmen
 
@@ -255,9 +355,14 @@ public class Organization : ScriptableObject, ISubject {
 	public int costPerTurn {get{return GetCostPerTurn();}}
 	public int maxAvailableHenchmen {get{return m_maxAvailableHenchmen;}}
 	public int currentWantedLevel {get{return m_currentWantedLevel; }}
+	public int maxWantedLevel {get{return m_maxWantedLevel; }}
 	public int currentInfamy {get{return m_currentInfamy; }}
+	public int maxInfamy {get{return m_maxInfamy; }}
 	public int currentIntel {get{return m_currentIntel; }}
 	public int maxIntel {get{return m_maxIntel; }}
 	public string orgName {get{return m_name;}}
 	public List<Asset> currentAssets {get{return m_currentAssets;}}
+	public List<ActiveMission> activeMissions {get{return m_activeMissions;}}
+	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}
+	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}
 }

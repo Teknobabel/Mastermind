@@ -11,11 +11,14 @@ public class GameManager : MonoBehaviour {
 	public MissionBase[] m_missionBank;
 	public MenuState[] m_menuStates;
 
+	public RegionData m_lairRegion;
+
 	private StartNewGameState m_startNewGame;
 	private BeginTurnState m_beginTurn;
 	private BeginPlayerPhaseState m_beginPlayerPhase;
 	private PlayerPhaseState m_playerPhase;
 	private MissionPhaseState m_missionPhase;
+	private EndPlayerPhaseState m_endPlayerPhase;
 	private RegionPhaseState m_regionPhase;
 	private AgentPhaseState m_agentPhase;
 
@@ -32,6 +35,8 @@ public class GameManager : MonoBehaviour {
 
 	void Awake ()
 	{
+		Application.targetFrameRate = 60;
+
 		if(!instance) {
 			instance = this;
 		} else {
@@ -43,6 +48,7 @@ public class GameManager : MonoBehaviour {
 		m_beginPlayerPhase = new BeginPlayerPhaseState ();
 		m_playerPhase = new PlayerPhaseState ();
 		m_missionPhase = new MissionPhaseState ();
+		m_endPlayerPhase = new EndPlayerPhaseState ();
 		m_regionPhase = new RegionPhaseState ();
 		m_agentPhase = new AgentPhaseState ();
 
@@ -150,10 +156,12 @@ public class GameManager : MonoBehaviour {
 	public BeginPlayerPhaseState beginPlayerPhase {get{return m_beginPlayerPhase; }}
 	public PlayerPhaseState playerPhase {get{return m_playerPhase; }}
 	public MissionPhaseState missionPhase {get{return m_missionPhase; }}
+	public EndPlayerPhaseState endPlayerPhase {get{return m_endPlayerPhase; }}
 	public RegionPhaseState regionPhase {get{return m_regionPhase; }}
 	public AgentPhaseState agentPhase {get{return m_agentPhase; }}
 	public Game game {get{return m_game; } set {m_game = value; }}
 	public MenuState.State currentMenuState {get{return m_menuState.m_state;}}
+	public MenuState currentMenu {get{ return m_menuState;}}
 	public int currentTabID {get{return m_menuState.tabInfo.id;}}
 	public string currentVersion {get{return m_currentVersion; }}
 	public int newID {get{m_currentID++; return m_currentID;}}
