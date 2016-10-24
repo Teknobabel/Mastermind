@@ -43,8 +43,8 @@ public class OmegaPlanMenu : MenuState {
 				
 				OPGoalButton b = m_goalButtons [i];
 
-				if (i < op.goals.Length) {
-					OPGoal g = op.goals [i];
+				if (i < op.goals.Count) {
+					OmegaPlan.Goal g = op.goals [i];
 					b.Initialize (g);
 				}
 

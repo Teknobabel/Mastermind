@@ -31,6 +31,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_currentMission.text = mission;
 
 		string location = "REGION:\n";
+//		Debug.Log (h.currentRegion);
 		location += h.currentRegion.regionName.ToUpper ();
 		m_currentLocation.text = location;
 
@@ -54,7 +55,11 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 
 	public void CallButtonClicked ()
 	{
-		CallHenchmenMenu.instance.henchmenID = m_henchmenID;
-		GameManager.instance.PushMenuState (MenuState.State.CallHenchmenMenu);
+		if (GameManager.instance.currentMenuState == MenuState.State.SelectHenchmenMenu && m_henchmenID != -1) {
+			SelectHenchmenMenu.instance.SelectHenchmen (m_henchmenID);
+		} else {
+			CallHenchmenMenu.instance.henchmenID = m_henchmenID;
+			GameManager.instance.PushMenuState (MenuState.State.CallHenchmenMenu);
+		}
 	}
 }

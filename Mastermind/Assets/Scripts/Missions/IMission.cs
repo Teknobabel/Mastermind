@@ -4,5 +4,5 @@ using System.Collections;
 public interface IMission {
 
 	bool IsValid ();
-	void CompleteMission ();
+	void CompleteMission (Organization.ActiveMission a);
 }

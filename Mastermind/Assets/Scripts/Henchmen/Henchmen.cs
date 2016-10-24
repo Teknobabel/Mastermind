@@ -51,7 +51,22 @@ public class Henchmen : ScriptableObject {
 
 	public void SetRegion (Region newRegion)
 	{
+		// remove from current region list
+
+		if (m_currentRegion != null && m_currentRegion.currentHenchmen.Contains (this)) {
+			m_currentRegion.currentHenchmen.Remove (this);
+		}
+
+		// add to new region list
+		if (newRegion != null) {
+			if (!newRegion.currentHenchmen.Contains (this)) {
+				newRegion.currentHenchmen.Add (this);
+			}
+		}
+			
 		m_currentRegion = newRegion;
+
+
 	}
 
 	public void AddTrait (TraitData t)

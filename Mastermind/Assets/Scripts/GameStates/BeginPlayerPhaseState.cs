@@ -16,9 +16,11 @@ public class BeginPlayerPhaseState : IGameState {
 
 		// update infamy
 
-		int infamyGain = GameManager.instance.game.director.m_infamyGainPerTurn;
-		if (infamyGain > 0) {
-			player.GainInfamy (infamyGain);
+		if (GameManager.instance.game.turnNumber > 1) {
+			int infamyGain = GameManager.instance.game.director.m_infamyGainPerTurn;
+			if (infamyGain > 0) {
+				player.GainInfamy (infamyGain);
+			}
 		}
 
 		// progress turn to next phase

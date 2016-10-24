@@ -16,6 +16,7 @@ public class MissionBase : ScriptableObject, IMission {
 	public int m_cost = 1;
 	public int m_numTurns = 1;
 	public int m_maxRank = 5;
+	public int m_infamyGain = 0;
 	public MissionTrait[] m_rank1Traits;
 	public MissionTrait[] m_rank2Traits;
 	public MissionTrait[] m_rank3Traits;
@@ -47,13 +48,15 @@ public class MissionBase : ScriptableObject, IMission {
 		return null;
 	}
 
-	public virtual void CompleteMission ()
+	public virtual void CompleteMission (Organization.ActiveMission a)
 	{
-
+		if (m_infamyGain > 0) {
+			GameManager.instance.game.player.GainInfamy (m_infamyGain);
+		}
 	}
 
 	public virtual bool IsValid ()
 	{
-		return true;
+		return false;
 	}
 }

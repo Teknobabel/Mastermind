@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	public MenuState[] m_menuStates;
 
 	public RegionData m_lairRegion;
+	public TravelToRegion m_travelMission;
 
 	private StartNewGameState m_startNewGame;
 	private BeginTurnState m_beginTurn;
@@ -30,6 +31,8 @@ public class GameManager : MonoBehaviour {
 	private MenuState m_menuState = null;
 
 	private int m_currentID = 0;
+
+	private MissionRequest m_currentMissionRequest;
 
 	private string m_currentVersion = "VER 0.0.1";
 
@@ -75,6 +78,15 @@ public class GameManager : MonoBehaviour {
 		m_currentState = newState;
 
 		newState.EnterState ();
+	}
+
+	public void ProcessMissionRequest ()
+	{
+		if (m_currentMissionRequest != null && m_currentMissionRequest.m_mission != null && m_currentMissionRequest.m_henchmen.Count > 0) {
+			Debug.Log ("Processing Mission Request: " + m_currentMissionRequest.m_mission.m_name);
+			GameManager.instance.game.player.AddMission (m_currentMissionRequest);
+			m_currentMissionRequest = null;
+		}
 	}
 
 	public void PushMenuState (MenuState.State newState)
@@ -159,10 +171,12 @@ public class GameManager : MonoBehaviour {
 	public EndPlayerPhaseState endPlayerPhase {get{return m_endPlayerPhase; }}
 	public RegionPhaseState regionPhase {get{return m_regionPhase; }}
 	public AgentPhaseState agentPhase {get{return m_agentPhase; }}
+
 	public Game game {get{return m_game; } set {m_game = value; }}
 	public MenuState.State currentMenuState {get{return m_menuState.m_state;}}
 	public MenuState currentMenu {get{ return m_menuState;}}
 	public int currentTabID {get{return m_menuState.tabInfo.id;}}
 	public string currentVersion {get{return m_currentVersion; }}
 	public int newID {get{m_currentID++; return m_currentID;}}
+	public MissionRequest currentMissionRequest {get{return m_currentMissionRequest;}set{m_currentMissionRequest = value;}}
 }

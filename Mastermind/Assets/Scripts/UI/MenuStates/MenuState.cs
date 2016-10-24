@@ -15,7 +15,9 @@ public abstract class MenuState : MonoBehaviour {
 		ActivityMenu,
 		AlertView_ExecuteTurn,
 		PauseMenu,
-		CallHenchmenMenu,
+		CallHenchmenMenu, // do we still use this?
+		SelectHenchmenMenu,
+		SelectMissionMenu,
 	}
 
 	public State m_state = State.None;

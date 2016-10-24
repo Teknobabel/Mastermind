@@ -28,7 +28,7 @@ public class TabButton : MonoBehaviour {
 
 	public void Initialize (MenuTab t)
 	{
-		m_buttonText.text = t.m_name;
+		m_buttonText.text = t.GetTabName ();
 		t.m_tabButton = this;
 		m_menuTab = t;
 	}
@@ -47,11 +47,13 @@ public class TabButton : MonoBehaviour {
 //			m_buttonImage.color = Color.white;
 			cb.normalColor = m_selectedColor;
 			m_button.colors = cb;
+			m_buttonImage.color = m_selectedColor;
 			break;
 		case State.Unselected:
 //			m_buttonImage.color = Color.gray;
 			cb.normalColor = m_unselectedColor;
 			m_button.colors = cb;
+			m_buttonImage.color = m_unselectedColor;
 			break;
 		}
 	}

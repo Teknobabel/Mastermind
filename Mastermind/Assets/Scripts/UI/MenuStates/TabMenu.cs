@@ -95,6 +95,9 @@ public class TabMenu : MenuState, IObserver {
 		case GameEvent.GameState_TurnNumberChanged:
 			m_turn.text = GameManager.instance.game.turnNumber.ToString();
 			break;
+		case GameEvent.Organization_InfamyChanged:
+			m_infamy.text = ((Organization)subject).currentInfamy.ToString () + "<size=24>/" + ((Organization)subject).maxInfamy.ToString() + "</size>";
+			break;
 		}
 	}
 

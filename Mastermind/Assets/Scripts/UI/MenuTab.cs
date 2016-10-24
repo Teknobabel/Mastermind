@@ -15,6 +15,24 @@ public class MenuTab {
 		m_tabID = GameManager.instance.newID;
 	}
 
+	public string GetTabName ()
+	{
+		string s = m_name.ToUpper ();
+
+		if (m_menuState == MenuState.State.OmegaPlanMenu && m_objectID != -1) {
+			OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [objectID];
+			s = "<size=18>" + m_name.ToUpper () + ":</size>";
+
+//			if (op.state == OmegaPlan.State.Hidden) {
+//				s += "\nUNKNOWN";
+//			} else {
+				s += "\n" + op.opNameShort.ToUpper ();
+//			}
+		}
+
+		return s;
+	}
+
 	public int id {get{return m_tabID; }}
 	public int objectID {get{return m_objectID; }set{m_objectID = value; }}
 }

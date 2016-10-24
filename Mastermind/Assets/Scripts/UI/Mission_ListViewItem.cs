@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 
 public class Mission_ListViewItem : MonoBehaviour {
@@ -18,8 +19,8 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	public void Initialize (Organization.ActiveMission a)
 	{
-		Henchmen h = a.m_henchmen [0];
-		Initialize (a.m_mission, h);
+//		Henchmen h = a.m_henchmen [0];
+		Initialize (a.m_mission, a.m_henchmen);
 
 		int turnsLeft = a.m_mission.m_numTurns - a.m_turnsPassed;
 		string duration = turnsLeft.ToString ();
@@ -32,7 +33,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 		m_missionDuration.text = duration;
 	}
 
-	public void Initialize (MissionBase m, Henchmen h)
+	public void Initialize (MissionBase m, List<Henchmen> h)
 	{
 		m_mission = m;
 		m_missionName.text = m.m_name.ToUpper();
@@ -50,6 +51,19 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 		int successChance = 0;
 
+		// gather traits from all henchmen
+
+		List<TraitData> combinedTraitList = new List<TraitData> ();
+
+		foreach (Henchmen thisH in h) {
+			List<TraitData> t = thisH.GetAllTraits();
+			foreach (TraitData thisT in t) {
+				if (!combinedTraitList.Contains (thisT)) {
+					combinedTraitList.Add (thisT);
+				}
+			}
+		}
+
 		MissionBase.MissionTrait[] traits = m.GetTraitList (1);
 
 		for (int i = 0; i < m_traits.Length; i++) {
@@ -58,7 +72,8 @@ public class Mission_ListViewItem : MonoBehaviour {
 				MissionBase.MissionTrait mT = traits [i];
 				if (mT.m_trait != null)
 				{
-					bool hasTrait = h.HasTrait (mT.m_trait);
+//					bool hasTrait = h.HasTrait (mT.m_trait);
+					bool hasTrait = combinedTraitList.Contains (mT.m_trait);
 					t.Initialize (mT.m_trait, hasTrait);
 
 					if (hasTrait) {
@@ -76,7 +91,10 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public void StartMissionButtonPressed ()
 	{
 		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
-			CallHenchmenMenu.instance.Startmission (m_mission);
+//			CallHenchmenMenu.instance.Startmission (m_mission);
+			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {
+				SelectMissionMenu.instance.SelectMission (m_mission);
+			}
 		}
 	}
 

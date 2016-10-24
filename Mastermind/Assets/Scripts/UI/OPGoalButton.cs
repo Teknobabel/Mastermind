@@ -13,8 +13,8 @@ public class OPGoalButton : MonoBehaviour {
 	
 	}
 	
-	public void Initialize (OPGoal goal)
+	public void Initialize (OmegaPlan.Goal goal)
 	{
-		m_buttonText.text = goal.m_goalName;
+		m_buttonText.text = goal.m_goal.GetText ();
 	}
 }

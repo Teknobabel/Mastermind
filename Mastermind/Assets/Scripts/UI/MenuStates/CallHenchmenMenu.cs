@@ -63,16 +63,16 @@ public class CallHenchmenMenu : MenuState {
 
 	private void UpdateMissionList (Henchmen h)
 	{
-		foreach (MissionBase m in GameManager.instance.m_missionBank) {
-			
-			if (((IMission)m).IsValid ()) {
-				
-				GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
-				g.transform.localScale = Vector3.one;
-				m_listViewItems.Add (g);
-				g.GetComponent<Mission_ListViewItem> ().Initialize (m, h);
-			}
-		}
+//		foreach (MissionBase m in GameManager.instance.m_missionBank) {
+//			
+//			if (((IMission)m).IsValid ()) {
+//				
+//				GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+//				g.transform.localScale = Vector3.one;
+//				m_listViewItems.Add (g);
+//				g.GetComponent<Mission_ListViewItem> ().Initialize (m, h);
+//			}
+//		}
 	}
 
 	public void CloseButtonClicked ()
@@ -82,15 +82,15 @@ public class CallHenchmenMenu : MenuState {
 
 	public void Startmission (MissionBase m)
 	{
-		if (m_henchmenID != -1) {
-			GameManager.instance.game.player.UseCommandPoints (m.m_cost);
-			Henchmen h = GameManager.instance.game.GetHenchmenByID (m_henchmenID);
-			List<Henchmen> l = new List<Henchmen> ();
-			l.Add (h);
-			GameManager.instance.game.player.AddMission (m, l);
-
-			GameManager.instance.PopMenuState ();
-		}
+//		if (m_henchmenID != -1) {
+//			GameManager.instance.game.player.UseCommandPoints (m.m_cost);
+//			Henchmen h = GameManager.instance.game.GetHenchmenByID (m_henchmenID);
+//			List<Henchmen> l = new List<Henchmen> ();
+//			l.Add (h);
+//			GameManager.instance.game.player.AddMission (m, l);
+//
+//			GameManager.instance.PopMenuState ();
+//		}
 	}
 
 	public int henchmenID {get{ return m_henchmenID; }set{m_henchmenID = value; }}

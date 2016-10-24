@@ -12,4 +12,6 @@ public enum GameEvent {
 	Henchmen_MissionCompleted,
 	Henchmen_MissionContinued,
 	Organization_HenchmenForHireArrived,
+	Henchmen_ArriveInRegion,
+	Organization_InfamyChanged,
 }

@@ -8,6 +8,7 @@ public class Game : ScriptableObject, ISubject {
 
 	private List<Region> m_regions = new List<Region>();
 	private Dictionary<RegionData.RegionGroup, List<Region>> m_regionsByGroup = new Dictionary<RegionData.RegionGroup, List<Region>>();
+	private Dictionary <int, Region> m_regionsByID = new Dictionary<int, Region>();
 
 	private List<Henchmen> m_henchmen = new List<Henchmen>();
 	private Dictionary<int, List<Henchmen>> m_henchmenByRank = new Dictionary<int, List<Henchmen>>();
@@ -50,6 +51,10 @@ public class Game : ScriptableObject, ISubject {
 			List<Region> rList = new List<Region> ();
 			rList.Add (r);
 			m_regionsByGroup.Add (r.regionGroup, rList);
+		}
+
+		if (!m_regionsByID.ContainsKey (r.id)) {
+			m_regionsByID.Add (r.id, r);
 		}
 	}
 
@@ -138,4 +143,5 @@ public class Game : ScriptableObject, ISubject {
 	public Director director {get{return m_director;}}
 	public List<Henchmen> henchmen {get{return m_henchmen; }}
 	public int turnNumber {get{return m_turnNumber;}set{m_turnNumber = value; Notify (this, GameEvent.GameState_TurnNumberChanged); }}
+	public Dictionary<int, Region> regionsByID {get{return m_regionsByID; }}
 }

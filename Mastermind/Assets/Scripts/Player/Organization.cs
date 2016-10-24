@@ -9,6 +9,7 @@ public class Organization : ScriptableObject, ISubject {
 		public MissionBase m_mission = null;
 		public int m_turnsPassed = 0;
 		public List<Henchmen> m_henchmen = new List<Henchmen> ();
+		public Region m_region = null;
 	}
 
 	private string m_name = "Null";
@@ -56,7 +57,8 @@ public class Organization : ScriptableObject, ISubject {
 				UseCommandPoints (h.hireCost);
 				m_currentHenchmen.Add (h);
 				m_availableHenchmen.RemoveAt (i);
-				h.SetRegion (m_homeRegion);
+//				h.SetRegion (m_homeRegion);
+				m_homeRegion.AddHenchmen(h);
 
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = h.henchmenName + " joins " + m_name;
@@ -82,19 +84,30 @@ public class Organization : ScriptableObject, ISubject {
 		}
 	}
 
-	public void AddMission (MissionBase m, List<Henchmen> h)
+	public void AddMission (MissionRequest mr)
 	{
 		ActiveMission a = new ActiveMission ();
-		a.m_mission = m;
-		a.m_henchmen = h;
+		a.m_mission = mr.m_mission;
+		a.m_henchmen = mr.m_henchmen;
+		a.m_region = mr.m_region;
 
-		foreach (Henchmen thisH in h) {
+		foreach (Henchmen thisH in a.m_henchmen) {
 			if (thisH.currentState != Henchmen.state.OnMission) {
 				thisH.ChangeState (Henchmen.state.OnMission);
 			}
 		}
 
 		m_activeMissions.Add (a);
+	}
+
+	public void MissionCompleted (ActiveMission a)
+	{
+		foreach (Henchmen h in a.m_henchmen) {
+			h.ChangeState (Henchmen.state.Idle);
+		}
+		if (m_activeMissions.Contains (a)) {
+			m_activeMissions.Remove (a);
+		}
 	}
 
 	public MissionBase GetMission (Henchmen h)
@@ -111,6 +124,17 @@ public class Organization : ScriptableObject, ISubject {
 		}
 
 		return m;
+	}
+
+	public MissionBase GetMission (Region r)
+	{
+		foreach (ActiveMission a in m_activeMissions) {
+			if (a.m_region != null && r.id == a.m_region.id) {
+				return a.m_mission;
+			}
+		}
+
+		return null;
 	}
 
 	public void AddHenchmenToAvailablePool (Henchmen h)
@@ -173,12 +197,23 @@ public class Organization : ScriptableObject, ISubject {
 				GainWantedLevel (1);
 			}
 		}
+		Notify (this, GameEvent.Organization_InfamyChanged);
 
 	}
 
 	public void AddAsset (Asset a)
 	{
 		m_currentAssets.Add (a);
+	}
+
+	public ActiveMission GetMissionForHenchmen (Henchmen h)
+	{
+		foreach (ActiveMission a in m_activeMissions) {
+			if (a.m_henchmen.Contains (h)) {
+				return (a);
+			}
+		}
+		return null;
 	}
 
 	public void Initialize (Director d, Game g, string orgName)
@@ -233,6 +268,7 @@ public class Organization : ScriptableObject, ISubject {
 		Region newRegion = Region.CreateInstance<Region> ();
 		newRegion.Initialize (GameManager.instance.m_lairRegion);
 		m_homeRegion = newRegion;
+		g.AddRegionToGame (newRegion);
 
 
 		// select starting Henchmen
