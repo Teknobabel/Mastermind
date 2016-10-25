@@ -13,10 +13,11 @@ public class Goal_AcquireAsset : OPGoalBase, IObserver {
 		return g;
 	}
 
-	public override void Initialize ()
+	public override void Initialize (OmegaPlan op, Organization o)
 	{
-		
+		base.Initialize (op, o);
 		// add observers as needed to detect goal completion
+		o.AddObserver(this);
 
 	}
 
@@ -34,11 +35,15 @@ public class Goal_AcquireAsset : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-//		switch (thisGameEvent) {
-//		case GameEvent.Organization_HenchmenDismissed:
-//		case GameEvent.Organization_HenchmenHired:
-//
-//			break;
-//		}
+		switch (thisGameEvent) {
+		case GameEvent.Organization_AssetGained:
+			Organization o = (Organization)subject;
+			if (o.currentAssets.Contains(m_asset)) {
+				// goal is met
+				m_omegaPlan.GoalCompleted(this);
+				GameManager.instance.game.player.RemoveObserver (this);
+			}
+			break;
+		}
 	}
 }

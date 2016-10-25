@@ -13,10 +13,12 @@ public class Goal_HireHenchmen : OPGoalBase, IObserver {
 		return g;
 	}
 
-	public override void Initialize ()
+	public override void Initialize (OmegaPlan op, Organization o)
 	{
+		base.Initialize (op, o);
 
 		// add observers as needed to detect goal completion
+		o.AddObserver(this);
 
 	}
 
@@ -34,11 +36,18 @@ public class Goal_HireHenchmen : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		//		switch (thisGameEvent) {
-		//		case GameEvent.Organization_HenchmenDismissed:
-		//		case GameEvent.Organization_HenchmenHired:
-		//
-		//			break;
-		//		}
+		switch (thisGameEvent) {
+		case GameEvent.Organization_HenchmenHired:
+			Organization o = (Organization)subject;
+
+			foreach (Henchmen h in o.currentHenchmen) {
+				if (h.HasTrait (m_trait)) {
+					// goal is met
+					m_omegaPlan.GoalCompleted(this);
+					GameManager.instance.game.player.RemoveObserver (this);
+				}
+			}
+			break;
+		}
 	}
 }

@@ -91,6 +91,8 @@ public class Organization : ScriptableObject, ISubject {
 		a.m_henchmen = mr.m_henchmen;
 		a.m_region = mr.m_region;
 
+		a.m_mission.InitializeMission (a);
+
 		foreach (Henchmen thisH in a.m_henchmen) {
 			if (thisH.currentState != Henchmen.state.OnMission) {
 				thisH.ChangeState (Henchmen.state.OnMission);
@@ -204,6 +206,8 @@ public class Organization : ScriptableObject, ISubject {
 	public void AddAsset (Asset a)
 	{
 		m_currentAssets.Add (a);
+
+		Notify (this, GameEvent.Organization_AssetGained);
 	}
 
 	public ActiveMission GetMissionForHenchmen (Henchmen h)
@@ -239,13 +243,42 @@ public class Organization : ScriptableObject, ISubject {
 
 		List<OmegaPlanData> ops = new List<OmegaPlanData> ();
 		m_omegaPlans = new List<OmegaPlan> ();
+
 		foreach (OmegaPlanData o in d.m_omegaPlanBank) {
-			ops.Add (o);
+
+			bool alreadyPresent = false;
+			foreach (OmegaPlanData startingO in d.m_startingOmegaPlanData)
+			{
+				if (startingO == o) {
+					alreadyPresent = true;
+				}
+			}
+
+			if (!alreadyPresent) {
+				ops.Add (o);
+			}
 		}
 
 		int revealed = 0;
 		for (int i = 0; i < d.m_startingOmegaPlans; i++) {
-			if (ops.Count > 0) {
+
+			// pull first from starting omega plans as per Director
+
+			if (i < d.m_startingOmegaPlanData.Length) {
+				OmegaPlanData newOPData = d.m_startingOmegaPlanData [i];
+
+				OmegaPlan newOP = OmegaPlan.CreateInstance<OmegaPlan> ();
+
+				if (revealed < d.m_startingRevealedOmegaPlans) {
+					newOP.Initialize (newOPData, OmegaPlan.State.Revealed, this);
+					revealed++;
+				} else {
+					newOP.Initialize (newOPData, OmegaPlan.State.Hidden, this);
+				}
+
+				AddOmegaPlan (newOP);
+
+			} else if (ops.Count > 0) {
 				int rand = Random.Range (0, ops.Count);
 				OmegaPlanData newOPData = ops [rand];
 				ops.RemoveAt (rand);
@@ -253,10 +286,10 @@ public class Organization : ScriptableObject, ISubject {
 				OmegaPlan newOP = OmegaPlan.CreateInstance<OmegaPlan> ();
 
 				if (revealed < d.m_startingRevealedOmegaPlans) {
-					newOP.Initialize (newOPData, OmegaPlan.State.Revealed);
+					newOP.Initialize (newOPData, OmegaPlan.State.Revealed, this);
 					revealed++;
 				} else {
-					newOP.Initialize (newOPData, OmegaPlan.State.Hidden);
+					newOP.Initialize (newOPData, OmegaPlan.State.Hidden, this);
 				}
 
 				AddOmegaPlan (newOP);

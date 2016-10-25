@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
 
 	public RegionData m_lairRegion;
 	public TravelToRegion m_travelMission;
+//	public Asset m_testAsset;
 
 	private StartNewGameState m_startNewGame;
 	private BeginTurnState m_beginTurn;
@@ -84,6 +85,7 @@ public class GameManager : MonoBehaviour {
 	{
 		if (m_currentMissionRequest != null && m_currentMissionRequest.m_mission != null && m_currentMissionRequest.m_henchmen.Count > 0) {
 			Debug.Log ("Processing Mission Request: " + m_currentMissionRequest.m_mission.m_name);
+			GameManager.instance.game.player.UseCommandPoints (m_currentMissionRequest.m_mission.m_cost);
 			GameManager.instance.game.player.AddMission (m_currentMissionRequest);
 			m_currentMissionRequest = null;
 		}

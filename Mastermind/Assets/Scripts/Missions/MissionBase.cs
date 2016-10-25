@@ -48,6 +48,11 @@ public class MissionBase : ScriptableObject, IMission {
 		return null;
 	}
 
+	public virtual void InitializeMission (Organization.ActiveMission a)
+	{
+
+	}
+
 	public virtual void CompleteMission (Organization.ActiveMission a)
 	{
 		if (m_infamyGain > 0) {

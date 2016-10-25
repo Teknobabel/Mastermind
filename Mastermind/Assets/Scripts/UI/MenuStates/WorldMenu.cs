@@ -126,25 +126,28 @@ public class WorldMenu : MenuState {
 
 		Organization player = GameManager.instance.game.player;
 
-		foreach (Henchmen h in player.currentHenchmen) {
+		if (player.currentCommandPool >= GameManager.instance.m_travelMission.m_cost) {
+			
+			foreach (Henchmen h in player.currentHenchmen) {
 
-			Organization.ActiveMission a = player.GetMissionForHenchmen (h);
+				Organization.ActiveMission a = player.GetMissionForHenchmen (h);
 
-			if (a == null && h.currentRegion.id != regionID) {
-				validHenchmen.Add (h);
+				if (a == null && h.currentRegion.id != regionID) {
+					validHenchmen.Add (h);
+				}
 			}
-		}
 
-		if (validHenchmen.Count > 0) {
-			Region region = GameManager.instance.game.regionsByID [regionID];
-			MissionRequest r = new MissionRequest ();
-			r.m_henchmen = validHenchmen;
-			r.m_mission = GameManager.instance.m_travelMission;
-			r.m_region = region;
+			if (validHenchmen.Count > 0) {
+				Region region = GameManager.instance.game.regionsByID [regionID];
+				MissionRequest r = new MissionRequest ();
+				r.m_henchmen = validHenchmen;
+				r.m_mission = GameManager.instance.m_travelMission;
+				r.m_region = region;
 
-			GameManager.instance.currentMissionRequest = r;
+				GameManager.instance.currentMissionRequest = r;
 
-			GameManager.instance.PushMenuState (State.SelectHenchmenMenu);
+				GameManager.instance.PushMenuState (State.SelectHenchmenMenu);
+			}
 		}
 	}
 }

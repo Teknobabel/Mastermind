@@ -20,7 +20,9 @@ public class Director : ScriptableObject {
 	m_maxIntel = 5;
 
 	public Asset[] m_startingAssets;
+	public OmegaPlanData[] m_startingOmegaPlanData;
 
+	// TODO: starting henchmen
 
 	// TODO: starting player upgrades
 

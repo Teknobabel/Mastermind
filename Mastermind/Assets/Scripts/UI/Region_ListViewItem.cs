@@ -37,8 +37,6 @@ public class Region_ListViewItem : MonoBehaviour {
 		for (int i = 0; i < m_policyTokens.Length; i++) {
 			TokenButton tB = m_policyTokens [i];
 			if (i < p.Count) {
-//				PolicyToken pT = p[i].m_policyToken;
-//				tB.Initialize(pT);
 				tB.Initialize(p[i]);
 			} else {
 				tB.Deactivate ();
@@ -48,8 +46,6 @@ public class Region_ListViewItem : MonoBehaviour {
 		for (int i = 0; i < m_assetTokens.Length; i++) {
 			TokenButton tB = m_assetTokens [i];
 			if (i < a.Count) {
-//				AssetToken aT = a[i].m_assetToken;
-//				tB.Initialize(aT);
 				tB.Initialize(a[i]);
 			} else {
 				tB.Deactivate ();
@@ -59,8 +55,6 @@ public class Region_ListViewItem : MonoBehaviour {
 		for (int i = 0; i < m_controlTokens.Length; i++) {
 			TokenButton tB = m_controlTokens [i];
 			if (i < c.Count) {
-//				ControlToken cT = c[i].m_controlToken;
-//				tB.Initialize(cT);
 				tB.Initialize(c[i]);
 			} else {
 				tB.Deactivate ();
@@ -69,10 +63,12 @@ public class Region_ListViewItem : MonoBehaviour {
 
 		for (int i = 0; i < m_henchmenTokens.Length; i++) {
 			RegionHenchmenButton tB = m_henchmenTokens [i];
-			if (i < r.currentHenchmen.Count) {
-				Henchmen h = r.currentHenchmen [i];
-				tB.Initialize (h);
-			} else if (i >= r.henchmenSlots) {
+			if (i < r.henchmenSlots.Count) {
+//				Henchmen h = r.currentHenchmen [i];
+//				tB.Initialize (h);
+				Region.HenchmenSlot hSlot = r.henchmenSlots[i];
+				tB.Initialize (hSlot);
+			} else if (i >= r.henchmenSlots.Count) {
 				tB.Deactivate ();
 			}
 		}

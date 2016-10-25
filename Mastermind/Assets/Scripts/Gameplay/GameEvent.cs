@@ -14,4 +14,5 @@ public enum GameEvent {
 	Organization_HenchmenForHireArrived,
 	Henchmen_ArriveInRegion,
 	Organization_InfamyChanged,
+	Organization_AssetGained,
 }

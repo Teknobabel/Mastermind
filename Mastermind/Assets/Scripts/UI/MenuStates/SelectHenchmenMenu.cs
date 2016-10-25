@@ -69,7 +69,10 @@ public class SelectHenchmenMenu : MenuState {
 
 	public override void OnUpdate()
 	{
-
+		if (Input.GetKeyUp (KeyCode.Escape)) {
+			GameManager.instance.currentMissionRequest = null;
+			GameManager.instance.PopMenuState ();
+		}
 	}
 
 	public void SelectHenchmen (int hID)

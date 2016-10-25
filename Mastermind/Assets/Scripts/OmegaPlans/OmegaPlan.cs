@@ -34,7 +34,7 @@ public class OmegaPlan : ScriptableObject {
 
 	private int m_id = -1;
 
-	public void Initialize (OmegaPlanData op, State state)
+	public void Initialize (OmegaPlanData op, State state, Organization o)
 	{
 		m_id = GameManager.instance.newID;
 		m_name = op.m_name;
@@ -46,11 +46,20 @@ public class OmegaPlan : ScriptableObject {
 
 			Goal goal = new Goal ();
 			OPGoalBase newGoal = g.GetObject ();
-			newGoal.Initialize ();
+			newGoal.Initialize (this, o);
 			goal.m_goal = newGoal;
 			m_goals.Add (goal);
 		}
 
+	}
+
+	public void GoalCompleted (OPGoalBase goal)
+	{
+		foreach (Goal g in m_goals) {
+			if (g.m_state == Goal.State.Active && goal.id == g.m_goal.id) {
+				g.m_state = Goal.State.Completed;
+			}
+		}
 	}
 
 	public int id {get{return m_id; }}

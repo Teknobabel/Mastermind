@@ -10,9 +10,9 @@ public class Goal_ThreatenTheWorld : OPGoalBase, IObserver {
 		return g;
 	}
 
-	public override void Initialize ()
+	public override void Initialize (OmegaPlan op, Organization o)
 	{
-
+		base.Initialize (op, o);
 		// add observers as needed to detect goal completion
 
 	}

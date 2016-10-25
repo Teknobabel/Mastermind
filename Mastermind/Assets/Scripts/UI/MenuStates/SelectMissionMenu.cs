@@ -54,7 +54,10 @@ public class SelectMissionMenu : MenuState {
 
 	public override void OnUpdate()
 	{
-
+		if (Input.GetKeyUp (KeyCode.Escape)) {
+			GameManager.instance.currentMissionRequest = null;
+			GameManager.instance.PopMenuState ();
+		}
 	}
 
 	private void UpdateMissionList ()
@@ -80,7 +83,6 @@ public class SelectMissionMenu : MenuState {
 	public void SelectMission (MissionBase m)
 	{
 		if (GameManager.instance.game.player.currentCommandPool >= m.m_cost) {
-			GameManager.instance.game.player.UseCommandPoints (m.m_cost);
 			GameManager.instance.currentMissionRequest.m_mission = m;
 			GameManager.instance.ProcessMissionRequest ();
 			GameManager.instance.PopMenuState ();

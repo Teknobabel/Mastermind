@@ -44,6 +44,21 @@ public class Region : ScriptableObject {
 		}
 	}
 
+	public class HenchmenSlot
+	{
+		public enum State
+		{
+			None,
+			Empty,
+			Reserved,
+			Occupied,
+		}
+
+		public int m_id = -1;
+		public State m_state = State.None;
+		public Henchmen m_henchmen = null;
+	}
+
 	private string m_regionName = "Null";
 	private RegionData.Rank m_rank = RegionData.Rank.None;
 	private RegionData.RegionGroup m_regionGroup = RegionData.RegionGroup.None;
@@ -52,10 +67,11 @@ public class Region : ScriptableObject {
 	private List<TokenSlot> m_policyTokens;
 	private List<TokenSlot> m_controlTokens;
 	private List<Henchmen> m_currentHenchmen;
+	private List<HenchmenSlot> m_henchmenSlots;
 
 	private int 
 	m_id = -1,
-	m_henchmenSlots = 1;
+	m_numHenchmenSlots = 1;
 
 	public void Initialize (RegionData r)
 	{
@@ -63,12 +79,13 @@ public class Region : ScriptableObject {
 		m_regionName = r.m_name.ToUpper();
 		m_rank = r.m_rank;
 		m_regionGroup = r.m_regionGroup;
-		m_henchmenSlots = r.m_henchmenSlots;
+		m_numHenchmenSlots = r.m_henchmenSlots;
 
 		m_assetTokens = new List<TokenSlot> ();
 		m_policyTokens = new List<TokenSlot> ();
 		m_controlTokens = new List<TokenSlot> ();
 		m_currentHenchmen = new List<Henchmen> ();
+		m_henchmenSlots = new List<HenchmenSlot> ();
 
 		foreach (AssetToken a in r.m_assetTokens) {
 
@@ -88,6 +105,13 @@ public class Region : ScriptableObject {
 			} else {
 				AddControlToken (c);
 			}
+		}
+
+		for (int i = 0; i < m_numHenchmenSlots; i++) {
+			HenchmenSlot s = new HenchmenSlot ();
+			s.m_state = HenchmenSlot.State.Empty;
+			s.m_id = GameManager.instance.newID;
+			m_henchmenSlots.Add (s);
 		}
 	}
 
@@ -111,14 +135,60 @@ public class Region : ScriptableObject {
 		m_controlTokens.Add (t);
 	}
 
+	public void ReserveSlot (Henchmen h)
+	{
+		foreach (HenchmenSlot s in m_henchmenSlots) {
+			if (s.m_state == HenchmenSlot.State.Empty) {
+				s.m_state = HenchmenSlot.State.Reserved;
+				s.m_henchmen = h;
+				break;
+			}
+		}
+	}
+
+	private HenchmenSlot HasReservation (Henchmen h)
+	{
+		foreach (HenchmenSlot s in m_henchmenSlots) {
+			if (s.m_state == HenchmenSlot.State.Reserved && s.m_henchmen != null && s.m_henchmen.id == h.id) {
+				return s;
+			}
+		}
+
+		return null;
+	}
+
 	public void AddHenchmen (Henchmen h)
 	{
+		HenchmenSlot r = HasReservation (h);
+
+		if (r != null) {
+			r.m_state = HenchmenSlot.State.Occupied;
+			r.m_henchmen = h;
+		
+		} else {
+			bool henchmenPlaced = false;
+
+			foreach (HenchmenSlot s in m_henchmenSlots) {
+				if (s.m_state == HenchmenSlot.State.Empty) {
+					s.m_state = HenchmenSlot.State.Occupied;
+					s.m_henchmen = h;
+					henchmenPlaced = true;
+					break;
+				}
+			}
+
+			if (!henchmenPlaced) {
+				Debug.Log (m_henchmenSlots.Count);
+				Debug.Log ("<color=red>No Henchmen Slot Found</color>");
+			}
+		}
+
 		h.SetRegion (this);
 		m_currentHenchmen.Add (h);
 	} 
 
 	public int id {get{return m_id;}}
-	public int henchmenSlots {get{return m_henchmenSlots;}}
+	public int numHenchmenSlots {get{return m_numHenchmenSlots;}}
 	public RegionData.Rank rank {get{return m_rank; }}
 	public string regionName {get{return m_regionName; }}
 	public RegionData.RegionGroup regionGroup {get{return m_regionGroup; }}
@@ -126,4 +196,5 @@ public class Region : ScriptableObject {
 	public List<TokenSlot> policyTokens {get{return m_policyTokens;}}
 	public List<TokenSlot> controlTokens {get{return m_controlTokens;}}
 	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen;}}
+	public List<HenchmenSlot> henchmenSlots {get{return m_henchmenSlots;}}
 }
