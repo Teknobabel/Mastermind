@@ -35,6 +35,9 @@ public abstract class MenuState : MonoBehaviour {
 	public virtual void HideActionPane (){
 	}
 
+	public virtual void BackButtonPressed (){
+	}
+
 	public State state {get{return m_state;}}
 	public MenuTab tabInfo {get{return m_tabInfo; } set{m_tabInfo = value; }}
 }

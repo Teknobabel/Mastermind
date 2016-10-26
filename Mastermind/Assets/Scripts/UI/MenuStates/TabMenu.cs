@@ -113,6 +113,13 @@ public class TabMenu : MenuState, IObserver {
 		GameManager.instance.PushMenuState(State.PauseMenu);
 	}
 
+	public override void BackButtonPressed ()
+	{
+		if (GameManager.instance.currentMenu != null) {
+			GameManager.instance.currentMenu.BackButtonPressed ();
+		}
+	}
+
 	public void EnableActivityPane ()
 	{
 		if (GameManager.instance.currentMenu != null) {

@@ -7,6 +7,7 @@ public class SelectMissionMenu : MenuState {
 	public static SelectMissionMenu instance;
 
 	public GameObject m_selectMissionMenu;
+	public GameObject m_backButton;
 
 	public GameObject m_missionListViewItem;
 	public GameObject m_sectionHeader;
@@ -27,6 +28,9 @@ public class SelectMissionMenu : MenuState {
 	public override void OnActivate(MenuTab tabInfo)
 	{
 		Debug.Log ("Starting Select Mission Menu");
+
+		m_selectMissionMenu.gameObject.SetActive (true);
+		m_backButton.gameObject.SetActive (true);
 
 		UpdateMissionList ();
 
@@ -50,14 +54,20 @@ public class SelectMissionMenu : MenuState {
 		}
 
 		m_selectMissionMenu.gameObject.SetActive (false);
+		m_backButton.gameObject.SetActive (false);
 	}
 
 	public override void OnUpdate()
 	{
 		if (Input.GetKeyUp (KeyCode.Escape)) {
-			GameManager.instance.currentMissionRequest = null;
-			GameManager.instance.PopMenuState ();
+			BackButtonPressed ();
 		}
+	}
+
+	public override void BackButtonPressed ()
+	{
+		GameManager.instance.currentMissionRequest = null;
+		GameManager.instance.PopMenuState ();
 	}
 
 	private void UpdateMissionList ()
@@ -66,13 +76,18 @@ public class SelectMissionMenu : MenuState {
 
 		if (GameManager.instance.currentMissionRequest != null) {
 
+			GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+			h.transform.localScale = Vector3.one;
+			h.GetComponent<SectionHeader> ().Initialize ("AVAILABLE MISSIONS");
+			m_listViewItems.Add (h);
+
 			foreach (MissionBase m in GameManager.instance.m_missionBank) {
 				if (m.IsValid ()) {
 
 					GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
 					g.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g);
-					g.GetComponent<Mission_ListViewItem> ().Initialize (m, GameManager.instance.currentMissionRequest.m_henchmen);
+					g.GetComponent<Mission_ListViewItem> ().Initialize (m, GameManager.instance.currentMissionRequest);
 
 				}
 			}

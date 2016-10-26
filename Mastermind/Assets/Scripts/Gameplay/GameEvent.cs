@@ -15,4 +15,5 @@ public enum GameEvent {
 	Henchmen_ArriveInRegion,
 	Organization_InfamyChanged,
 	Organization_AssetGained,
+	ActivityMenu_TurnResultsChanged,
 }

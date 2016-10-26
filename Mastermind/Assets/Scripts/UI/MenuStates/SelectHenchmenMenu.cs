@@ -6,6 +6,7 @@ public class SelectHenchmenMenu : MenuState {
 	public static SelectHenchmenMenu instance;
 
 	public GameObject m_selectHenchmenMenu;
+	public GameObject m_backButton;
 
 	public GameObject m_henchmenListViewItem;
 	public GameObject m_sectionHeader;
@@ -27,6 +28,7 @@ public class SelectHenchmenMenu : MenuState {
 	{
 		Debug.Log ("Starting Select Henchmen Menu");
 		m_selectHenchmenMenu.gameObject.SetActive (true);
+		m_backButton.gameObject.SetActive (true);
 
 		if (GameManager.instance.currentMissionRequest != null) {
 
@@ -65,14 +67,20 @@ public class SelectHenchmenMenu : MenuState {
 		}
 
 		m_selectHenchmenMenu.gameObject.SetActive (false);
+		m_backButton.gameObject.SetActive (false);
 	}
 
 	public override void OnUpdate()
 	{
 		if (Input.GetKeyUp (KeyCode.Escape)) {
-			GameManager.instance.currentMissionRequest = null;
-			GameManager.instance.PopMenuState ();
+			BackButtonPressed ();
 		}
+	}
+
+	public override void BackButtonPressed ()
+	{
+		GameManager.instance.currentMissionRequest = null;
+		GameManager.instance.PopMenuState ();
 	}
 
 	public void SelectHenchmen (int hID)

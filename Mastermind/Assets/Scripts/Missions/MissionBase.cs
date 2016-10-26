@@ -25,24 +25,24 @@ public class MissionBase : ScriptableObject, IMission {
 
 	public MissionTrait[] GetTraitList (int rank)
 	{
-		if (rank <= m_maxRank) {
-			switch (rank) {
-			case 1:
-				return m_rank1Traits;
-				break;
-			case 2:
-				return m_rank2Traits;
-				break;
-			case 3:
-				return m_rank3Traits;
-				break;
-			case 4:
-				return m_rank4Traits;
-				break;
-			case 5:
-				return m_rank5Traits;
-				break;
-			}
+		int r = Mathf.Clamp (rank, 1, m_maxRank);
+
+		switch (r) {
+		case 1:
+			return m_rank1Traits;
+			break;
+		case 2:
+			return m_rank2Traits;
+			break;
+		case 3:
+			return m_rank3Traits;
+			break;
+		case 4:
+			return m_rank4Traits;
+			break;
+		case 5:
+			return m_rank5Traits;
+			break;
 		}
 
 		return null;
