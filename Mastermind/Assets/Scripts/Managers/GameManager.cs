@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour {
 
 	private List<MenuState> m_menuStateStack = new List<MenuState>();
 	private MenuState m_menuState = null;
+	private MenuState.State m_targetMenuState = MenuState.State.None;
+	private MenuTab m_currentTab = null;
 
 	private int m_currentID = 0;
 
@@ -121,6 +123,8 @@ public class GameManager : MonoBehaviour {
 	{
 		Debug.Log ("Push State: " + newTab.m_menuState);
 
+		m_currentTab = newTab;
+
 //		MenuState menuState = this.GetComponentInChildren(newStateType) as MenuState;
 		MenuState menuState = null;
 		foreach (MenuState m in m_menuStates) {
@@ -177,8 +181,9 @@ public class GameManager : MonoBehaviour {
 	public Game game {get{return m_game; } set {m_game = value; }}
 	public MenuState.State currentMenuState {get{return m_menuState.m_state;}}
 	public MenuState currentMenu {get{ return m_menuState;}}
-	public int currentTabID {get{return m_menuState.tabInfo.id;}}
+	public int currentTabID {get{return m_currentTab.id;}}
 	public string currentVersion {get{return m_currentVersion; }}
 	public int newID {get{m_currentID++; return m_currentID;}}
 	public MissionRequest currentMissionRequest {get{return m_currentMissionRequest;}set{m_currentMissionRequest = value;}}
+	public MenuState.State targetMenuState {get{ return m_targetMenuState; }set{m_targetMenuState = value; }}
 }

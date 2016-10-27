@@ -21,6 +21,8 @@ public class Goal_SeizeAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 		// add observers as needed to detect goal completion
 
+		o.AddObserver(this);
+
 	}
 
 	public override string GetText ()
@@ -41,11 +43,30 @@ public class Goal_SeizeAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		//		switch (thisGameEvent) {
-		//		case GameEvent.Organization_HenchmenDismissed:
-		//		case GameEvent.Organization_HenchmenHired:
-		//
-		//			break;
-		//		}
+		switch (thisGameEvent) {
+		case GameEvent.Region_ControlTokenSeized:
+			Region r = (Region)subject;
+			if (r == m_region) {
+
+				// check if all control tokens of type in region belong to player
+
+				bool seizedAllTokens = true;
+				foreach (Region.TokenSlot t in r.controlTokens) {
+
+					if (t.m_type == Region.TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && t.m_owner == Region.TokenSlot.Owner.AI) {
+						seizedAllTokens = false;
+						break;
+					}
+				}
+
+				if (seizedAllTokens)
+				{
+//				// goal is met
+				m_omegaPlan.GoalCompleted(this);
+				GameManager.instance.game.player.RemoveObserver (this);
+				}
+			}
+			break;
+		}
 	}
 }

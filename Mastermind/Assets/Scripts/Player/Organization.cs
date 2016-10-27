@@ -71,6 +71,12 @@ public class Organization : ScriptableObject, ISubject {
 		}
 	}
 
+	public void AddHenchmen (Henchmen h)
+	{
+		m_currentHenchmen.Add (h);
+		m_homeRegion.AddHenchmen(h);
+	}
+
 	public void DismissHenchmen (int henchmenID)
 	{
 		for (int i=0; i < m_availableHenchmen.Count; i++)
@@ -207,7 +213,7 @@ public class Organization : ScriptableObject, ISubject {
 	{
 		m_currentAssets.Add (a);
 
-		Notify (this, GameEvent.Organization_AssetGained);
+		Notify (a, GameEvent.Organization_AssetGained);
 	}
 
 	public ActiveMission GetMissionForHenchmen (Henchmen h)
@@ -303,11 +309,21 @@ public class Organization : ScriptableObject, ISubject {
 		m_homeRegion = newRegion;
 		g.AddRegionToGame (newRegion);
 
-
 		// select starting Henchmen
 
 		m_currentHenchmen = new List<Henchmen> ();
 		m_availableHenchmen = new List<Henchmen> ();
+
+		// get any starting henchmen from the director
+
+		for (int i=0; i < d.m_startingHenchmenData.Length; i++)
+		{
+			Henchmen h = g.GetHenchmen (d.m_startingHenchmenData [i]);
+
+			if (h != null) {
+				AddHenchmen (h);
+			}
+		}
 
 		List<Henchmen> bank = new List<Henchmen> ();
 
@@ -324,6 +340,12 @@ public class Organization : ScriptableObject, ISubject {
 			bank.AddRange (g.GetHenchmenByRank(2));
 			bank.AddRange (g.GetHenchmenByRank(3));
 			break;
+		}
+
+		foreach (Henchmen h in m_currentHenchmen) {
+			if (bank.Contains (h)) {
+				bank.Remove (h);
+			}
 		}
 
 		for (int i = 0; i < d.m_startingHenchmen; i++) {

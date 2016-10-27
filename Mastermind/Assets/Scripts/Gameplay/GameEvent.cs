@@ -16,4 +16,8 @@ public enum GameEvent {
 	Organization_InfamyChanged,
 	Organization_AssetGained,
 	ActivityMenu_TurnResultsChanged,
+	Mission_AssetLaunched,
+	Mission_AssetUsed,
+	Region_ControlTokenSeized,
+	Region_TokenStatusChanged,
 }

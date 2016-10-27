@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 [CreateAssetMenu()]
@@ -26,6 +27,8 @@ public class RegionData : ScriptableObject {
 	public string m_name = "Null";
 
 	public Rank m_rank = Rank.None;
+
+	public Sprite m_portrait;
 
 	public int m_henchmenSlots = 1;
 

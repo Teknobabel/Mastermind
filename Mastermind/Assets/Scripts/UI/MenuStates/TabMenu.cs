@@ -34,6 +34,7 @@ public class TabMenu : MenuState, IObserver {
 
 	public override void OnActivate(MenuTab tabInfo)
 	{
+		
 		// set up tabs
 		Dictionary<int, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
 		List<MenuTab> tabList = new List<MenuTab> ();
@@ -68,6 +69,14 @@ public class TabMenu : MenuState, IObserver {
 
 	public override void OnReturn()
 	{
+		if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState != m_state)
+		{
+			GameManager.instance.PopMenuState();
+			return;
+		} else if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState == m_state)
+		{
+			GameManager.instance.targetMenuState = MenuState.State.None;
+		}
 	}
 
 	public override void OnDeactivate()

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [CreateAssetMenu()]
-public class Asset : ScriptableObject {
+public class Asset : ScriptableObject, ISubject {
 
 	public enum Rank
 	{
@@ -55,6 +56,35 @@ public class Asset : ScriptableObject {
 		Relic,
 		Sacrifice,
 		Portal,
+	}
+
+	private List<IObserver>
+	m_observers = new List<IObserver> ();
+
+	public void AddObserver (IObserver observer)
+	{
+		if (!m_observers.Contains(observer))
+		{
+			m_observers.Add (observer);
+		}
+	}
+
+	public void RemoveObserver (IObserver observer)
+	{
+		if (m_observers.Contains(observer))
+		{
+			m_observers.Remove(observer);
+		}
+	}
+
+	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	{
+		List<IObserver> observers = new List<IObserver> (m_observers);
+
+		for (int i=0; i < observers.Count; i++)
+		{
+			observers[i].OnNotify(subject, thisGameEvent);
+		}
 	}
 
 	public string m_name = "Null";

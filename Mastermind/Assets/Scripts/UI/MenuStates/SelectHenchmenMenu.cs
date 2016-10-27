@@ -60,6 +60,10 @@ public class SelectHenchmenMenu : MenuState {
 
 	public override void OnDeactivate()
 	{
+		if (GameManager.instance.targetMenuState != State.None) {
+			GameManager.instance.currentMissionRequest = null;
+		}
+
 		while (m_listViewItems.Count > 0) {
 			GameObject g = m_listViewItems [0];
 			m_listViewItems.RemoveAt (0);

@@ -21,8 +21,7 @@ public class Director : ScriptableObject {
 
 	public Asset[] m_startingAssets;
 	public OmegaPlanData[] m_startingOmegaPlanData;
-
-	// TODO: starting henchmen
+	public HenchmenData[] m_startingHenchmenData;
 
 	// TODO: starting player upgrades
 

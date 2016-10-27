@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [CreateAssetMenu()]
-public class Region : ScriptableObject {
+public class Region : ScriptableObject, ISubject {
 
 	public class TokenSlot
 	{
@@ -22,11 +22,28 @@ public class Region : ScriptableObject {
 			Control,
 		}
 
+		public enum Status
+		{
+			None,
+			Normal,
+			MindControlled,
+			Zombified,
+			Destroyed,
+		}
+
+		public enum Owner
+		{
+			AI,
+			Player,
+		}
+
 		public State m_state = State.None;
 		public TokenType m_type = TokenType.None;
 		public PolicyToken m_policyToken;
 		public AssetToken m_assetToken;
 		public ControlToken m_controlToken;
+		public Status m_status = Status.Normal;
+		public Owner m_owner = Owner.AI;
 
 		public TokenBase GetBaseToken () {
 			switch (m_type) {
@@ -61,6 +78,7 @@ public class Region : ScriptableObject {
 
 	private string m_regionName = "Null";
 	private RegionData.Rank m_rank = RegionData.Rank.None;
+	private Sprite m_portrait;
 	private RegionData.RegionGroup m_regionGroup = RegionData.RegionGroup.None;
 
 	private List<TokenSlot> m_assetTokens;
@@ -73,6 +91,9 @@ public class Region : ScriptableObject {
 	m_id = -1,
 	m_numHenchmenSlots = 1;
 
+	private List<IObserver>
+	m_observers = new List<IObserver> ();
+
 	public void Initialize (RegionData r)
 	{
 		m_id = GameManager.instance.newID;
@@ -80,6 +101,7 @@ public class Region : ScriptableObject {
 		m_rank = r.m_rank;
 		m_regionGroup = r.m_regionGroup;
 		m_numHenchmenSlots = r.m_henchmenSlots;
+		m_portrait = r.m_portrait;
 
 		m_assetTokens = new List<TokenSlot> ();
 		m_policyTokens = new List<TokenSlot> ();
@@ -187,6 +209,32 @@ public class Region : ScriptableObject {
 		m_currentHenchmen.Add (h);
 	} 
 
+	public void AddObserver (IObserver observer)
+	{
+		if (!m_observers.Contains(observer))
+		{
+			m_observers.Add (observer);
+		}
+	}
+
+	public void RemoveObserver (IObserver observer)
+	{
+		if (m_observers.Contains(observer))
+		{
+			m_observers.Remove(observer);
+		}
+	}
+
+	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	{
+		List<IObserver> observers = new List<IObserver> (m_observers);
+
+		for (int i=0; i < observers.Count; i++)
+		{
+			observers[i].OnNotify(subject, thisGameEvent);
+		}
+	}
+
 	public int id {get{return m_id;}}
 	public int numHenchmenSlots {get{return m_numHenchmenSlots;}}
 	public RegionData.Rank rank {get{return m_rank; }}
@@ -197,4 +245,5 @@ public class Region : ScriptableObject {
 	public List<TokenSlot> controlTokens {get{return m_controlTokens;}}
 	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen;}}
 	public List<HenchmenSlot> henchmenSlots {get{return m_henchmenSlots;}}
+	public Sprite portrait {get{return m_portrait;}}
 }

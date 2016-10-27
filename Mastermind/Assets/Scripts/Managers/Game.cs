@@ -103,6 +103,17 @@ public class Game : ScriptableObject, ISubject {
 		return h;
 	}
 
+	public Henchmen GetHenchmen (HenchmenData h)
+	{
+		foreach (Henchmen thisH in m_henchmen) {
+			if (thisH.henchmenName == h.m_name) {
+				return thisH;
+			}
+		}
+
+		return null;
+	}
+
 	public Dictionary<RegionData.RegionGroup, List<Region>> GetAllRegionsByGroup ()
 	{
 		return m_regionsByGroup;

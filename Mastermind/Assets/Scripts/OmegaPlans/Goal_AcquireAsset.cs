@@ -37,8 +37,8 @@ public class Goal_AcquireAsset : OPGoalBase, IObserver {
 	{
 		switch (thisGameEvent) {
 		case GameEvent.Organization_AssetGained:
-			Organization o = (Organization)subject;
-			if (o.currentAssets.Contains(m_asset)) {
+			Asset a = (Asset)subject;
+			if (a == m_asset) {
 				// goal is met
 				m_omegaPlan.GoalCompleted(this);
 				GameManager.instance.game.player.RemoveObserver (this);

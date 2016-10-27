@@ -22,6 +22,7 @@ public class Goal_CombineAssets : OPGoalBase, IObserver {
 		base.Initialize (op, o);
 
 		// add observers as needed to detect goal completion
+		o.AddObserver(this);
 
 	}
 
@@ -39,11 +40,15 @@ public class Goal_CombineAssets : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		//		switch (thisGameEvent) {
-		//		case GameEvent.Organization_HenchmenDismissed:
-		//		case GameEvent.Organization_HenchmenHired:
-		//
-		//			break;
-		//		}
+		switch (thisGameEvent) {
+		case GameEvent.Organization_AssetGained:
+			Asset a = (Asset)subject;
+			if (a == m_resultAsset) {
+				// goal is met
+				m_omegaPlan.GoalCompleted(this);
+				GameManager.instance.game.player.RemoveObserver (this);
+			}
+			break;
+		}
 	}
 }

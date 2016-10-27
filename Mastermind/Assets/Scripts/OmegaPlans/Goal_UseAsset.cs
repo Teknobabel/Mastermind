@@ -19,6 +19,8 @@ public class Goal_UseAsset : OPGoalBase, IObserver {
 
 		// add observers as needed to detect goal completion
 
+		o.AddObserver(this);
+
 	}
 
 	public override string GetText ()
@@ -34,11 +36,15 @@ public class Goal_UseAsset : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		//		switch (thisGameEvent) {
-		//		case GameEvent.Organization_HenchmenDismissed:
-		//		case GameEvent.Organization_HenchmenHired:
-		//
-		//			break;
-		//		}
+		switch (thisGameEvent) {
+		case GameEvent.Mission_AssetUsed:
+			Asset a = (Asset)subject;
+			if (a == m_asset) {
+				// goal is met
+				m_omegaPlan.GoalCompleted(this);
+				GameManager.instance.game.player.RemoveObserver (this);
+			}
+			break;
+		}
 	}
 }

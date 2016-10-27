@@ -29,6 +29,7 @@ public class Region_ListViewItem : MonoBehaviour {
 	{
 		m_regionName.text = r.regionName;
 		m_regionID = r.id;
+		m_regionPortrait.sprite = r.portrait;
 
 		List<Region.TokenSlot> p = r.policyTokens;
 		List<Region.TokenSlot> a = r.assetTokens;
