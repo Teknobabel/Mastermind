@@ -30,4 +30,10 @@ public class OPGoalButton : MonoBehaviour {
 		}
 
 	}
+
+	public void Deactivate ()
+	{
+		m_buttonImage.color = Color.black;
+		m_buttonText.text = "??????";
+	}
 }

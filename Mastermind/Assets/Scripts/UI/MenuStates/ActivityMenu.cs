@@ -8,6 +8,7 @@ public class ActivityMenu : MenuState, ISubject {
 	public GameObject m_turnResultsMenu;
 	public GameObject m_turnResultsListViewItem;
 	public GameObject m_missionListViewItem;
+	public GameObject m_activeMissionListViewItem;
 	public GameObject m_turnResultsButton;
 	public GameObject m_sectionHeader;
 	public GameObject m_scrollViewContent;
@@ -139,10 +140,10 @@ public class ActivityMenu : MenuState, ISubject {
 		} else if (turn == GameManager.instance.game.turnNumber) {
 			
 			foreach (Organization.ActiveMission a in player.activeMissions) {
-				GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+				GameObject g = (GameObject)(Instantiate (m_activeMissionListViewItem, m_scrollViewContent.transform));
 				g.transform.localScale = Vector3.one;
 				m_listViewItems.Add (g);
-				g.GetComponent<Mission_ListViewItem> ().Initialize (a);
+				g.GetComponent<Mission_Active_ListViewItem> ().Initialize (a);
 			}
 		}
 

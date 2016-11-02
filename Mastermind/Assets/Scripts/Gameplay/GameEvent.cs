@@ -20,4 +20,6 @@ public enum GameEvent {
 	Mission_AssetUsed,
 	Region_ControlTokenSeized,
 	Region_TokenStatusChanged,
+	Organization_OmegaPlanRevealed,
+	Organization_AssetRemoved,
 }

@@ -49,13 +49,10 @@ public class Region : ScriptableObject, ISubject {
 			switch (m_type) {
 			case TokenType.Asset:
 				return m_assetToken;
-				break;
 			case TokenType.Policy:
 				return m_policyToken;
-				break;
 			case TokenType.Control:
 				return m_controlToken;
-				break;
 			}
 			return null;
 		}
@@ -145,6 +142,13 @@ public class Region : ScriptableObject, ISubject {
 		t.m_state = TokenSlot.State.Hidden;
 
 		m_assetTokens.Add (t);
+	}
+
+	public void RemoveAssetToken (TokenSlot ts)
+	{
+		ts.m_state = TokenSlot.State.None;
+		ts.m_assetToken = null;
+		ts.m_status = TokenSlot.Status.None;
 	}
 
 	private void AddControlToken (ControlToken c)

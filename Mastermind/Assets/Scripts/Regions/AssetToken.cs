@@ -8,6 +8,6 @@ public class AssetToken : TokenBase, IToken {
 
 	public void ClaimToken ()
 	{
-
+		
 	}
 }

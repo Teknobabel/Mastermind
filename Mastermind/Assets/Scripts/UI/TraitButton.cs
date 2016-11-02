@@ -13,7 +13,8 @@ public class TraitButton : MonoBehaviour {
 	m_skillColor = Color.yellow,
 	m_resourceColor = Color.blue,
 	m_giftColor = Color.green,
-	m_flawColor = Color.red;
+	m_flawColor = Color.red,
+	m_assetColor = Color.magenta;
 
 	public void Initialize (TraitData t, bool activeTrait)
 	{
@@ -39,7 +40,21 @@ public class TraitButton : MonoBehaviour {
 		}
 
 		m_traitButtonImage.color = c;
-		m_traitName.color = c;
+//		m_traitName.color = c;
+	}
+
+	public void Initialize (Asset a, bool activeAsset)
+	{
+		m_traitName.text = a.m_name.ToUpper ();
+
+		Color c = Color.gray;
+
+		if (activeAsset) {
+			c = m_assetColor;
+		}
+
+		m_traitButtonImage.color = c;
+//		m_traitName.color = c;
 	}
 
 	public void Deactivate ()

@@ -60,6 +60,7 @@ public class TokenButton : MonoBehaviour {
 	{
 		switch (newState) {
 		case Region.TokenSlot.State.Hidden:
+			
 			m_tokenImage.fillCenter = true;
 
 			switch (m_tokenSlot.m_type) {
@@ -76,10 +77,26 @@ public class TokenButton : MonoBehaviour {
 			break;
 
 		case Region.TokenSlot.State.Revealed:
-				TokenBase b = m_tokenSlot.GetBaseToken ();
-				if (b != null) {
-					m_tokenText.text = b.m_name.ToUpper ();
-				}
+
+			m_tokenImage.fillCenter = false;
+			
+			TokenBase b = m_tokenSlot.GetBaseToken ();
+			if (b != null) {
+				m_tokenText.text = b.m_name.ToUpper ();
+			}
+
+			if (m_tokenSlot.m_owner == Region.TokenSlot.Owner.Player) {
+				m_tokenImage.color = Color.green;
+				m_tokenText.color = Color.green;
+			}
+			break;
+
+		case Region.TokenSlot.State.None:
+
+			m_tokenImage.fillCenter = false;
+			m_tokenImage.color = Color.grey;
+			m_tokenText.text = "";
+
 			break;
 		}
 

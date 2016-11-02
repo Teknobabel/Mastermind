@@ -56,6 +56,19 @@ public class Asset : ScriptableObject, ISubject {
 		Relic,
 		Sacrifice,
 		Portal,
+		LairUpgrade_Dojo,
+		LairUpgrade_Library,
+		LairUpgrade_DangerRoom,
+		LairUpgrade_Infirmary,
+		LairUpgrade_Jail,
+		LairUpgrade_DarkNet,
+		LairUpgrade_Vault,
+		LairUpgrade_Nexus,
+		LairUpgrade_Barracks,
+		LairUpgrade_Armory,
+		LairUpgrade_Runway,
+		LairUpgrade_BackDoor,
+		LairUpgrade_BlackMarket,
 	}
 
 	private List<IObserver>

@@ -9,36 +9,9 @@ public class RevealPolicy : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		// determine completion percentage
+		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
 
-		int completionPercentage = 0;
-
-		List<TraitData> combinedTraitList = new List<TraitData> ();
-
-		foreach (Henchmen thisH in a.m_henchmen) {
-			List<TraitData> t = thisH.GetAllTraits();
-			foreach (TraitData thisT in t) {
-				if (!combinedTraitList.Contains (thisT)) {
-					combinedTraitList.Add (thisT);
-				}
-			}
-		}
-
-		MissionBase.MissionTrait[] traits = a.m_mission.GetTraitList (1);
-
-		foreach (MissionBase.MissionTrait mt in traits) {
-			if (mt.m_trait != null && combinedTraitList.Contains (mt.m_trait)) {
-				completionPercentage += mt.m_percentageContribution;
-			}
-		}
-
-
-		bool missionSuccess = false;
-		int rand = Random.Range (0, 101);
-		if (rand <= completionPercentage) {
-
-			missionSuccess = true;
-		}
+		bool missionSuccess = WasMissionSuccessful (completionChance);
 
 		if (missionSuccess) {
 
@@ -63,7 +36,7 @@ public class RevealPolicy : MissionBase {
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 				t.m_resultsText += "\n" + tB.m_policyToken.m_name.ToUpper() + " is revealed!";
-				t.m_resultsText += "\n" + rand.ToString () + " / " + completionPercentage.ToString ();
+				t.m_resultsText += "\n" + completionChance.ToString ();
 				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -72,7 +45,7 @@ public class RevealPolicy : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + rand.ToString () + " / " + completionPercentage.ToString ();
+			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

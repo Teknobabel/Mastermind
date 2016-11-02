@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class OmegaPlan : ScriptableObject {
+public class OmegaPlan : ScriptableObject, ISubject {
 
 	public enum State
 	{
@@ -34,6 +34,9 @@ public class OmegaPlan : ScriptableObject {
 
 	private int m_id = -1;
 
+	private List<IObserver>
+	m_observers = new List<IObserver> ();
+
 	public void Initialize (OmegaPlanData op, State state, Organization o)
 	{
 		m_id = GameManager.instance.newID;
@@ -53,12 +56,49 @@ public class OmegaPlan : ScriptableObject {
 
 	}
 
+	public void ChangeState ( State newState)
+	{
+		m_state = newState;
+
+		switch (newState) {
+		case State.Revealed:
+			Notify (this, GameEvent.Organization_OmegaPlanRevealed);
+			break;
+		}
+	}
+
 	public void GoalCompleted (OPGoalBase goal)
 	{
 		foreach (Goal g in m_goals) {
 			if (g.m_state == Goal.State.Active && goal.id == g.m_goal.id) {
 				g.m_state = Goal.State.Completed;
 			}
+		}
+	}
+
+	public void AddObserver (IObserver observer)
+	{
+		if (!m_observers.Contains(observer))
+		{
+			m_observers.Add (observer);
+		}
+	}
+
+	public void RemoveObserver (IObserver observer)
+	{
+		if (m_observers.Contains(observer))
+		{
+			m_observers.Remove(observer);
+		}
+	}
+
+	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	{
+		List<IObserver> observers = new List<IObserver> (m_observers);
+
+		for (int i=0; i < observers.Count; i++)
+		{
+			observers[i].OnNotify(subject, thisGameEvent);
 		}
 	}
 

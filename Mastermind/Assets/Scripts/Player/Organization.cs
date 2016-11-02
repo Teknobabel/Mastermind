@@ -216,6 +216,15 @@ public class Organization : ScriptableObject, ISubject {
 		Notify (a, GameEvent.Organization_AssetGained);
 	}
 
+	public void RemoveAsset (Asset a)
+	{
+		if (m_currentAssets.Contains (a)) {
+			m_currentAssets.Remove (a);
+
+			Notify (a, GameEvent.Organization_AssetRemoved);
+		}
+	}
+
 	public ActiveMission GetMissionForHenchmen (Henchmen h)
 	{
 		foreach (ActiveMission a in m_activeMissions) {
@@ -438,6 +447,7 @@ public class Organization : ScriptableObject, ISubject {
 	}
 
 	public Dictionary<int, MenuTab> menuTabs {get{return m_menuTabs; }}
+	public List<OmegaPlan> omegaPlans {get{return m_omegaPlans; }}
 	public Dictionary<int, OmegaPlan> omegaPlansByID {get{return m_omegaPlansByID; }}
 	public List<Henchmen> availableHenchmen {get{return m_availableHenchmen; }}
 	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen; }}
@@ -456,4 +466,6 @@ public class Organization : ScriptableObject, ISubject {
 	public List<ActiveMission> activeMissions {get{return m_activeMissions;}}
 	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}
 	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}
+	public Region homeRegion {get{return m_homeRegion;}}
+
 }

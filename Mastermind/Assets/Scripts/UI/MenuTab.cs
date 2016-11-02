@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MenuTab {
+public class MenuTab: IObserver {
 
 	public string m_name = "Null";
 	public MenuState.State m_menuState = MenuState.State.None;
@@ -23,14 +23,25 @@ public class MenuTab {
 			OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [objectID];
 			s = "<size=18>" + m_name.ToUpper () + ":</size>";
 
-//			if (op.state == OmegaPlan.State.Hidden) {
-//				s += "\nUNKNOWN";
-//			} else {
+			if (op.state == OmegaPlan.State.Hidden) {
+				s += "\nUNKNOWN";
+				op.AddObserver (this);
+			} else {
 				s += "\n" + op.opNameShort.ToUpper ();
-//			}
+			}
 		}
 
 		return s;
+	}
+
+	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	{
+		switch (thisGameEvent) {
+		case GameEvent.Organization_OmegaPlanRevealed:
+//			OmegaPlan op = (OmegaPlan)subject;
+			m_tabButton.Initialize(this);
+			break;
+		}
 	}
 
 	public int id {get{return m_tabID; }}
