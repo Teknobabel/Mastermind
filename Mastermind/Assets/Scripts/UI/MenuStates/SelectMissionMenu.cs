@@ -86,6 +86,7 @@ public class SelectMissionMenu : MenuState {
 			m_listViewItems.Add (h);
 
 			foreach (MissionBase m in GameManager.instance.m_missionBank) {
+				
 				if (m.IsValid ()) {
 
 					GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));

@@ -11,9 +11,20 @@ public class MissionBase : ScriptableObject, IMission {
 		public Asset m_asset;
 		public int m_percentageContribution;
 	}
+
+	public enum TargetType
+	{
+		None,
+		Region,
+		Henchmen,
+		AssetToken,
+		ControlToken,
+		PolicyToken,
+	}
 	
 	public string m_name = "Null";
 	public string m_description = "Lorem Ipsum";
+	public TargetType m_targetType = TargetType.Region;
 	public int m_cost = 1;
 	public int m_numTurns = 1;
 	public int m_maxRank = 5;
