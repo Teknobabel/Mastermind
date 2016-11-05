@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Omega Plan Goal/Use Asset on all Tokens of Type in Region")]
 public class Goal_UseAssetOnAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 	public Asset m_asset;

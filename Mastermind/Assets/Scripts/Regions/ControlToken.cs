@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Token/Control Token")]
 public class ControlToken : TokenBase, IToken {
 
 	public enum ControlType

@@ -9,7 +9,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_henchmenName;
 	public TextMeshProUGUI m_currentMission;
 	public TextMeshProUGUI m_currentLocation;
-	public TextMeshProUGUI m_turnCost;
+//	public TextMeshProUGUI m_turnCost;
 	public Image m_henchmenPortrait;
 
 	public TraitButton[] m_traits;
@@ -35,7 +35,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		location += h.currentRegion.regionName.ToUpper ();
 		m_currentLocation.text = location;
 
-		m_turnCost.text = h.costPerTurn.ToString() + "CP / TURN";
+//		m_turnCost.text = h.costPerTurn.ToString() + "CP / TURN";
 		m_henchmenPortrait.sprite = h.portrait;
 
 		List<TraitData> traits = h.GetAllTraits ();

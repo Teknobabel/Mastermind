@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Reveal Policy Token")]
 public class RevealPolicy : MissionBase {
 
 	public override void CompleteMission (Organization.ActiveMission a)

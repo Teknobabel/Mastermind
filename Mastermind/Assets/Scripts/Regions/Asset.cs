@@ -69,6 +69,7 @@ public class Asset : ScriptableObject, ISubject {
 		LairUpgrade_Runway,
 		LairUpgrade_BackDoor,
 		LairUpgrade_BlackMarket,
+		Intel,
 	}
 
 	private List<IObserver>

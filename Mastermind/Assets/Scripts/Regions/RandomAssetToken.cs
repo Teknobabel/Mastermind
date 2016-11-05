@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Token/Random Asset Token")]
 public class RandomAssetToken : AssetToken {
 
 	public AssetToken[] m_assets;

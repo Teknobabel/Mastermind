@@ -258,6 +258,7 @@ public class Organization : ScriptableObject, ISubject {
 
 		List<OmegaPlanData> ops = new List<OmegaPlanData> ();
 		m_omegaPlans = new List<OmegaPlan> ();
+		List<AssetToken> mandatoryAssets = new List<AssetToken> ();
 
 		foreach (OmegaPlanData o in d.m_omegaPlanBank) {
 
@@ -291,6 +292,8 @@ public class Organization : ScriptableObject, ISubject {
 					newOP.Initialize (newOPData, OmegaPlan.State.Hidden, this);
 				}
 
+				mandatoryAssets.AddRange (newOP.mandatoryAssets);
+
 				AddOmegaPlan (newOP);
 
 			} else if (ops.Count > 0) {
@@ -307,7 +310,43 @@ public class Organization : ScriptableObject, ISubject {
 					newOP.Initialize (newOPData, OmegaPlan.State.Hidden, this);
 				}
 
+				mandatoryAssets.AddRange (newOP.mandatoryAssets);
+
 				AddOmegaPlan (newOP);
+			}
+		}
+
+		// disperse any mandatory assets needed to complete OP's
+
+		List<Region> allRegions = g.GetAllRegions();
+
+		while (mandatoryAssets.Count > 0) {
+			
+			AssetToken thisAsset = mandatoryAssets [0];
+			mandatoryAssets.RemoveAt (0);
+
+			// get list of regions with less than max # assets
+
+			List<Region> validRegions = new List<Region>();
+
+			foreach (Region r in allRegions) {
+
+				if (r.assetTokens.Count < d.maxTokenSlotsInRegion) {
+					validRegions.Add (r);
+				}
+			}
+
+			// pull a random region
+
+			if (validRegions.Count > 0) {
+
+				int rand = Random.Range (0, validRegions.Count);
+
+				Region thisRegion = validRegions[rand];
+
+				// add Asset
+
+				thisRegion.AddAssetToken (thisAsset);
 			}
 		}
 

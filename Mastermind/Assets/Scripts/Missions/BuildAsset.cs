@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Build Asset")]
 public class BuildAsset : MissionBase {
 
 	public Asset m_asset;

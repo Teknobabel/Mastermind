@@ -28,9 +28,9 @@ public class OmegaPlan : ScriptableObject, ISubject {
 	private State m_state = State.None;
 	private string m_name = "Null";
 	private string m_shortName = "Null";
-//	private OPGoalBase[] m_goals;
 
 	private List<Goal> m_goals = new List<Goal>();
+	private List<AssetToken> m_mandatoryAssets = new List<AssetToken> ();
 
 	private int m_id = -1;
 
@@ -43,7 +43,6 @@ public class OmegaPlan : ScriptableObject, ISubject {
 		m_name = op.m_name;
 		m_shortName = op.m_shortName;
 		m_state = state;
-//		m_goals = op.m_goals;
 
 		foreach (OPGoalBase g in op.m_goals) {
 
@@ -52,6 +51,10 @@ public class OmegaPlan : ScriptableObject, ISubject {
 			newGoal.Initialize (this, o);
 			goal.m_goal = newGoal;
 			m_goals.Add (goal);
+		}
+
+		foreach (AssetToken a in op.m_mandatoryAssets) {
+			m_mandatoryAssets.Add (a);
 		}
 
 	}
@@ -107,4 +110,5 @@ public class OmegaPlan : ScriptableObject, ISubject {
 	public string opNameShort {get{return m_shortName;}}
 	public List<Goal> goals {get{return m_goals;}}
 	public State state {get{return m_state;}}
+	public List<AssetToken> mandatoryAssets {get{return m_mandatoryAssets;}}
 }

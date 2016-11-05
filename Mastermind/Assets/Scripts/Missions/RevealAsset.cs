@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Reveal Asset")]
 public class RevealAsset : MissionBase {
 
 	public override void CompleteMission (Organization.ActiveMission a)

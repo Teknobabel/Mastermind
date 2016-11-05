@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour {
 	public static GameManager instance;
 
 	public HenchmenData[] m_henchmenBank;
+	public HenchmenData[] m_agentBank;
 	public RegionData[] m_regionBank;
 	public Director[] m_directorBank;
 	public MissionBase[] m_missionBank;
@@ -13,7 +14,7 @@ public class GameManager : MonoBehaviour {
 
 	public RegionData m_lairRegion;
 	public TravelToRegion m_travelMission;
-//	public Asset m_testAsset;
+	public Asset m_intel;
 
 	private StartNewGameState m_startNewGame;
 	private BeginTurnState m_beginTurn;

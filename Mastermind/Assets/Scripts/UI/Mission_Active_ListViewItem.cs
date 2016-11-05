@@ -78,18 +78,29 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 		MissionBase.MissionTrait[] traits = m.GetTraitList (missionRank);
 
 		for (int i = 0; i < m_traits.Length; i++) {
-			TraitButton t = m_traits [i];
-			if (i < traits.Length) {
-				MissionBase.MissionTrait mT = traits [i];
-				if (mT.m_trait != null)
-				{
-					bool hasTrait = combinedTraitList.Contains (mT.m_trait);
-					t.Initialize (mT.m_trait, hasTrait);
 
-					if (hasTrait) {
-						successChance = Mathf.Clamp(successChance + mT.m_percentageContribution, 0, 100);
-					}
+			TraitButton t = m_traits [i];
+
+			if (i < traits.Length) {
+
+				MissionBase.MissionTrait mT = traits [i];
+				bool hasTrait = false;
+				bool hasAsset = false;
+
+				if (mT.m_trait != null) {
+					hasTrait = combinedTraitList.Contains (mT.m_trait);
+					t.Initialize (mT.m_trait, hasTrait);
 				}
+
+				if (mT.m_asset != null) {
+					hasAsset = GameManager.instance.game.player.currentAssets.Contains (mT.m_asset);
+					t.Initialize (mT.m_asset, hasAsset);
+				}
+
+				if (hasAsset || hasTrait) {
+					successChance = Mathf.Clamp (successChance + mT.m_percentageContribution, 0, 100);
+				}
+
 			} else {
 				t.Deactivate ();
 			}

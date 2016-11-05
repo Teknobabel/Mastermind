@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Token/Policy Token")]
 public class PolicyToken : TokenBase, IToken {
 
 	public void ClaimToken ()

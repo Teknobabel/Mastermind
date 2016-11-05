@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Steal Asset")]
 public class StealAsset : MissionBase {
 
 	public override void CompleteMission (Organization.ActiveMission a)

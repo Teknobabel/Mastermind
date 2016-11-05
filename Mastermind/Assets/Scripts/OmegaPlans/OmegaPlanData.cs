@@ -9,5 +9,7 @@ public class OmegaPlanData : ScriptableObject {
 
 	public OPGoalBase[] m_goals;
 
+	public AssetToken[] m_mandatoryAssets;
+
 
 }

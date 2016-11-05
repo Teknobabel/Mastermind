@@ -16,7 +16,8 @@ public class Game : ScriptableObject, ISubject {
 
 	private int 
 	m_randomSeed = 0,
-	m_turnNumber = 0;
+	m_turnNumber = 0,
+	m_turnToSpawnNextIntel = -1;
 
 	private Organization m_player;
 
@@ -27,6 +28,8 @@ public class Game : ScriptableObject, ISubject {
 	{
 		m_randomSeed = (int)System.DateTime.Now.Ticks;
 		Random.InitState(m_randomSeed);
+
+		DetermineIntelSpawnTurn ();
 	}
 
 	public void AddOrganizationToGame (Organization o)
@@ -124,6 +127,18 @@ public class Game : ScriptableObject, ISubject {
 		return m_regions;
 	}
 
+	public void SpawnIntel ()
+	{
+		Debug.Log ("<color=blue>Spawning Intel</color>");
+
+		DetermineIntelSpawnTurn ();
+	}
+
+	public void DetermineIntelSpawnTurn ()
+	{
+		m_turnToSpawnNextIntel = m_turnNumber + Random.Range (m_director.m_intelSpawnLowerBounds, m_director.m_intelSpawnUpperBounds);
+	}
+
 	public void AddObserver (IObserver observer)
 	{
 		if (!m_observers.Contains(observer))
@@ -155,4 +170,5 @@ public class Game : ScriptableObject, ISubject {
 	public List<Henchmen> henchmen {get{return m_henchmen; }}
 	public int turnNumber {get{return m_turnNumber;}set{m_turnNumber = value; Notify (this, GameEvent.GameState_TurnNumberChanged); }}
 	public Dictionary<int, Region> regionsByID {get{return m_regionsByID; }}
+	public int turnToSpawnNextIntel {get{return m_turnToSpawnNextIntel; }}
 }

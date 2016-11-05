@@ -54,9 +54,9 @@ public class LairMenu : MenuState {
 		Organization player = GameManager.instance.game.player;
 
 		string s = "ORG NAME: " + player.orgName;
-		s += "\n INFAMY: " + player.currentInfamy.ToString();
-		s += "\n WANTED LEVEL: " + player.currentWantedLevel.ToString();
-		s += "\n INTEL: " + player.currentIntel.ToString () + " / " + player.maxIntel.ToString ();
+//		s += "\n INFAMY: " + player.currentInfamy.ToString();
+//		s += "\n WANTED LEVEL: " + player.currentWantedLevel.ToString();
+//		s += "\n INTEL: " + player.currentIntel.ToString () + " / " + player.maxIntel.ToString ();
 		s += "\n UPGRADES:";
 		s += "\n ASSETS:";
 

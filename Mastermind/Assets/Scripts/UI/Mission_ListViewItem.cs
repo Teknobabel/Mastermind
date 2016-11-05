@@ -29,25 +29,27 @@ public class Mission_ListViewItem : MonoBehaviour {
 			duration += " TURN";
 		}
 
+		m_missionDuration.text = duration;
+
 		CalculateTraits (m, mr.m_region, mr.m_henchmen);
 	}
 
-	public void Initialize (Organization.ActiveMission a)
-	{
-		WriteBaseMissionStats (a.m_mission);
-
-		int turnsLeft = a.m_mission.m_numTurns - a.m_turnsPassed;
-		string duration = turnsLeft.ToString ();
-		if (turnsLeft > 1) {
-			duration += " TURNS";
-		} else {
-			duration += " TURN";
-		}
-
-		m_missionDuration.text = duration;
-
-		CalculateTraits (a.m_mission, a.m_region, a.m_henchmen);
-	}
+//	public void Initialize (Organization.ActiveMission a) //TODO See if this is still needed, added a new cell type for active missions
+//	{
+//		WriteBaseMissionStats (a.m_mission);
+//
+//		int turnsLeft = a.m_mission.m_numTurns - a.m_turnsPassed;
+//		string duration = turnsLeft.ToString ();
+//		if (turnsLeft > 1) {
+//			duration += " TURNS";
+//		} else {
+//			duration += " TURN";
+//		}
+//
+//		m_missionDuration.text = duration;
+//
+//		CalculateTraits (a.m_mission, a.m_region, a.m_henchmen);
+//	}
 
 	private void WriteBaseMissionStats (MissionBase m)
 	{

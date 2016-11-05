@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Omega Plan Goal/Threaten the World")]
 public class Goal_ThreatenTheWorld : OPGoalBase, IObserver {
 
 	public override OPGoalBase GetObject ()

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Seize Control Token")]
 public class SeizeControlToken : MissionBase {
 
 	public ControlToken.ControlType m_type = ControlToken.ControlType.None;

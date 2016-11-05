@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Omega Plan Goal/Aquire Asset")]
 public class Goal_AcquireAsset : OPGoalBase, IObserver {
 
 	public Asset m_asset;

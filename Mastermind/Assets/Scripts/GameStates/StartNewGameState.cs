@@ -8,10 +8,11 @@ public class StartNewGameState : IGameState {
 		Debug.Log ("Starting new game");
 
 		Game newGame = Game.CreateInstance<Game> ();
-		newGame.Initialize ();
 
 		Director newDirector = GameManager.instance.m_directorBank [Random.Range (0, GameManager.instance.m_directorBank.Length)];
 		newGame.AddDirectorToGame (newDirector);
+
+		newGame.Initialize ();
 
 		foreach (HenchmenData h in GameManager.instance.m_henchmenBank) {
 			Henchmen newHenchman = Henchmen.CreateInstance<Henchmen> ();

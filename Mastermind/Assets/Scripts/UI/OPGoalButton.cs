@@ -19,13 +19,16 @@ public class OPGoalButton : MonoBehaviour {
 		switch (goal.m_state) {
 		case OmegaPlan.Goal.State.Active:
 			m_buttonText.text = goal.m_goal.GetText ();
+			m_buttonText.color = Color.black;
 			m_buttonImage.fillCenter = false;
 			m_buttonImage.color = Color.black;
 			break;
 		case OmegaPlan.Goal.State.Completed:
+			m_buttonText.text = goal.m_goal.GetText ();
 			m_buttonImage.fillCenter = true;
 			m_buttonImage.color = Color.green;
-			m_buttonText.text = "COMPLETE";
+			m_buttonText.text += "\nCOMPLETE";
+//			m_buttonText.color = Color.grey;
 			break;
 		}
 

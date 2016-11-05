@@ -17,7 +17,12 @@ public class Director : ScriptableObject {
 	m_maxStartingHenchmenLevel = 1,
 	m_startingCommandPool = 10,
 	m_startingIntel = 0,
-	m_maxIntel = 5;
+	m_maxIntel = 5,
+	m_intelSpawnLowerBounds = 5,
+	m_intelSpawnUpperBounds = 20;
+
+	private int
+		m_maxTokenSlotsInRegion = 6;
 
 	public Asset[] m_startingAssets;
 	public OmegaPlanData[] m_startingOmegaPlanData;
@@ -25,4 +30,6 @@ public class Director : ScriptableObject {
 
 	// TODO: starting player upgrades
 
+
+	public int maxTokenSlotsInRegion {get{return m_maxTokenSlotsInRegion;}}
 }

@@ -111,6 +111,8 @@ public class WorldMenu : MenuState {
 
 	public void SelectMissionForRegion (int regionID)
 	{
+		Debug.Log("Select Mission For Region");
+
 		if (GameManager.instance.game.regionsByID.ContainsKey (regionID)) {
 			Region r = GameManager.instance.game.regionsByID [regionID];
 
@@ -118,11 +120,11 @@ public class WorldMenu : MenuState {
 
 				MissionRequest mr = new MissionRequest ();
 				mr.m_region = r;
+				Debug.Log (r.currentHenchmen.Count);
 				foreach (Henchmen h in r.currentHenchmen) {
 					mr.m_henchmen.Add (h);
 				}
 				GameManager.instance.currentMissionRequest = mr;
-
 				GameManager.instance.PushMenuState (State.SelectMissionMenu);
 			}
 		}

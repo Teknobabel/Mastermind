@@ -134,7 +134,7 @@ public class Region : ScriptableObject, ISubject {
 		}
 	}
 
-	private void AddAssetToken (AssetToken a)
+	public void AddAssetToken (AssetToken a)
 	{
 		TokenSlot t = new TokenSlot ();
 		t.m_type = TokenSlot.TokenType.Asset;
@@ -183,6 +183,18 @@ public class Region : ScriptableObject, ISubject {
 		return null;
 	}
 
+	public void RemoveHenchmen (Henchmen h)
+	{
+		foreach (HenchmenSlot s in m_henchmenSlots) {
+			if (s.m_state == HenchmenSlot.State.Occupied && s.m_henchmen != null && s.m_henchmen == h) {
+				s.m_state = HenchmenSlot.State.Empty;
+				s.m_henchmen = null;
+
+				break;
+			}
+		}
+	}
+
 	public void AddHenchmen (Henchmen h)
 	{
 		HenchmenSlot r = HasReservation (h);
@@ -209,8 +221,8 @@ public class Region : ScriptableObject, ISubject {
 			}
 		}
 
-		h.SetRegion (this);
 		m_currentHenchmen.Add (h);
+		h.SetRegion (this);
 	} 
 
 	public void AddObserver (IObserver observer)

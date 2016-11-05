@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Omega Plan Goal/Hire Henchmen")]
 public class Goal_HireHenchmen : OPGoalBase, IObserver {
 
 	public TraitData m_trait;

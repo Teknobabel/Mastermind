@@ -86,15 +86,42 @@ public class SelectMissionMenu : MenuState {
 			m_listViewItems.Add (h);
 
 			foreach (MissionBase m in GameManager.instance.m_missionBank) {
-				
-				if (m.IsValid ()) {
 
-					GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
-					g.transform.localScale = Vector3.one;
-					m_listViewItems.Add (g);
-					g.GetComponent<Mission_ListViewItem> ().Initialize (m, GameManager.instance.currentMissionRequest);
+				switch (m.m_targetType) {
 
+				case MissionBase.TargetType.Region:
+
+					if (m.IsValid ()) {
+
+						GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+						g.transform.localScale = Vector3.one;
+						m_listViewItems.Add (g);
+						g.GetComponent<Mission_ListViewItem> ().Initialize (m, GameManager.instance.currentMissionRequest);
+
+					}
+
+					break;
+
+				case MissionBase.TargetType.Henchmen:
+
+					foreach (Henchmen thisH in GameManager.instance.currentMissionRequest.m_henchmen) {
+
+						GameManager.instance.currentMissionRequest.m_henchmenInFocus = thisH;
+
+						if (m.IsValid ()) {
+
+							GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+							g.transform.localScale = Vector3.one;
+							m_listViewItems.Add (g);
+							g.GetComponent<Mission_ListViewItem> ().Initialize (m, GameManager.instance.currentMissionRequest);
+
+						}
+					}
+
+					break;
 				}
+
+
 			}
 		}
 	}

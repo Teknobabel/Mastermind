@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Add Henchmen Trait")]
 public class AddHenchmenTrait : MissionBase {
 
 	public TraitData m_newTrait;
+	public Asset m_requiredUpgrade;
 
 	public override void CompleteMission (Organization.ActiveMission a)
 	{
@@ -56,18 +57,16 @@ public class AddHenchmenTrait : MissionBase {
 
 	public override bool IsValid ()
 	{
-//		// Valid if region is lair and player has requiredUpgrade and sourceAsset
-//		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_region != null) {
-//
-//			Region r = GameManager.instance.currentMissionRequest.m_region;
-//
-//			if (r == GameManager.instance.game.player.homeRegion && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade))
-//			{
-//				if (m_sourceAsset == null || GameManager.instance.game.player.currentAssets.Contains (m_sourceAsset)) {
-//					return true;
-//				}
-//			}
-//		}
+		// Valid if henchmen in focus doesn't currently have newTrait
+
+		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_henchmenInFocus != null)
+		{
+			if (!GameManager.instance.currentMissionRequest.m_henchmenInFocus.HasTrait (m_newTrait)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 		return false;
 	}
 }

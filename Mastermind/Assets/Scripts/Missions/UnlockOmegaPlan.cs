@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Unlock Omega Plan")]
 public class UnlockOmegaPlan : MissionBase {
 
 	public override void CompleteMission (Organization.ActiveMission a)

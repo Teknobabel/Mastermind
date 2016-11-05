@@ -54,7 +54,7 @@ public class Henchmen : ScriptableObject {
 		// remove from current region list
 
 		if (m_currentRegion != null && m_currentRegion.currentHenchmen.Contains (this)) {
-			m_currentRegion.currentHenchmen.Remove (this);
+			m_currentRegion.RemoveHenchmen (this);
 		}
 
 		// add to new region list

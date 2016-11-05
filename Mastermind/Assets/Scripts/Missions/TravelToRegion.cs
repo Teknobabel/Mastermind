@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Travel To Region")]
 public class TravelToRegion : MissionBase {
 
 	public override void InitializeMission (Organization.ActiveMission a)
@@ -24,6 +24,7 @@ public class TravelToRegion : MissionBase {
 
 		string s = null;
 		foreach (Henchmen h in a.m_henchmen) {
+			
 			a.m_region.AddHenchmen (h);
 			s += h.henchmenName.ToUpper () + " ";
 		}

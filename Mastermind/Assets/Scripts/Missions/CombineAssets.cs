@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Combine Assets")]
 public class CombineAssets : MissionBase {
 
 	public Asset m_requiredUpgrade;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName = "Missions/Transmute Asset")]
 public class TransmuteAsset : MissionBase {
 
 	public Asset m_requiredUpgrade;
