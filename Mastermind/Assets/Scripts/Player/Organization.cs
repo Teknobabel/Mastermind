@@ -9,6 +9,7 @@ public class Organization : ScriptableObject, ISubject {
 		public MissionBase m_mission = null;
 		public int m_turnsPassed = 0;
 		public List<Henchmen> m_henchmen = new List<Henchmen> ();
+		public Henchmen m_henchmenInFocus = null;
 		public Region m_region = null;
 	}
 
@@ -96,6 +97,7 @@ public class Organization : ScriptableObject, ISubject {
 		a.m_mission = mr.m_mission;
 		a.m_henchmen = mr.m_henchmen;
 		a.m_region = mr.m_region;
+		a.m_henchmenInFocus = mr.m_henchmenInFocus;
 
 		a.m_mission.InitializeMission (a);
 

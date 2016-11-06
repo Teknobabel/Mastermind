@@ -67,6 +67,11 @@ public class MissionBase : ScriptableObject, IMission {
 		}
 	}
 
+	public virtual string GetNameText ()
+	{
+		return m_name;
+	}
+
 	public virtual bool IsValid ()
 	{
 		return false;

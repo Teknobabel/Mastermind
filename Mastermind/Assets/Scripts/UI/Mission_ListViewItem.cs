@@ -17,6 +17,8 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	private MissionBase m_mission = null;
 
+	private Henchmen m_henchmen = null;
+
 	public void Initialize (MissionBase m, MissionRequest mr)
 	{
 		WriteBaseMissionStats (m);
@@ -32,6 +34,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 		m_missionDuration.text = duration;
 
 		CalculateTraits (m, mr.m_region, mr.m_henchmen);
+
+		if (m.m_targetType == MissionBase.TargetType.Henchmen && GameManager.instance.currentMissionRequest.m_henchmenInFocus != null) {
+
+			m_henchmen = GameManager.instance.currentMissionRequest.m_henchmenInFocus;
+		}
 	}
 
 //	public void Initialize (Organization.ActiveMission a) //TODO See if this is still needed, added a new cell type for active missions
@@ -54,7 +61,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 	private void WriteBaseMissionStats (MissionBase m)
 	{
 		m_mission = m;
-		m_missionName.text = m.m_name.ToUpper();
+		m_missionName.text = m.GetNameText().ToUpper();
 		m_missionDescription.text = m.m_description;
 		m_missionCost.text = m.m_cost.ToString ();
 	}
@@ -128,6 +135,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
 //			CallHenchmenMenu.instance.Startmission (m_mission);
 			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {
+
+				if (m_henchmen != null) {
+					GameManager.instance.currentMissionRequest.m_henchmenInFocus = m_henchmen;
+				}
+
 				SelectMissionMenu.instance.SelectMission (m_mission);
 			}
 		}

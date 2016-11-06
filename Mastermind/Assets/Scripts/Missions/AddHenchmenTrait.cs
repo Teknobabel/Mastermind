@@ -17,32 +17,18 @@ public class AddHenchmenTrait : MissionBase {
 
 		if (success) {
 
-			// check if player still meets requirements
+			// add trait to henchmen
 
-//			if (a.m_region == GameManager.instance.game.player.homeRegion && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade))
-//			{
-//				if (m_sourceAsset == null || GameManager.instance.game.player.currentAssets.Contains (m_sourceAsset)) {
-//
-//					if (m_sourceAsset != null) {
-//						GameManager.instance.game.player.RemoveAsset (m_sourceAsset);
-//					}
-//
-//					GameManager.instance.game.player.AddAsset (m_createdAsset);
-//
-//					TurnResultsEntry t = new TurnResultsEntry ();
-//					t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-//
-//					if (m_sourceAsset != null) {
-//						t.m_resultsText += "\n" + m_sourceAsset.m_name.ToUpper () + " IS REMOVED.";
-//					}
-//
-//					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper () + " GAINS " + m_createdAsset.m_name.ToUpper () + " ASSET.";
-//					t.m_resultsText += "\n" + completionChance.ToString ();
-//					t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
-//					t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-//					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
-//				}
-//			}
+			a.m_henchmenInFocus.AddTrait (m_newTrait);
+
+			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
+			t.m_resultsText += "\n" + a.m_henchmenInFocus.henchmenName.ToUpper () + " GAINS " + m_newTrait.m_name.ToUpper () + " TRAIT.";
+			t.m_resultsText += "\n" + completionChance.ToString ();
+			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
+			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
+			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
 
 		} else {
 
@@ -55,16 +41,30 @@ public class AddHenchmenTrait : MissionBase {
 		}
 	}
 
+	public override string GetNameText ()
+	{
+		string s = m_name + " - ";
+
+		if (GameManager.instance.currentMissionRequest.m_henchmenInFocus != null) {
+			s += GameManager.instance.currentMissionRequest.m_henchmenInFocus.henchmenName;
+		}
+
+		return s;
+	}
+
 	public override bool IsValid ()
 	{
 		// Valid if henchmen in focus doesn't currently have newTrait
 
-		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_henchmenInFocus != null)
+		if (m_requiredUpgrade == null || (m_requiredUpgrade != null && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade)) )
 		{
-			if (!GameManager.instance.currentMissionRequest.m_henchmenInFocus.HasTrait (m_newTrait)) {
-				return true;
-			} else {
-				return false;
+			if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_henchmenInFocus != null)
+			{
+				if (!GameManager.instance.currentMissionRequest.m_henchmenInFocus.HasTrait (m_newTrait)) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
 		return false;
