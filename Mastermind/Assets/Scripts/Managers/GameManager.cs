@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 
 	public RegionData m_lairRegion;
 	public TravelToRegion m_travelMission;
-	public Asset m_intel;
+	public AssetToken m_intel;
 
 	private StartNewGameState m_startNewGame;
 	private BeginTurnState m_beginTurn;
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour {
 	private EndPlayerPhaseState m_endPlayerPhase;
 	private RegionPhaseState m_regionPhase;
 	private AgentPhaseState m_agentPhase;
+	private EndTurnState m_endTurnPhase;
 
 	private IGameState m_currentState = null;
 
@@ -58,6 +59,7 @@ public class GameManager : MonoBehaviour {
 		m_endPlayerPhase = new EndPlayerPhaseState ();
 		m_regionPhase = new RegionPhaseState ();
 		m_agentPhase = new AgentPhaseState ();
+		m_endTurnPhase = new EndTurnState ();
 
 	}
 
@@ -178,6 +180,7 @@ public class GameManager : MonoBehaviour {
 	public EndPlayerPhaseState endPlayerPhase {get{return m_endPlayerPhase; }}
 	public RegionPhaseState regionPhase {get{return m_regionPhase; }}
 	public AgentPhaseState agentPhase {get{return m_agentPhase; }}
+	public EndTurnState endTurnPhase {get{return m_endTurnPhase; }}
 
 	public Game game {get{return m_game; } set {m_game = value; }}
 	public MenuState.State currentMenuState {get{return m_menuState.m_state;}}

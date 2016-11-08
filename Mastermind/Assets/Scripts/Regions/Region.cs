@@ -136,12 +136,29 @@ public class Region : ScriptableObject, ISubject {
 
 	public void AddAssetToken (AssetToken a)
 	{
-		TokenSlot t = new TokenSlot ();
-		t.m_type = TokenSlot.TokenType.Asset;
-		t.m_assetToken = a;
-		t.m_state = TokenSlot.State.Hidden;
+		bool tokenAdded = false;
 
-		m_assetTokens.Add (t);
+		foreach (TokenSlot ts in m_assetTokens) {
+
+			if (ts.m_state == TokenSlot.State.None) {
+
+				ts.m_assetToken = a;
+				ts.m_state = TokenSlot.State.Revealed;
+				ts.m_status = TokenSlot.Status.Normal;
+				tokenAdded = true;
+				break;
+			}
+		}
+
+		if (!tokenAdded) {
+			TokenSlot t = new TokenSlot ();
+			t.m_type = TokenSlot.TokenType.Asset;
+			t.m_assetToken = a;
+			t.m_state = TokenSlot.State.Revealed;
+			t.m_status = TokenSlot.Status.Normal;
+
+			m_assetTokens.Add (t);
+		}
 	}
 
 	public void RemoveAssetToken (TokenSlot ts)

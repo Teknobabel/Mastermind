@@ -22,4 +22,6 @@ public enum GameEvent {
 	Region_TokenStatusChanged,
 	Organization_OmegaPlanRevealed,
 	Organization_AssetRemoved,
+	Organization_IntelSpawned,
+	Organization_IntelCaptured,
 }

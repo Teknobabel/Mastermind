@@ -18,6 +18,13 @@ public class TabMenu : MenuState, IObserver {
 		m_intel,
 		m_turn;
 
+	public RawImage[]
+		m_IntelInPlaySprites;
+
+	public Texture
+		m_intelEmpty,
+		m_intelFull;
+
 	public GameObject
 		m_activityPane,
 		m_activityPaneScrollViewContent,
@@ -106,6 +113,21 @@ public class TabMenu : MenuState, IObserver {
 			break;
 		case GameEvent.Organization_InfamyChanged:
 			m_infamy.text = ((Organization)subject).currentInfamy.ToString () + "<size=24>/" + ((Organization)subject).maxInfamy.ToString() + "</size>";
+			break;
+		case GameEvent.Organization_IntelSpawned:
+		case GameEvent.Organization_IntelCaptured:
+			Debug.Log ("<color=red>A;LKSDF;LSKJFD;LKSJF;DLK</color>");
+//			m_IntelInPlaySprites [0].texture = m_intelFull;
+			for (int i=0; i < m_IntelInPlaySprites.Length; i++)
+			{
+				if (i < GameManager.instance.game.intelInPlay.Count) {
+//					Debug.Log (GameManager.instance.game.intelInPlay.Count);
+					m_IntelInPlaySprites [i].texture = m_intelFull;
+				} else {
+//					Debug.Log ("aljsdkfjsd");
+					m_IntelInPlaySprites [i].texture = m_intelEmpty;
+				}
+			}
 			break;
 		}
 	}

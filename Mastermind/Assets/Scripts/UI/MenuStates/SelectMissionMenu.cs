@@ -119,6 +119,24 @@ public class SelectMissionMenu : MenuState {
 					}
 
 					break;
+
+				case MissionBase.TargetType.AssetToken:
+
+					foreach (Region.TokenSlot ts in GameManager.instance.currentMissionRequest.m_region.assetTokens) {
+
+						GameManager.instance.currentMissionRequest.m_tokenInFocus = ts;
+
+						if (m.IsValid ()) {
+
+							GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+							g.transform.localScale = Vector3.one;
+							m_listViewItems.Add (g);
+							g.GetComponent<Mission_ListViewItem> ().Initialize (m, GameManager.instance.currentMissionRequest);
+
+						}
+					}
+
+					break;
 				}
 
 

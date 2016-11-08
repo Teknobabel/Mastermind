@@ -15,28 +15,25 @@ public class StealAsset : MissionBase {
 		if (missionSuccess) {
 
 			// find a revealed non-empty asset token
-			foreach (Region.TokenSlot at in a.m_region.assetTokens) {
+			Region.TokenSlot at = a.m_tokenInFocus;
 
-				if (at.m_state == Region.TokenSlot.State.Revealed) {
+			if (at.m_state == Region.TokenSlot.State.Revealed) {
 
-					// remove it from region and add to player bank
+				// remove it from region and add to player bank
 
-					Asset asset = at.m_assetToken.m_asset;
+				Asset asset = at.m_assetToken.m_asset;
 
-					GameManager.instance.game.player.AddAsset (at.m_assetToken.m_asset);
+				GameManager.instance.game.player.AddAsset (at.m_assetToken.m_asset);
 
-					a.m_region.RemoveAssetToken (at);
+				a.m_region.RemoveAssetToken (at);
 
-					TurnResultsEntry t = new TurnResultsEntry ();
-					t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + asset.m_name.ToUpper() + " ASSET.";
-					t.m_resultsText += "\n" + completionChance.ToString ();
-					t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
-					t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
-
-					break;
-				}
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
+				t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + asset.m_name.ToUpper() + " ASSET.";
+				t.m_resultsText += "\n" + completionChance.ToString ();
+				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
+				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
+				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 
 		} else {
@@ -50,21 +47,29 @@ public class StealAsset : MissionBase {
 		}
 	}
 
+	public override string GetNameText ()
+	{
+		string s = m_name + " - ";
+
+		if (GameManager.instance.currentMissionRequest.m_tokenInFocus != null) {
+			s += GameManager.instance.currentMissionRequest.m_tokenInFocus.m_assetToken.m_name;
+		}
+
+		return s;
+	}
+
 	public override bool IsValid ()
 	{
 		// valid if there is a revealed, non empty asset token in the region
 
-		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_region != null) {
+		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_tokenInFocus != null) {
 
-			Region r = GameManager.instance.currentMissionRequest.m_region;
+			if (GameManager.instance.currentMissionRequest.m_tokenInFocus.m_state == Region.TokenSlot.State.Revealed &&
+				GameManager.instance.currentMissionRequest.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
 
-			foreach (Region.TokenSlot a in r.assetTokens) {
-
-				if (a.m_state == Region.TokenSlot.State.Revealed) {
-
-					return true;
-				}
+				return true;
 			}
+
 		}
 
 		return false;

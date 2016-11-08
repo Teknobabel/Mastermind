@@ -7,7 +7,7 @@ public class AgentPhaseState : IGameState {
 
 		Debug.Log ("Starting Agent Phase");
 
-		GameManager.instance.ChangeGameState (GameManager.instance.beginTurn);
+		GameManager.instance.ChangeGameState (GameManager.instance.endTurnPhase);
 	}
 
 	public void UpdateState () {

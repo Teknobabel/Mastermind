@@ -24,6 +24,8 @@ public class Game : ScriptableObject, ISubject {
 	private List<IObserver>
 	m_observers = new List<IObserver> ();
 
+	private List<AssetToken> m_intelInPlay = new List<AssetToken>();
+
 	public void Initialize ()
 	{
 		m_randomSeed = (int)System.DateTime.Now.Ticks;
@@ -127,9 +129,72 @@ public class Game : ScriptableObject, ISubject {
 		return m_regions;
 	}
 
+	public void IntelCaptured ()
+	{
+		if (m_intelInPlay.Count > 0) {
+			m_intelInPlay.RemoveAt (0);
+		}
+
+		Notify (this, GameEvent.Organization_IntelCaptured);
+	}
+
 	public void SpawnIntel ()
 	{
 		Debug.Log ("<color=blue>Spawning Intel</color>");
+
+		// don't spawn new intel if we are at max # in world at the same time
+
+		if (m_intelInPlay.Count == GameManager.instance.game.director.m_maxIntelInWorld) {
+
+			DetermineIntelSpawnTurn ();
+			return;
+		}
+
+		// gather list of regions with room to spawn intel
+
+		List<Region> r = new List<Region> ();
+
+		foreach (Region thisR in GameManager.instance.game.m_regions) {
+
+			if (thisR.id != GameManager.instance.game.player.homeRegion.id) {
+				
+				if (thisR.assetTokens.Count < GameManager.instance.game.m_director.maxTokenSlotsInRegion && thisR.id != GameManager.instance.game.player.homeRegion.id) {
+
+					r.Add (thisR);
+
+				} else {
+
+					// check for any open slots
+					foreach (Region.TokenSlot ts in thisR.assetTokens) {
+						if (ts.m_state == Region.TokenSlot.State.None) {
+							r.Add (thisR);
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (r.Count > 0) {
+
+			int rand = Random.Range (0, r.Count);
+
+			Region region = r[rand];
+
+			region.AddAssetToken (GameManager.instance.m_intel);
+
+			m_intelInPlay.Add (GameManager.instance.m_intel);
+
+			Notify (this, GameEvent.Organization_IntelSpawned);
+
+			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_resultsText = "Intel has appeared somewhere in the world!";
+			t.m_resultType = GameEvent.Organization_IntelSpawned;
+			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
+
+
+		}
 
 		DetermineIntelSpawnTurn ();
 	}
@@ -171,4 +236,5 @@ public class Game : ScriptableObject, ISubject {
 	public int turnNumber {get{return m_turnNumber;}set{m_turnNumber = value; Notify (this, GameEvent.GameState_TurnNumberChanged); }}
 	public Dictionary<int, Region> regionsByID {get{return m_regionsByID; }}
 	public int turnToSpawnNextIntel {get{return m_turnToSpawnNextIntel; }}
+	public List<AssetToken> intelInPlay {get{return m_intelInPlay; }}
 }

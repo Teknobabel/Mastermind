@@ -8,6 +8,7 @@ public class MissionRequest {
 	public Region m_region;
 	public Henchmen m_henchmenInFocus;
 	public List<Henchmen> m_henchmen = new List<Henchmen>();
+	public Region.TokenSlot m_tokenInFocus;
 
 
 }

@@ -19,6 +19,8 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	private Henchmen m_henchmen = null;
 
+	private Region.TokenSlot m_token = null;
+
 	public void Initialize (MissionBase m, MissionRequest mr)
 	{
 		WriteBaseMissionStats (m);
@@ -38,6 +40,8 @@ public class Mission_ListViewItem : MonoBehaviour {
 		if (m.m_targetType == MissionBase.TargetType.Henchmen && GameManager.instance.currentMissionRequest.m_henchmenInFocus != null) {
 
 			m_henchmen = GameManager.instance.currentMissionRequest.m_henchmenInFocus;
+		} else if (m.m_targetType == MissionBase.TargetType.AssetToken && GameManager.instance.currentMissionRequest.m_tokenInFocus != null) {
+			m_token = GameManager.instance.currentMissionRequest.m_tokenInFocus;
 		}
 	}
 
@@ -138,6 +142,9 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 				if (m_henchmen != null) {
 					GameManager.instance.currentMissionRequest.m_henchmenInFocus = m_henchmen;
+				}
+				if (m_token != null) {
+					GameManager.instance.currentMissionRequest.m_tokenInFocus = m_token;
 				}
 
 				SelectMissionMenu.instance.SelectMission (m_mission);

@@ -19,7 +19,8 @@ public class Director : ScriptableObject {
 	m_startingIntel = 0,
 	m_maxIntel = 5,
 	m_intelSpawnLowerBounds = 5,
-	m_intelSpawnUpperBounds = 20;
+	m_intelSpawnUpperBounds = 20,
+	m_maxIntelInWorld = 3;
 
 	private int
 		m_maxTokenSlotsInRegion = 6;

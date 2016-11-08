@@ -100,6 +100,8 @@ public class MissionBase : ScriptableObject, IMission {
 			missionRank += 2;
 			break;
 		}
+
+//		if (m.m_targetType == TargetType.AssetToken)
 			
 		int completionPercentage = 0;
 
