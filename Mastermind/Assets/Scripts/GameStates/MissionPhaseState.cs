@@ -10,9 +10,9 @@ public class MissionPhaseState : IGameState {
 
 		Organization player = GameManager.instance.game.player;
 
-		List<Organization.ActiveMission> completedMissions = new List<Organization.ActiveMission> ();
+		List<MissionWrapper> completedMissions = new List<MissionWrapper> ();
 
-		foreach (Organization.ActiveMission a in player.activeMissions) {
+		foreach (MissionWrapper a in player.activeMissions) {
 			
 			a.m_turnsPassed++;
 
@@ -41,7 +41,7 @@ public class MissionPhaseState : IGameState {
 		}
 
 		while (completedMissions.Count > 0) {
-			Organization.ActiveMission a = completedMissions [0];
+			MissionWrapper a = completedMissions [0];
 			completedMissions.RemoveAt (0);
 			player.MissionCompleted (a);
 		}

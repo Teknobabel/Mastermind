@@ -118,16 +118,55 @@ public class WorldMenu : MenuState {
 
 			if (r.currentHenchmen.Count > 0 && GameManager.instance.game.player.GetMission(r) == null) {
 
-				MissionRequest mr = new MissionRequest ();
+				MissionWrapper mr = new MissionWrapper ();
 				mr.m_region = r;
-				Debug.Log (r.currentHenchmen.Count);
+
 				foreach (Henchmen h in r.currentHenchmen) {
 					mr.m_henchmen.Add (h);
 				}
-				GameManager.instance.currentMissionRequest = mr;
+				GameManager.instance.currentMissionWrapper = mr;
 				GameManager.instance.PushMenuState (State.SelectMissionMenu);
 			}
 		}
+	}
+
+	public void SelectMissionForToken (Region.TokenSlot ts)
+	{
+		Debug.Log("Select Mission For Token");
+
+		MissionWrapper mr = new MissionWrapper ();
+		mr.m_region = ts.m_region;
+		foreach (Henchmen h in mr.m_region.currentHenchmen) {
+			mr.m_henchmen.Add (h);
+		}
+
+		switch (ts.m_type) {
+		case Region.TokenSlot.TokenType.Asset:
+			mr.m_scope = MissionBase.TargetType.AssetToken;
+			break;
+		case Region.TokenSlot.TokenType.Policy:
+			mr.m_scope = MissionBase.TargetType.PolicyToken;
+			break;
+		case Region.TokenSlot.TokenType.Control:
+
+			switch (ts.m_controlToken.m_controlType) {
+			case ControlToken.ControlType.Economic:
+				mr.m_scope = MissionBase.TargetType.EconomicControlToken;
+				break;
+			case ControlToken.ControlType.Military:
+				mr.m_scope = MissionBase.TargetType.MilitaryControlToken;
+				break;
+			case ControlToken.ControlType.Political:
+				mr.m_scope = MissionBase.TargetType.PoliticalControlToken;
+				break;
+			}
+
+			break;
+		}
+		mr.m_tokenInFocus = ts;
+		GameManager.instance.currentMissionWrapper = mr;
+		GameManager.instance.PushMenuState (State.SelectMissionMenu);
+
 	}
 
 	public void SelectHenchmenForTravel (int regionID)
@@ -141,7 +180,7 @@ public class WorldMenu : MenuState {
 			
 			foreach (Henchmen h in player.currentHenchmen) {
 
-				Organization.ActiveMission a = player.GetMissionForHenchmen (h);
+				MissionWrapper a = player.GetMissionForHenchmen (h);
 
 				if (a == null && h.currentRegion.id != regionID) {
 					validHenchmen.Add (h);
@@ -150,12 +189,12 @@ public class WorldMenu : MenuState {
 
 			if (validHenchmen.Count > 0) {
 				Region region = GameManager.instance.game.regionsByID [regionID];
-				MissionRequest r = new MissionRequest ();
+				MissionWrapper r = new MissionWrapper ();
 				r.m_henchmen = validHenchmen;
 				r.m_mission = GameManager.instance.m_travelMission;
 				r.m_region = region;
 
-				GameManager.instance.currentMissionRequest = r;
+				GameManager.instance.currentMissionWrapper = r;
 
 				GameManager.instance.PushMenuState (State.SelectHenchmenMenu);
 			}

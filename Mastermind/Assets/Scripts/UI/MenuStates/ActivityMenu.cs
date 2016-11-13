@@ -139,7 +139,7 @@ public class ActivityMenu : MenuState, ISubject {
 			}
 		} else if (turn == GameManager.instance.game.turnNumber) {
 			
-			foreach (Organization.ActiveMission a in player.activeMissions) {
+			foreach (MissionWrapper a in player.activeMissions) {
 				GameObject g = (GameObject)(Instantiate (m_activeMissionListViewItem, m_scrollViewContent.transform));
 				g.transform.localScale = Vector3.one;
 				m_listViewItems.Add (g);

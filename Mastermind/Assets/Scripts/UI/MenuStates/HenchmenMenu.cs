@@ -59,6 +59,7 @@ public class HenchmenMenu : MenuState, IObserver {
 		switch (thisGameEvent) {
 		case GameEvent.Organization_HenchmenDismissed:
 		case GameEvent.Organization_HenchmenHired:
+		case GameEvent.Organization_HenchmenFired:
 			UpdateHenchmenList ();
 //			Organization o = (Organization)subject;
 			break;

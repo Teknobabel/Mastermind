@@ -4,11 +4,11 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Unlock Omega Plan")]
 public class UnlockOmegaPlan : MissionBase {
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
+		int completionChance = CalculateCompletionPercentage (a);
 
 		bool missionSuccess = WasMissionSuccessful (completionChance);
 
@@ -47,9 +47,9 @@ public class UnlockOmegaPlan : MissionBase {
 	{
 		// valid if there is a locked Omega Plan and the current region is the Lair
 
-		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_region != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
-			Region r = GameManager.instance.currentMissionRequest.m_region;
+			Region r = GameManager.instance.currentMissionWrapper.m_region;
 			if (r == GameManager.instance.game.player.homeRegion) {
 
 				foreach (OmegaPlan op in GameManager.instance.game.player.omegaPlans) {

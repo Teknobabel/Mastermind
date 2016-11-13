@@ -99,6 +99,7 @@ public class TabMenu : MenuState, IObserver {
 		switch (thisGameEvent) {
 		case GameEvent.Organization_CommandPoolChanged:
 		case GameEvent.Organization_HenchmenHired:
+		case GameEvent.Organization_HenchmenFired:
 		case GameEvent.Organization_Initialized:
 			Organization player = (Organization)subject;
 			m_currentCommandPoints.text = player.currentCommandPool.ToString ();

@@ -106,4 +106,13 @@ public class Region_ListViewItem : MonoBehaviour {
 		}
 	}
 
+	public void TokenButtonClicked (TokenButton tb)
+	{
+		Debug.Log ("Token Button Clicked");
+
+		if (tb.tokenSlot.m_state == Region.TokenSlot.State.Revealed) {
+			WorldMenu.instance.SelectMissionForToken (tb.tokenSlot);
+		}
+	}
+
 }

@@ -4,11 +4,11 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Capture Intel")]
 public class CaptureIntel : MissionBase {
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
+		int completionChance = CalculateCompletionPercentage (a);
 
 		bool success = WasMissionSuccessful (completionChance);
 
@@ -48,9 +48,9 @@ public class CaptureIntel : MissionBase {
 	public override bool IsValid ()
 	{
 
-		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_region != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
-			Region r = GameManager.instance.currentMissionRequest.m_region;
+			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
 			foreach (Region.TokenSlot ts in r.assetTokens) {
 				if (ts.m_state == Region.TokenSlot.State.Revealed && ts.m_assetToken == GameManager.instance.m_intel) {

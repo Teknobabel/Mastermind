@@ -29,6 +29,10 @@ public class Region : ScriptableObject, ISubject {
 			MindControlled,
 			Zombified,
 			Destroyed,
+			Infected,
+			AIControl,
+			Protected,
+			Vulnerable,
 		}
 
 		public enum Owner
@@ -42,8 +46,12 @@ public class Region : ScriptableObject, ISubject {
 		public PolicyToken m_policyToken;
 		public AssetToken m_assetToken;
 		public ControlToken m_controlToken;
-		public Status m_status = Status.Normal;
+		public List<TokenSlot> m_assetTokens = new List<TokenSlot> ();
+		public List<TokenSlot> m_controlTokens = new List<TokenSlot>();
+		public List<TokenSlot> m_policyTokens = new List<TokenSlot>();
+		public List<Status> m_effects = new List<Status>();
 		public Owner m_owner = Owner.AI;
+		public Region m_region = null;
 
 		public TokenBase GetBaseToken () {
 			switch (m_type) {
@@ -81,6 +89,7 @@ public class Region : ScriptableObject, ISubject {
 	private List<TokenSlot> m_assetTokens;
 	private List<TokenSlot> m_policyTokens;
 	private List<TokenSlot> m_controlTokens;
+	private List<TokenSlot> m_allTokens;
 	private List<Henchmen> m_currentHenchmen;
 	private List<HenchmenSlot> m_henchmenSlots;
 
@@ -105,6 +114,7 @@ public class Region : ScriptableObject, ISubject {
 		m_controlTokens = new List<TokenSlot> ();
 		m_currentHenchmen = new List<Henchmen> ();
 		m_henchmenSlots = new List<HenchmenSlot> ();
+		m_allTokens = new List<TokenSlot> ();
 
 		foreach (AssetToken a in r.m_assetTokens) {
 
@@ -126,6 +136,25 @@ public class Region : ScriptableObject, ISubject {
 			}
 		}
 
+		foreach (PolicyToken p in r.m_policyTokens) {
+
+			if (p is RandomPolicyToken) {
+				
+				if (Random.Range (0.0f, 1.0f) > ((RandomPolicyToken)p).m_emptyChance) {
+					
+					PolicyToken pt = ((RandomPolicyToken)p).GetRandomPolicy ();
+					AddPolicyToken (pt);
+
+				} else {
+					
+					// add empty policy token
+					AddPolicyToken (null);
+				}
+			} else {
+				AddPolicyToken (p);
+			}
+		}
+
 		for (int i = 0; i < m_numHenchmenSlots; i++) {
 			HenchmenSlot s = new HenchmenSlot ();
 			s.m_state = HenchmenSlot.State.Empty;
@@ -144,7 +173,7 @@ public class Region : ScriptableObject, ISubject {
 
 				ts.m_assetToken = a;
 				ts.m_state = TokenSlot.State.Revealed;
-				ts.m_status = TokenSlot.Status.Normal;
+//				ts.m_status = TokenSlot.Status.Normal;
 				tokenAdded = true;
 				break;
 			}
@@ -155,9 +184,11 @@ public class Region : ScriptableObject, ISubject {
 			t.m_type = TokenSlot.TokenType.Asset;
 			t.m_assetToken = a;
 			t.m_state = TokenSlot.State.Revealed;
-			t.m_status = TokenSlot.Status.Normal;
+//			t.m_status = TokenSlot.Status.Normal;
+			t.m_region = this;
 
 			m_assetTokens.Add (t);
+			m_allTokens.Add (t);
 		}
 	}
 
@@ -165,7 +196,8 @@ public class Region : ScriptableObject, ISubject {
 	{
 		ts.m_state = TokenSlot.State.None;
 		ts.m_assetToken = null;
-		ts.m_status = TokenSlot.Status.None;
+//		ts.m_status = TokenSlot.Status.None;
+		ts.m_effects.Clear();
 	}
 
 	private void AddControlToken (ControlToken c)
@@ -173,9 +205,61 @@ public class Region : ScriptableObject, ISubject {
 		TokenSlot t = new TokenSlot ();
 		t.m_type = TokenSlot.TokenType.Control;
 		t.m_controlToken = c;
-		t.m_state = TokenSlot.State.Hidden;
+		t.m_state = TokenSlot.State.Revealed;
+		t.m_region = this;
 
 		m_controlTokens.Add (t);
+		m_allTokens.Add (t);
+	}
+
+	private void AddPolicyToken (PolicyToken p)
+	{
+		bool tokenAdded = false;
+
+		foreach (TokenSlot ts in m_policyTokens) {
+
+			if (ts.m_state == TokenSlot.State.None && p != null) {
+
+				ts.m_policyToken = p;
+
+//				ts.m_status = TokenSlot.Status.Normal;
+
+				p.StartPolicy (ts);
+				ts.m_state = TokenSlot.State.Revealed;
+
+				tokenAdded = true;
+				break;
+			}
+		}
+
+		if (!tokenAdded) {
+			TokenSlot t = new TokenSlot ();
+			t.m_type = TokenSlot.TokenType.Policy;
+			t.m_policyToken = p;
+
+//			t.m_status = TokenSlot.Status.Normal;
+			t.m_region = this;
+
+			if (p != null) {
+				p.StartPolicy (t);
+				t.m_state = TokenSlot.State.Revealed;
+			} else {
+				t.m_state = TokenSlot.State.None;
+			}
+
+			m_policyTokens.Add (t);
+			m_allTokens.Add (t);
+		}
+	}
+
+	public void RemovePolicyToken (TokenSlot ts)
+	{
+		ts.m_policyToken.EndPolicy (ts);
+
+		ts.m_state = TokenSlot.State.None;
+		ts.m_policyToken = null;
+//		ts.m_status = TokenSlot.Status.None;
+		ts.m_effects.Clear();
 	}
 
 	public void ReserveSlot (Henchmen h)
@@ -276,6 +360,7 @@ public class Region : ScriptableObject, ISubject {
 	public List<TokenSlot> assetTokens {get{return m_assetTokens;}}
 	public List<TokenSlot> policyTokens {get{return m_policyTokens;}}
 	public List<TokenSlot> controlTokens {get{return m_controlTokens;}}
+	public List<TokenSlot> allTokens {get{return m_allTokens;}}
 	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen;}}
 	public List<HenchmenSlot> henchmenSlots {get{return m_henchmenSlots;}}
 	public Sprite portrait {get{return m_portrait;}}

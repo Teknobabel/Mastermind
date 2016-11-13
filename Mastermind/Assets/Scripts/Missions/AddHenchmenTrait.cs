@@ -7,11 +7,11 @@ public class AddHenchmenTrait : MissionBase {
 	public TraitData m_newTrait;
 	public Asset m_requiredUpgrade;
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
+		int completionChance = CalculateCompletionPercentage (a);
 
 		bool success = WasMissionSuccessful (completionChance);
 
@@ -45,8 +45,8 @@ public class AddHenchmenTrait : MissionBase {
 	{
 		string s = m_name + " - ";
 
-		if (GameManager.instance.currentMissionRequest.m_henchmenInFocus != null) {
-			s += GameManager.instance.currentMissionRequest.m_henchmenInFocus.henchmenName;
+		if (GameManager.instance.currentMissionWrapper.m_henchmenInFocus != null) {
+			s += GameManager.instance.currentMissionWrapper.m_henchmenInFocus.henchmenName;
 		}
 
 		return s;
@@ -56,11 +56,12 @@ public class AddHenchmenTrait : MissionBase {
 	{
 		// Valid if henchmen in focus doesn't currently have newTrait
 
-		if (m_requiredUpgrade == null || (m_requiredUpgrade != null && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade)) )
+		if (m_requiredUpgrade == null || (m_requiredUpgrade != null && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade)) && 
+			GameManager.instance.currentMissionWrapper.m_region == GameManager.instance.game.player.homeRegion)
 		{
-			if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_henchmenInFocus != null)
+			if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_henchmenInFocus != null)
 			{
-				if (!GameManager.instance.currentMissionRequest.m_henchmenInFocus.HasTrait (m_newTrait)) {
+				if (!GameManager.instance.currentMissionWrapper.m_henchmenInFocus.HasTrait (m_newTrait)) {
 					return true;
 				} else {
 					return false;

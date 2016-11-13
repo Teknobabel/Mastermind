@@ -20,6 +20,9 @@ public class MissionBase : ScriptableObject, IMission {
 		AssetToken,
 		ControlToken,
 		PolicyToken,
+		EconomicControlToken,
+		PoliticalControlToken,
+		MilitaryControlToken,
 	}
 	
 	public string m_name = "Null";
@@ -55,12 +58,12 @@ public class MissionBase : ScriptableObject, IMission {
 		return null;
 	}
 
-	public virtual void InitializeMission (Organization.ActiveMission a)
+	public virtual void InitializeMission (MissionWrapper a)
 	{
 
 	}
 
-	public virtual void CompleteMission (Organization.ActiveMission a)
+	public virtual void CompleteMission (MissionWrapper a)
 	{
 		if (m_infamyGain > 0) {
 			GameManager.instance.game.player.GainInfamy (m_infamyGain);
@@ -88,11 +91,11 @@ public class MissionBase : ScriptableObject, IMission {
 		return missionSuccess;
 	}
 
-	public int CalculateCompletionPercentage (MissionBase m, Region r, List<Henchmen> h)
+	public int CalculateCompletionPercentage (MissionWrapper mw)
 	{
 		int missionRank = 1;
 
-		switch (r.rank) {
+		switch (mw.m_region.rank) {
 		case RegionData.Rank.Two:
 			missionRank += 1;
 			break;
@@ -101,13 +104,28 @@ public class MissionBase : ScriptableObject, IMission {
 			break;
 		}
 
-//		if (m.m_targetType == TargetType.AssetToken)
+		if (mw.m_mission.m_targetType == TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
+
+			AssetToken a = (AssetToken)mw.m_tokenInFocus.m_assetToken;
+				
+			if (a.m_asset.m_rank == Asset.Rank.Three) {
+				missionRank++;
+			} else if (a.m_asset.m_rank == Asset.Rank.Four) {
+				missionRank += 2;
+			}
+		}
+
+		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+			missionRank += 1;
+		} else if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+			missionRank = Mathf.Clamp (missionRank - 2, 1, 5);
+		}
 			
 		int completionPercentage = 0;
 
 		List<TraitData> combinedTraitList = new List<TraitData> ();
 
-		foreach (Henchmen thisH in h) {
+		foreach (Henchmen thisH in mw.m_henchmen) {
 			List<TraitData> t = thisH.GetAllTraits();
 			foreach (TraitData thisT in t) {
 				if (!combinedTraitList.Contains (thisT)) {
@@ -116,7 +134,7 @@ public class MissionBase : ScriptableObject, IMission {
 			}
 		}
 
-		MissionBase.MissionTrait[] traits = m.GetTraitList (missionRank);
+		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (missionRank);
 
 		foreach (MissionBase.MissionTrait mt in traits) {
 

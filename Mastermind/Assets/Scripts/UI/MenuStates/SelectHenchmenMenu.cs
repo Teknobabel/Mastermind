@@ -30,9 +30,9 @@ public class SelectHenchmenMenu : MenuState {
 		m_selectHenchmenMenu.gameObject.SetActive (true);
 		m_backButton.gameObject.SetActive (true);
 
-		if (GameManager.instance.currentMissionRequest != null) {
+		if (GameManager.instance.currentMissionWrapper != null) {
 
-			MissionRequest r = GameManager.instance.currentMissionRequest;
+			MissionWrapper r = GameManager.instance.currentMissionWrapper;
 
 			GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 			h.transform.localScale = Vector3.one;
@@ -61,7 +61,7 @@ public class SelectHenchmenMenu : MenuState {
 	public override void OnDeactivate()
 	{
 		if (GameManager.instance.targetMenuState != State.None) {
-			GameManager.instance.currentMissionRequest = null;
+			GameManager.instance.currentMissionWrapper = null;
 		}
 
 		while (m_listViewItems.Count > 0) {
@@ -83,17 +83,17 @@ public class SelectHenchmenMenu : MenuState {
 
 	public override void BackButtonPressed ()
 	{
-		GameManager.instance.currentMissionRequest = null;
+		GameManager.instance.currentMissionWrapper = null;
 		GameManager.instance.PopMenuState ();
 	}
 
 	public void SelectHenchmen (int hID)
 	{
-		GameManager.instance.currentMissionRequest.m_henchmen.Clear();
+		GameManager.instance.currentMissionWrapper.m_henchmen.Clear();
 		Henchmen h = GameManager.instance.game.GetHenchmenByID (hID);
-		GameManager.instance.currentMissionRequest.m_henchmen.Add (h);
+		GameManager.instance.currentMissionWrapper.m_henchmen.Add (h);
 
-		GameManager.instance.ProcessMissionRequest ();
+		GameManager.instance.ProcessMissionWrapper ();
 
 		GameManager.instance.PopMenuState ();
 	}

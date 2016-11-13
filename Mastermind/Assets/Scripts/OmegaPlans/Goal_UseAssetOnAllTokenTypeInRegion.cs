@@ -59,7 +59,7 @@ public class Goal_UseAssetOnAllTokenTypeInRegion : OPGoalBase, IObserver {
 				bool allTokensOfTypeAffected = true;
 				foreach (Region.TokenSlot t in r.controlTokens) {
 
-					if (t.m_type == Region.TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && t.m_status != m_status) {
+					if (t.m_type == Region.TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && !t.m_effects.Contains(m_status)) {
 						allTokensOfTypeAffected = false;
 					}
 				}

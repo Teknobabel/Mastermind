@@ -62,4 +62,11 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 			GameManager.instance.PushMenuState (MenuState.State.CallHenchmenMenu);
 		}
 	}
+
+	public void FireButtonClicked ()
+	{
+		if (m_henchmenID > -1) {
+			GameManager.instance.game.player.FireHenchmen (m_henchmenID);
+		}
+	}
 }

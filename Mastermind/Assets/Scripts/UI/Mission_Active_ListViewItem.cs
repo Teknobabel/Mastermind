@@ -15,7 +15,7 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 	public TraitButton[] m_traits;
 	public RegionHenchmenButton[] m_henchmenTokens;
 
-	public void Initialize (Organization.ActiveMission a)
+	public void Initialize (MissionWrapper a)
 	{
 		m_missionName.text = a.m_mission.m_name.ToUpper();
 		m_missionDescription.text = a.m_mission.m_description;
@@ -30,7 +30,7 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 
 		m_missionDuration.text = duration;
 
-		CalculateTraits (a.m_mission, a.m_region, a.m_henchmen);
+		CalculateTraits (a);
 
 		Region r = a.m_region;
 
@@ -45,13 +45,13 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 		}
 	}
 
-	private void CalculateTraits (MissionBase m, Region r, List<Henchmen> hList)
+	private void CalculateTraits (MissionWrapper mw)
 	{
 		// calculate mission rank
 
 		int missionRank = 1;
 
-		switch (r.rank) {
+		switch (mw.m_region.rank) {
 		case RegionData.Rank.Two:
 			missionRank += 1;
 			break;
@@ -60,13 +60,32 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 			break;
 		}
 
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
+
+			AssetToken a = (AssetToken)mw.m_tokenInFocus.m_assetToken;
+
+			if (a.m_asset.m_rank == Asset.Rank.Three) {
+				missionRank++;
+			} else if (a.m_asset.m_rank == Asset.Rank.Four) {
+				missionRank += 2;
+			}
+
+		}
+
+		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+			missionRank += 1;
+		} else if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+			missionRank = Mathf.Clamp (missionRank - 2, 1, 5);
+		}
+
+
 		int successChance = 0;
 
 		// gather traits from all henchmen
 
 		List<TraitData> combinedTraitList = new List<TraitData> ();
 
-		foreach (Henchmen thisH in hList) {
+		foreach (Henchmen thisH in mw.m_henchmen) {
 			List<TraitData> t = thisH.GetAllTraits();
 			foreach (TraitData thisT in t) {
 				if (!combinedTraitList.Contains (thisT)) {
@@ -75,7 +94,7 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 			}
 		}
 
-		MissionBase.MissionTrait[] traits = m.GetTraitList (missionRank);
+		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (missionRank);
 
 		for (int i = 0; i < m_traits.Length; i++) {
 

@@ -4,7 +4,7 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Travel To Region")]
 public class TravelToRegion : MissionBase {
 
-	public override void InitializeMission (Organization.ActiveMission a)
+	public override void InitializeMission (MissionWrapper a)
 	{
 		Debug.Log ("Initializing Mission: " + m_name);
 
@@ -18,7 +18,7 @@ public class TravelToRegion : MissionBase {
 
 	}
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		Debug.Log ("Completing Mission: " + m_name);
 

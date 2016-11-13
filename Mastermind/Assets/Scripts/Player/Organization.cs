@@ -4,16 +4,6 @@ using System.Collections.Generic;
 
 public class Organization : ScriptableObject, ISubject {
 
-	public class ActiveMission
-	{
-		public MissionBase m_mission = null;
-		public int m_turnsPassed = 0;
-		public List<Henchmen> m_henchmen = new List<Henchmen> ();
-		public Henchmen m_henchmenInFocus = null;
-		public Region.TokenSlot m_tokenInFocus = null;
-		public Region m_region = null;
-	}
-
 	private string m_name = "Null";
 
 	private int m_currentInfamy = 0;
@@ -40,7 +30,7 @@ public class Organization : ScriptableObject, ISubject {
 	private List<IObserver>
 	m_observers = new List<IObserver> ();
 
-	private List<ActiveMission> m_activeMissions = new List<ActiveMission>();
+	private List<MissionWrapper> m_activeMissions = new List<MissionWrapper>();
 
 	private Region m_homeRegion = null;
 
@@ -84,17 +74,66 @@ public class Organization : ScriptableObject, ISubject {
 		for (int i=0; i < m_availableHenchmen.Count; i++)
 		{
 			Henchmen h = m_availableHenchmen [i];
+
 			if (h.id == henchmenID) {
+				
 				m_availableHenchmen.RemoveAt (i);
+
 				Notify (this, GameEvent.Organization_HenchmenDismissed);
 				break;
 			}
 		}
 	}
 
-	public void AddMission (MissionRequest mr)
+	public void FireHenchmen (int henchmenID)
 	{
-		ActiveMission a = new ActiveMission ();
+		for (int i=0; i < m_currentHenchmen.Count; i++)
+		{
+			Henchmen h = m_currentHenchmen [i];
+
+			if (h.id == henchmenID) {
+
+				m_currentHenchmen.RemoveAt (i);
+
+				// remove from current region
+				h.SetRegion(null);
+
+				// remove from current missions
+				List<MissionWrapper> cancelledMissions = new List<MissionWrapper>();
+
+				foreach (MissionWrapper mission in m_activeMissions) {
+
+					if (mission.m_henchmenInFocus != null && mission.m_henchmenInFocus == h) {
+
+						cancelledMissions.Add (mission);
+					}
+					else if (mission.m_henchmen.Count > 0 && mission.m_henchmen.Contains (h)) {
+
+						mission.m_henchmen.Remove (h);
+
+						if (mission.m_henchmen.Count == 0) {
+							cancelledMissions.Add (mission);
+						}
+					}
+				}
+
+				while (cancelledMissions.Count > 0) {
+
+					MissionWrapper mission = cancelledMissions [0];
+					cancelledMissions.RemoveAt (0);
+
+					activeMissions.Remove (mission);
+				}
+
+				Notify (this, GameEvent.Organization_HenchmenFired);
+				break;
+			}
+		}
+	}
+
+	public void AddMission (MissionWrapper mr)
+	{
+		MissionWrapper a = new MissionWrapper ();
 		a.m_mission = mr.m_mission;
 		a.m_henchmen = mr.m_henchmen;
 		a.m_region = mr.m_region;
@@ -112,7 +151,7 @@ public class Organization : ScriptableObject, ISubject {
 		m_activeMissions.Add (a);
 	}
 
-	public void MissionCompleted (ActiveMission a)
+	public void MissionCompleted (MissionWrapper a)
 	{
 		foreach (Henchmen h in a.m_henchmen) {
 			h.ChangeState (Henchmen.state.Idle);
@@ -126,7 +165,7 @@ public class Organization : ScriptableObject, ISubject {
 	{
 		MissionBase m = null;
 
-		foreach (ActiveMission a in m_activeMissions) {
+		foreach (MissionWrapper a in m_activeMissions) {
 			foreach (Henchmen thisH in a.m_henchmen)
 			{
 				if (h.id == thisH.id) {
@@ -140,7 +179,7 @@ public class Organization : ScriptableObject, ISubject {
 
 	public MissionBase GetMission (Region r)
 	{
-		foreach (ActiveMission a in m_activeMissions) {
+		foreach (MissionWrapper a in m_activeMissions) {
 			if (a.m_region != null && r.id == a.m_region.id) {
 				return a.m_mission;
 			}
@@ -229,9 +268,9 @@ public class Organization : ScriptableObject, ISubject {
 		}
 	}
 
-	public ActiveMission GetMissionForHenchmen (Henchmen h)
+	public MissionWrapper GetMissionForHenchmen (Henchmen h)
 	{
-		foreach (ActiveMission a in m_activeMissions) {
+		foreach (MissionWrapper a in m_activeMissions) {
 			if (a.m_henchmen.Contains (h)) {
 				return (a);
 			}
@@ -506,7 +545,7 @@ public class Organization : ScriptableObject, ISubject {
 	public int maxIntel {get{return m_maxIntel; }}
 	public string orgName {get{return m_name;}}
 	public List<Asset> currentAssets {get{return m_currentAssets;}}
-	public List<ActiveMission> activeMissions {get{return m_activeMissions;}}
+	public List<MissionWrapper> activeMissions {get{return m_activeMissions;}}
 	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}
 	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}
 	public Region homeRegion {get{return m_homeRegion;}}

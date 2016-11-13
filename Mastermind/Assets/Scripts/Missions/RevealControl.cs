@@ -5,11 +5,11 @@ using System.Collections.Generic;
 [CreateAssetMenu(menuName = "Missions/Reveal Control Token")]
 public class RevealControl : MissionBase {
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
+		int completionChance = CalculateCompletionPercentage (a);
 
 		bool missionSuccess = WasMissionSuccessful (completionChance);
 
@@ -58,9 +58,9 @@ public class RevealControl : MissionBase {
 	{
 		// valid if there are any hidden tokens in the region
 
-		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_region != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
-			Region r = GameManager.instance.currentMissionRequest.m_region;
+			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
 			foreach (Region.TokenSlot c in r.controlTokens) {
 

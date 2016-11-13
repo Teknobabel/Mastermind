@@ -21,11 +21,13 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	private Region.TokenSlot m_token = null;
 
-	public void Initialize (MissionBase m, MissionRequest mr)
+	public void Initialize ()
 	{
-		WriteBaseMissionStats (m);
+		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
+//		Debug.Log (mw.m_mission);
+		WriteBaseMissionStats (mw.m_mission);
 
-		int turnsLeft = m.m_numTurns;
+		int turnsLeft = mw.m_mission.m_numTurns;
 		string duration = turnsLeft.ToString ();
 		if (turnsLeft > 1) {
 			duration += " TURNS";
@@ -35,32 +37,15 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 		m_missionDuration.text = duration;
 
-		CalculateTraits (m, mr.m_region, mr.m_henchmen);
+		CalculateTraits (mw);
 
-		if (m.m_targetType == MissionBase.TargetType.Henchmen && GameManager.instance.currentMissionRequest.m_henchmenInFocus != null) {
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.Henchmen && mw.m_henchmenInFocus != null) {
 
-			m_henchmen = GameManager.instance.currentMissionRequest.m_henchmenInFocus;
-		} else if (m.m_targetType == MissionBase.TargetType.AssetToken && GameManager.instance.currentMissionRequest.m_tokenInFocus != null) {
-			m_token = GameManager.instance.currentMissionRequest.m_tokenInFocus;
+			m_henchmen = mw.m_henchmenInFocus;
+		} else if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus != null) {
+			m_token = mw.m_tokenInFocus;
 		}
 	}
-
-//	public void Initialize (Organization.ActiveMission a) //TODO See if this is still needed, added a new cell type for active missions
-//	{
-//		WriteBaseMissionStats (a.m_mission);
-//
-//		int turnsLeft = a.m_mission.m_numTurns - a.m_turnsPassed;
-//		string duration = turnsLeft.ToString ();
-//		if (turnsLeft > 1) {
-//			duration += " TURNS";
-//		} else {
-//			duration += " TURN";
-//		}
-//
-//		m_missionDuration.text = duration;
-//
-//		CalculateTraits (a.m_mission, a.m_region, a.m_henchmen);
-//	}
 
 	private void WriteBaseMissionStats (MissionBase m)
 	{
@@ -70,13 +55,13 @@ public class Mission_ListViewItem : MonoBehaviour {
 		m_missionCost.text = m.m_cost.ToString ();
 	}
 
-	private void CalculateTraits (MissionBase m, Region r, List<Henchmen> hList)
+	private void CalculateTraits (MissionWrapper mw)
 	{
 		// calculate mission rank
 
 		int missionRank = 1;
 
-		switch (r.rank) {
+		switch (mw.m_region.rank) {
 		case RegionData.Rank.Two:
 			missionRank += 1;
 			break;
@@ -85,13 +70,31 @@ public class Mission_ListViewItem : MonoBehaviour {
 			break;
 		}
 
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
+
+			AssetToken a = (AssetToken)mw.m_tokenInFocus.m_assetToken;
+
+			if (a.m_asset.m_rank == Asset.Rank.Three) {
+				missionRank++;
+			} else if (a.m_asset.m_rank == Asset.Rank.Four) {
+				missionRank += 2;
+			}
+		}
+
+		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+			missionRank += 1;
+		} else if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+			missionRank = Mathf.Clamp (missionRank - 2, 1, 5);
+		}
+
+
 		int successChance = 0;
 
 		// gather traits from all henchmen
 
 		List<TraitData> combinedTraitList = new List<TraitData> ();
 
-		foreach (Henchmen thisH in hList) {
+		foreach (Henchmen thisH in mw.m_henchmen) {
 			List<TraitData> t = thisH.GetAllTraits();
 			foreach (TraitData thisT in t) {
 				if (!combinedTraitList.Contains (thisT)) {
@@ -100,7 +103,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 			}
 		}
 
-		MissionBase.MissionTrait[] traits = m.GetTraitList (missionRank);
+		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (missionRank);
 
 		for (int i = 0; i < m_traits.Length; i++) {
 			
@@ -117,7 +120,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 					t.Initialize (mT.m_trait, hasTrait);
 				}
 
-				if (mT.m_asset != null) {
+				if (!hasTrait && mT.m_asset != null) {
 					hasAsset = GameManager.instance.game.player.currentAssets.Contains (mT.m_asset);
 					t.Initialize (mT.m_asset, hasAsset);
 				}
@@ -141,10 +144,10 @@ public class Mission_ListViewItem : MonoBehaviour {
 			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {
 
 				if (m_henchmen != null) {
-					GameManager.instance.currentMissionRequest.m_henchmenInFocus = m_henchmen;
+					GameManager.instance.currentMissionWrapper.m_henchmenInFocus = m_henchmen;
 				}
 				if (m_token != null) {
-					GameManager.instance.currentMissionRequest.m_tokenInFocus = m_token;
+					GameManager.instance.currentMissionWrapper.m_tokenInFocus = m_token;
 				}
 
 				SelectMissionMenu.instance.SelectMission (m_mission);

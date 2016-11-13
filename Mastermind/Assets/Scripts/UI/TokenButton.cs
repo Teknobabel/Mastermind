@@ -29,33 +29,6 @@ public class TokenButton : MonoBehaviour {
 		gameObject.SetActive (false);
 	}
 
-//	public void InitializeAsset (Region.TokenSlot t)
-//	{
-//		Initialize (t.m_assetToken);
-//
-//		if (t.m_state == Region.TokenSlot.State.Hidden) {
-//			m_tokenText.text = "A";
-//		}
-//	}
-//
-//	public void InitializePolicy (Region.TokenSlot t)
-//	{
-//		Initialize (t.m_policyToken);
-//
-//		if (t.m_state == Region.TokenSlot.State.Hidden) {
-//			m_tokenText.text = "P";
-//		}
-//	}
-//
-//	public void InitializeControl (Region.TokenSlot t)
-//	{
-//		Initialize (t.m_controlToken);
-//
-//		if (t.m_state == Region.TokenSlot.State.Hidden) {
-//			m_tokenText.text = "C";
-//		}
-//	}
-
 	public void ChangeState (Region.TokenSlot.State newState)
 	{
 		switch (newState) {
@@ -82,12 +55,27 @@ public class TokenButton : MonoBehaviour {
 			
 			TokenBase b = m_tokenSlot.GetBaseToken ();
 			if (b != null) {
-				m_tokenText.text = b.m_name.ToUpper ();
+				string s = b.m_name.ToUpper ();
+
+//				if (m_tokenSlot.m_status != Region.TokenSlot.Status.Normal) {
+//					s += "\n<color=red>(" + m_tokenSlot.m_status.ToString ().ToUpper () + ")</color>";
+//				}
+
+				m_tokenText.text = s;
 			}
 
 			if (m_tokenSlot.m_owner == Region.TokenSlot.Owner.Player) {
 				m_tokenImage.color = Color.green;
 				m_tokenText.color = Color.green;
+			} else if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+				m_tokenImage.color = Color.blue;
+				m_tokenText.color = Color.blue;
+			} else if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+				m_tokenImage.color = Color.red;
+				m_tokenText.color = Color.red;
+			} else if (m_tokenSlot.m_effects.Count > 0 && !m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+				m_tokenImage.color = Color.magenta;
+				m_tokenText.color = Color.magenta;
 			}
 			break;
 
@@ -103,5 +91,5 @@ public class TokenButton : MonoBehaviour {
 		m_state = newState;
 	}
 	
-
+	public Region.TokenSlot tokenSlot {get{return m_tokenSlot;}}
 }

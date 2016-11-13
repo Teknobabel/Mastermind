@@ -8,11 +8,11 @@ public class TransmuteAsset : MissionBase {
 	public Asset m_sourceAsset;
 	public Asset m_createdAsset;
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
+		int completionChance = CalculateCompletionPercentage (a);
 
 		bool success = WasMissionSuccessful (completionChance);
 
@@ -59,9 +59,9 @@ public class TransmuteAsset : MissionBase {
 	public override bool IsValid ()
 	{
 		// Valid if region is lair and player has requiredUpgrade and sourceAsset
-		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_region != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
-			Region r = GameManager.instance.currentMissionRequest.m_region;
+			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
 			if (r == GameManager.instance.game.player.homeRegion && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade))
 			{

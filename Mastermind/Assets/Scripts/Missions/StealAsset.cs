@@ -4,11 +4,11 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Steal Asset")]
 public class StealAsset : MissionBase {
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
+		int completionChance = CalculateCompletionPercentage (a);
 
 		bool missionSuccess = WasMissionSuccessful (completionChance);
 
@@ -51,8 +51,8 @@ public class StealAsset : MissionBase {
 	{
 		string s = m_name + " - ";
 
-		if (GameManager.instance.currentMissionRequest.m_tokenInFocus != null) {
-			s += GameManager.instance.currentMissionRequest.m_tokenInFocus.m_assetToken.m_name;
+		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+			s += GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken.m_name;
 		}
 
 		return s;
@@ -62,10 +62,10 @@ public class StealAsset : MissionBase {
 	{
 		// valid if there is a revealed, non empty asset token in the region
 
-		if (GameManager.instance.currentMissionRequest != null && GameManager.instance.currentMissionRequest.m_tokenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
 
-			if (GameManager.instance.currentMissionRequest.m_tokenInFocus.m_state == Region.TokenSlot.State.Revealed &&
-				GameManager.instance.currentMissionRequest.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
+			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == Region.TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == Region.TokenSlot.TokenType.Asset &&
+				GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
 
 				return true;
 			}

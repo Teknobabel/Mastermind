@@ -6,11 +6,11 @@ public class SeizeControlToken : MissionBase {
 
 	public ControlToken.ControlType m_type = ControlToken.ControlType.None;
 
-	public override void CompleteMission (Organization.ActiveMission a)
+	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a.m_mission, a.m_region, a.m_henchmen);
+		int completionChance = CalculateCompletionPercentage (a);
 
 		bool missionSuccess = WasMissionSuccessful (completionChance);
 
@@ -55,13 +55,13 @@ public class SeizeControlToken : MissionBase {
 	{
 		// valid if there is a control token of m_type not under player control
 
-		foreach (Region.TokenSlot t in GameManager.instance.currentMissionRequest.m_region.controlTokens) {
+		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null)
+		{
+			Region.TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 
-			if (t.m_controlToken.m_controlType == m_type && t.m_owner != Region.TokenSlot.Owner.Player && t.m_state == Region.TokenSlot.State.Revealed) {
-
+			if (t.m_type == Region.TokenSlot.TokenType.Control && t.m_controlToken.m_controlType == m_type && t.m_owner != Region.TokenSlot.Owner.Player) {
 				return true;
 			}
-
 		}
 		return false;
 	}

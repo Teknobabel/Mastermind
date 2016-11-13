@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour {
 
 	private int m_currentID = 0;
 
-	private MissionRequest m_currentMissionRequest;
+	private MissionWrapper m_currentMissionWrapper;
 
 	private string m_currentVersion = "VER 0.0.1";
 
@@ -86,13 +86,13 @@ public class GameManager : MonoBehaviour {
 		newState.EnterState ();
 	}
 
-	public void ProcessMissionRequest ()
+	public void ProcessMissionWrapper ()
 	{
-		if (m_currentMissionRequest != null && m_currentMissionRequest.m_mission != null && m_currentMissionRequest.m_henchmen.Count > 0) {
-			Debug.Log ("Processing Mission Request: " + m_currentMissionRequest.m_mission.m_name);
-			GameManager.instance.game.player.UseCommandPoints (m_currentMissionRequest.m_mission.m_cost);
-			GameManager.instance.game.player.AddMission (m_currentMissionRequest);
-			m_currentMissionRequest = null;
+		if (m_currentMissionWrapper != null && m_currentMissionWrapper.m_mission != null && m_currentMissionWrapper.m_henchmen.Count > 0) {
+			Debug.Log ("Processing Mission Request: " + m_currentMissionWrapper.m_mission.m_name);
+			GameManager.instance.game.player.UseCommandPoints (m_currentMissionWrapper.m_mission.m_cost);
+			GameManager.instance.game.player.AddMission (m_currentMissionWrapper);
+			m_currentMissionWrapper = null;
 		}
 	}
 
@@ -188,6 +188,6 @@ public class GameManager : MonoBehaviour {
 	public int currentTabID {get{return m_currentTab.id;}}
 	public string currentVersion {get{return m_currentVersion; }}
 	public int newID {get{m_currentID++; return m_currentID;}}
-	public MissionRequest currentMissionRequest {get{return m_currentMissionRequest;}set{m_currentMissionRequest = value;}}
+	public MissionWrapper currentMissionWrapper {get{return m_currentMissionWrapper;}set{m_currentMissionWrapper = value;}}
 	public MenuState.State targetMenuState {get{ return m_targetMenuState; }set{m_targetMenuState = value; }}
 }

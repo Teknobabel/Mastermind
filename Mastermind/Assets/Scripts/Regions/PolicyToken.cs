@@ -8,4 +8,14 @@ public class PolicyToken : TokenBase, IToken {
 	{
 
 	}
+
+	public virtual void StartPolicy (Region.TokenSlot t)
+	{
+
+	}
+
+	public virtual void EndPolicy (Region.TokenSlot t)
+	{
+
+	}
 }
