@@ -220,6 +220,17 @@ public class Region : ScriptableObject, ISubject {
 		m_allTokens.Add (t);
 	}
 
+	public void AddPolicytoken (PolicyToken p, TokenSlot t)
+	{
+		if (t.m_state == TokenSlot.State.None) {
+
+			t.m_policyToken = p;
+
+			p.StartPolicy (t);
+			t.m_state = TokenSlot.State.Revealed;
+		}
+	}
+
 	private void AddPolicyToken (PolicyToken p)
 	{
 		bool tokenAdded = false;
