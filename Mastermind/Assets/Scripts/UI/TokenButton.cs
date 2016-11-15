@@ -48,7 +48,7 @@ public class TokenButton : MonoBehaviour {
 				break;
 			}
 			break;
-
+		case Region.TokenSlot.State.None:
 		case Region.TokenSlot.State.Revealed:
 
 			m_tokenImage.fillCenter = false;
@@ -62,14 +62,22 @@ public class TokenButton : MonoBehaviour {
 //				}
 
 				m_tokenText.text = s;
+			} else {
+				m_tokenText.text = "";
 			}
 
 			if (m_tokenSlot.m_owner == Region.TokenSlot.Owner.Player) {
 				m_tokenImage.color = Color.green;
 				m_tokenText.color = Color.green;
 			} else if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+				
 				m_tokenImage.color = Color.blue;
 				m_tokenText.color = Color.blue;
+
+				if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+					m_tokenText.color = Color.red;
+				}
+
 			} else if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
 				m_tokenImage.color = Color.red;
 				m_tokenText.color = Color.red;
@@ -79,13 +87,13 @@ public class TokenButton : MonoBehaviour {
 			}
 			break;
 
-		case Region.TokenSlot.State.None:
-
-			m_tokenImage.fillCenter = false;
-			m_tokenImage.color = Color.grey;
-			m_tokenText.text = "";
-
-			break;
+//		case Region.TokenSlot.State.None:
+//
+//			m_tokenImage.fillCenter = false;
+//			m_tokenImage.color = Color.grey;
+//			m_tokenText.text = "";
+//
+//			break;
 		}
 
 		m_state = newState;

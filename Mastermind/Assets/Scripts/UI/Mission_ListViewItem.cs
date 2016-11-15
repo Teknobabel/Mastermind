@@ -82,9 +82,23 @@ public class Mission_ListViewItem : MonoBehaviour {
 		}
 
 		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
-			missionRank += 1;
-		} else if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
-			missionRank = Mathf.Clamp (missionRank - 2, 1, 5);
+
+			foreach (Region.TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
+				if (s == Region.TokenSlot.Status.Protected) {
+					missionRank += 1;
+				}
+			}
+
+		}
+
+		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+
+			foreach (Region.TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
+				if (s == Region.TokenSlot.Status.Vulnerable) {
+					missionRank = Mathf.Clamp (missionRank - 1, 1, 5);
+				}
+			}
+
 		}
 
 

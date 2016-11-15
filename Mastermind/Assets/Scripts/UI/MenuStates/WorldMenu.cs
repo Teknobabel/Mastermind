@@ -25,8 +25,7 @@ public class WorldMenu : MenuState {
 	public override void OnActivate(MenuTab tabInfo)
 	{
 		Debug.Log ("Starting World Menu");
-//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-//		t.m_tabButton.ChangeState (TabButton.State.Selected);
+
 		m_tabInfo = tabInfo;
 		if (m_tabInfo != null) {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
@@ -73,6 +72,8 @@ public class WorldMenu : MenuState {
 
 	public override void OnReturn()
 	{
+		// continue going back up the stack if this is not the target menu
+
 		if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState != m_state)
 		{
 			GameManager.instance.PopMenuState();
@@ -93,8 +94,6 @@ public class WorldMenu : MenuState {
 			Destroy (g);
 		}
 
-//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-//		t.m_tabButton.ChangeState (TabButton.State.Unselected);
 		if (m_tabInfo != null) {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
 			m_tabInfo = null;

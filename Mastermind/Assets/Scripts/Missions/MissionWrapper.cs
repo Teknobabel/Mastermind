@@ -9,7 +9,9 @@ public class MissionWrapper {
 	public Henchmen m_henchmenInFocus;
 	public List<Henchmen> m_henchmen = new List<Henchmen>();
 	public Region.TokenSlot m_tokenInFocus;
+	public Base.Floor m_floorInFocus;
 	public int m_turnsPassed = 0;
 	public MissionBase.TargetType m_scope = MissionBase.TargetType.Region;
+	public bool m_success = false;
 
 }

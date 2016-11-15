@@ -12,15 +12,11 @@ public class Drill : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a);
-
-		bool missionSuccess = WasMissionSuccessful (completionChance);
-
-		if (missionSuccess) {
+		if (a.m_success) {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -29,7 +25,7 @@ public class Drill : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

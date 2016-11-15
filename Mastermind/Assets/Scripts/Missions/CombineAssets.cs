@@ -13,11 +13,7 @@ public class CombineAssets : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a);
-
-		bool success = WasMissionSuccessful (completionChance);
-
-		if (success) {
+		if (a.m_success) {
 
 			// check if player still meets requirements
 
@@ -49,7 +45,7 @@ public class CombineAssets : MissionBase {
 //					}
 
 					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper () + " GAINS " + m_createdAsset.m_name.ToUpper () + " ASSET.";
-					t.m_resultsText += "\n" + completionChance.ToString ();
+//					t.m_resultsText += "\n" + completionChance.ToString ();
 					t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 					t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -60,7 +56,7 @@ public class CombineAssets : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -78,12 +74,12 @@ public class CombineAssets : MissionBase {
 			if (r == GameManager.instance.game.player.homeRegion && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade))
 			{
 
-				foreach (Asset a in m_sourceAssets) {
-					
-					if (!GameManager.instance.game.player.currentAssets.Contains (a)) {
-						return false;
-					}
-				}
+//				foreach (Asset a in m_sourceAssets) {
+//					
+//					if (!GameManager.instance.game.player.currentAssets.Contains (a)) {
+//						return false;
+//					}
+//				}
 					
 				return true;
 			}

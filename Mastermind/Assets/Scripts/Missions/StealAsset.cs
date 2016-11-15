@@ -8,11 +8,7 @@ public class StealAsset : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a);
-
-		bool missionSuccess = WasMissionSuccessful (completionChance);
-
-		if (missionSuccess) {
+		if (a.m_success) {
 
 			// find a revealed non-empty asset token
 			Region.TokenSlot at = a.m_tokenInFocus;
@@ -30,7 +26,7 @@ public class StealAsset : MissionBase {
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 				t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + asset.m_name.ToUpper() + " ASSET.";
-				t.m_resultsText += "\n" + completionChance.ToString ();
+//				t.m_resultsText += "\n" + completionChance.ToString ();
 				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -40,7 +36,7 @@ public class StealAsset : MissionBase {
 			
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

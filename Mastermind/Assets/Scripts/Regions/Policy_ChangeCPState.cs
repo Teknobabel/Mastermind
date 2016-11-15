@@ -13,9 +13,9 @@ public class Policy_ChangeCPState : PolicyToken {
 
 		foreach (Region.TokenSlot ts in t.m_region.controlTokens) {
 
-			if (ts.m_controlToken != null) {
+//			if (ts.m_controlToken != null) {
 				validTokens.Add (ts);
-			}
+//			}
 		}
 
 		if (validTokens.Count > 0) {
@@ -37,6 +37,7 @@ public class Policy_ChangeCPState : PolicyToken {
 			if (ts.m_controlToken == t.m_controlToken && ts.m_effects.Contains (m_newState)) {
 
 				ts.m_effects.Remove (m_newState);
+				t.m_controlToken = null;
 				break;
 
 			}

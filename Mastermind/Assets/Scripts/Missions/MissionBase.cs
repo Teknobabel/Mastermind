@@ -23,6 +23,8 @@ public class MissionBase : ScriptableObject, IMission {
 		EconomicControlToken,
 		PoliticalControlToken,
 		MilitaryControlToken,
+		BaseUpgrade,
+		Floor,
 	}
 	
 	public string m_name = "Null";
@@ -32,6 +34,7 @@ public class MissionBase : ScriptableObject, IMission {
 	public int m_numTurns = 1;
 	public int m_maxRank = 5;
 	public int m_infamyGain = 0;
+	public int m_missionFailInfamyGain = 0;
 	public MissionTrait[] m_rank1Traits;
 	public MissionTrait[] m_rank2Traits;
 	public MissionTrait[] m_rank3Traits;
@@ -65,8 +68,14 @@ public class MissionBase : ScriptableObject, IMission {
 
 	public virtual void CompleteMission (MissionWrapper a)
 	{
-		if (m_infamyGain > 0) {
+		int completionChance = CalculateCompletionPercentage (a);
+
+		a.m_success = WasMissionSuccessful (completionChance);
+
+		if (a.m_success && m_infamyGain > 0) {
 			GameManager.instance.game.player.GainInfamy (m_infamyGain);
+		} else if (!a.m_success && m_missionFailInfamyGain > 0) {
+			GameManager.instance.game.player.GainInfamy (m_missionFailInfamyGain);
 		}
 	}
 
@@ -116,9 +125,23 @@ public class MissionBase : ScriptableObject, IMission {
 		}
 
 		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
-			missionRank += 1;
-		} else if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
-			missionRank = Mathf.Clamp (missionRank - 2, 1, 5);
+
+			foreach (Region.TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
+				if (s == Region.TokenSlot.Status.Protected) {
+					missionRank += 1;
+				}
+			}
+
+		}
+
+		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+
+			foreach (Region.TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
+				if (s == Region.TokenSlot.Status.Vulnerable) {
+					missionRank = Mathf.Clamp (missionRank - 1, 1, 5);
+				}
+			}
+
 		}
 			
 		int completionPercentage = 0;

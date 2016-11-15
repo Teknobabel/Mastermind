@@ -26,7 +26,7 @@ public class Policy_ChangePolicyState : PolicyToken {
 
 			ts.m_effects.Add (m_newState);
 
-			t.m_policyToken = ts.m_policyToken;
+			t.m_policyTokens.Add (ts);
 		}
 	}
 
@@ -37,6 +37,7 @@ public class Policy_ChangePolicyState : PolicyToken {
 			if (ts.m_policyToken == t.m_policyToken && ts.m_effects.Contains (m_newState)) {
 
 				ts.m_effects.Remove (m_newState);
+				t.m_policyTokens.Clear ();
 				break;
 
 			}

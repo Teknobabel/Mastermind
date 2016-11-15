@@ -34,6 +34,8 @@ public class Organization : ScriptableObject, ISubject {
 
 	private Region m_homeRegion = null;
 
+	private Base m_base;
+
 	public void RefillCommandPool ()
 	{
 		m_currentCommandPool = m_commandPool;
@@ -139,6 +141,8 @@ public class Organization : ScriptableObject, ISubject {
 		a.m_region = mr.m_region;
 		a.m_henchmenInFocus = mr.m_henchmenInFocus;
 		a.m_tokenInFocus = mr.m_tokenInFocus;
+		a.m_floorInFocus = mr.m_floorInFocus;
+		a.m_scope = mr.m_scope;
 
 		a.m_mission.InitializeMission (a);
 
@@ -232,8 +236,15 @@ public class Organization : ScriptableObject, ISubject {
 
 	public void GainWantedLevel (int amount)
 	{
+		Debug.Log ("Wanted Level Increased");
+
 		if (m_currentWantedLevel < m_maxWantedLevel) {
 			m_currentWantedLevel++;
+
+			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_resultsText = "Wanted Level has increased to " + m_currentWantedLevel.ToString() + "!";
+			t.m_resultType = GameEvent.Organization_WantedLevelIncreased;
+			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 		}
 	}
 
@@ -296,6 +307,11 @@ public class Organization : ScriptableObject, ISubject {
 		foreach (Asset a in d.m_startingAssets) {
 			AddAsset (a);
 		}
+
+		// initialize base
+
+		m_base = new Base ();
+		m_base.Initialize (6);
 
 		// select Omega Plans
 
@@ -549,5 +565,6 @@ public class Organization : ScriptableObject, ISubject {
 	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}
 	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}
 	public Region homeRegion {get{return m_homeRegion;}}
+	public Base orgBase {get{return m_base;}}
 
 }

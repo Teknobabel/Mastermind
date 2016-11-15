@@ -12,11 +12,7 @@ public class TransmuteAsset : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a);
-
-		bool success = WasMissionSuccessful (completionChance);
-
-		if (success) {
+		if (a.m_success) {
 
 			// check if player still meets requirements
 
@@ -38,7 +34,7 @@ public class TransmuteAsset : MissionBase {
 					}
 
 					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper () + " GAINS " + m_createdAsset.m_name.ToUpper () + " ASSET.";
-					t.m_resultsText += "\n" + completionChance.ToString ();
+//					t.m_resultsText += "\n" + completionChance.ToString ();
 					t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 					t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -49,7 +45,7 @@ public class TransmuteAsset : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

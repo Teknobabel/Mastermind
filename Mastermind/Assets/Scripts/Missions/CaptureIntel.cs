@@ -8,11 +8,7 @@ public class CaptureIntel : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a);
-
-		bool success = WasMissionSuccessful (completionChance);
-
-		if (success) {
+		if (a.m_success) {
 
 			// remove intel asset from region
 
@@ -29,7 +25,7 @@ public class CaptureIntel : MissionBase {
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 			t.m_resultsText += "\n" + "INTEL HAS BEEN RECOVERED BEFORE AGENTS COULD INTERCEPT.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -38,7 +34,7 @@ public class CaptureIntel : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

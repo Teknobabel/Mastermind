@@ -25,4 +25,5 @@ public enum GameEvent {
 	Organization_IntelSpawned,
 	Organization_IntelCaptured,
 	Organization_HenchmenFired,
+	Organization_WantedLevelIncreased,
 }

@@ -11,11 +11,7 @@ public class UncoverToken : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a);
-
-		bool missionSuccess = WasMissionSuccessful (completionChance);
-
-		if (missionSuccess) {
+		if (a.m_success) {
 
 			// gather all hidden tokens
 
@@ -64,7 +60,7 @@ public class UncoverToken : MissionBase {
 				TokenBase tb = ts.GetBaseToken ();
 				t.m_resultsText += "\n" + tb.m_name.ToUpper () + " is revealed!";
 			}
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -73,7 +69,7 @@ public class UncoverToken : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

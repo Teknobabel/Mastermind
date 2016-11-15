@@ -13,9 +13,9 @@ public class Policy_ChangeAssetState : PolicyToken {
 
 		foreach (Region.TokenSlot ts in t.m_region.assetTokens) {
 
-			if (ts.m_assetToken != null) {
+//			if (ts.m_assetToken != null) {
 				validTokens.Add (ts);
-			}
+//			}
 		}
 
 		if (validTokens.Count > 0) {
@@ -37,6 +37,7 @@ public class Policy_ChangeAssetState : PolicyToken {
 			if (ts.m_assetToken == t.m_assetToken && ts.m_effects.Contains (m_newState)) {
 
 				ts.m_effects.Remove (m_newState);
+				t.m_assetToken = null;
 				break;
 
 			}

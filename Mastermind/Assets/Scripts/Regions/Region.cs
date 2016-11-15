@@ -136,6 +136,14 @@ public class Region : ScriptableObject, ISubject {
 			}
 		}
 
+
+		// pre populate policy tokens since policies can effect empty slots
+
+		foreach (PolicyToken p in r.m_policyTokens) {
+
+			AddPolicyToken (null);
+		}
+
 		foreach (PolicyToken p in r.m_policyTokens) {
 
 			if (p is RandomPolicyToken) {
@@ -225,7 +233,7 @@ public class Region : ScriptableObject, ISubject {
 //				ts.m_status = TokenSlot.Status.Normal;
 
 				p.StartPolicy (ts);
-				ts.m_state = TokenSlot.State.Revealed;
+				ts.m_state = TokenSlot.State.Hidden;
 
 				tokenAdded = true;
 				break;
@@ -242,7 +250,7 @@ public class Region : ScriptableObject, ISubject {
 
 			if (p != null) {
 				p.StartPolicy (t);
-				t.m_state = TokenSlot.State.Revealed;
+				t.m_state = TokenSlot.State.Hidden;
 			} else {
 				t.m_state = TokenSlot.State.None;
 			}

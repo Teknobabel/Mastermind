@@ -10,11 +10,7 @@ public class SeizeControlToken : MissionBase {
 	{
 		base.CompleteMission (a);
 
-		int completionChance = CalculateCompletionPercentage (a);
-
-		bool missionSuccess = WasMissionSuccessful (completionChance);
-
-		if (missionSuccess) {
+		if (a.m_success) {
 
 			// find the first control token of m_type not under player control
 
@@ -29,7 +25,7 @@ public class SeizeControlToken : MissionBase {
 					TurnResultsEntry t = new TurnResultsEntry ();
 					t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 					t.m_resultsText += "\n" + ts.GetBaseToken().m_name.ToUpper() + " is now under " + GameManager.instance.game.player.orgName.ToUpper() + " control!";
-					t.m_resultsText += "\n" + completionChance.ToString ();
+//					t.m_resultsText += "\n" + completionChance.ToString ();
 					t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 					t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -44,7 +40,7 @@ public class SeizeControlToken : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-			t.m_resultsText += "\n" + completionChance.ToString ();
+//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
