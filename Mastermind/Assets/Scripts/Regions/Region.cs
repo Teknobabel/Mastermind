@@ -153,11 +153,12 @@ public class Region : ScriptableObject, ISubject {
 					PolicyToken pt = ((RandomPolicyToken)p).GetRandomPolicy ();
 					AddPolicyToken (pt);
 
-				} else {
-					
-					// add empty policy token
-					AddPolicyToken (null);
-				}
+				} 
+//				else {
+//					
+//					// add empty policy token
+//					AddPolicyToken (null);
+//				}
 			} else {
 				AddPolicyToken (p);
 			}
@@ -244,7 +245,7 @@ public class Region : ScriptableObject, ISubject {
 //				ts.m_status = TokenSlot.Status.Normal;
 
 				p.StartPolicy (ts);
-				ts.m_state = TokenSlot.State.Hidden;
+				ts.m_state = TokenSlot.State.Revealed;
 
 				tokenAdded = true;
 				break;
@@ -261,7 +262,7 @@ public class Region : ScriptableObject, ISubject {
 
 			if (p != null) {
 				p.StartPolicy (t);
-				t.m_state = TokenSlot.State.Hidden;
+				t.m_state = TokenSlot.State.Revealed;
 			} else {
 				t.m_state = TokenSlot.State.None;
 			}
@@ -312,6 +313,10 @@ public class Region : ScriptableObject, ISubject {
 
 				break;
 			}
+		}
+
+		if (m_currentHenchmen.Contains (h)) {
+			m_currentHenchmen.Remove (h);
 		}
 	}
 

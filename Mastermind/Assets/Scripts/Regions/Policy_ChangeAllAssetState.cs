@@ -11,10 +11,9 @@ public class Policy_ChangeAllAssetState : PolicyToken {
 	{
 		foreach (Region.TokenSlot ts in t.m_region.assetTokens) {
 
-			if (ts.m_assetToken != null) {
-				ts.m_effects.Add (m_newState);
-				t.m_assetTokens.Add (ts);
-			}
+			ts.m_effects.Add (m_newState);
+			t.m_assetTokens.Add (ts);
+
 		}
 	}
 

@@ -11,10 +11,9 @@ public class Policy_ChangeAllCPState : PolicyToken {
 	{
 		foreach (Region.TokenSlot ts in t.m_region.controlTokens) {
 
-			if (ts.m_controlToken != null) {
-				ts.m_effects.Add (m_newState);
-				t.m_controlTokens.Add (ts);
-			}
+			ts.m_effects.Add (m_newState);
+			t.m_controlTokens.Add (ts);
+
 		}
 	}
 

@@ -5,6 +5,14 @@ using System.Collections.Generic;
 public class WorldMenu : MenuState {
 	public static WorldMenu instance;
 
+	public enum SortType
+	{
+		None,
+		RegionGroup,
+		Occupied,
+		RegionRank,
+	}
+
 	public GameObject m_regionListViewItem;
 	public GameObject m_sectionHeader;
 	public GameObject m_scrollView;
@@ -12,6 +20,8 @@ public class WorldMenu : MenuState {
 	public GameObject m_sortPanelParent;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
+
+	private SortType m_sortType = SortType.RegionGroup;
 
 	void Awake ()
 	{

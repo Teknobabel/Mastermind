@@ -11,10 +11,8 @@ public class Policy_ChangeAllPolicyState : PolicyToken {
 	{
 		foreach (Region.TokenSlot ts in t.m_region.policyTokens) {
 
-			if (ts.m_policyToken != null) {
-				ts.m_effects.Add (m_newState);
-				t.m_policyTokens.Add (ts);
-			}
+			ts.m_effects.Add (m_newState);
+			t.m_policyTokens.Add (ts);
 		}
 	}
 

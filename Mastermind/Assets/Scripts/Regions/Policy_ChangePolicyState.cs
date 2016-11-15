@@ -12,10 +12,8 @@ public class Policy_ChangePolicyState : PolicyToken {
 		List<Region.TokenSlot> validTokens = new List<Region.TokenSlot> ();
 
 		foreach (Region.TokenSlot ts in t.m_region.policyTokens) {
-
-//			if (ts.m_policyToken != null) {
-				validTokens.Add (ts);
-//			}
+			
+			validTokens.Add (ts);
 		}
 
 		if (validTokens.Count > 0) {
