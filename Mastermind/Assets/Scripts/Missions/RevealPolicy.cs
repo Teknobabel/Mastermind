@@ -31,7 +31,11 @@ public class RevealPolicy : MissionBase {
 
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-				t.m_resultsText += "\n" + tB.m_policyToken.m_name.ToUpper() + " is revealed!";
+				if (tB.m_policyToken != null) {
+					t.m_resultsText += "\n" + tB.m_policyToken.m_name.ToUpper () + " is revealed!";
+				} else {
+					t.m_resultsText += "\n Empty Policy Slot is revealed!";
+				}
 //				t.m_resultsText += "\n" + completionChance.ToString ();
 				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 				t.m_resultType = GameEvent.Henchmen_MissionCompleted;

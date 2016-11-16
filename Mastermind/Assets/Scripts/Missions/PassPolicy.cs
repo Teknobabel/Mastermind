@@ -40,7 +40,7 @@ public class PassPolicy : MissionBase {
 
 			Region.TokenSlot ts = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 
-			if (ts.m_type == Region.TokenSlot.TokenType.Policy && ts.m_state == Region.TokenSlot.State.None) {
+			if (ts.m_type == Region.TokenSlot.TokenType.Policy && ts.m_state == Region.TokenSlot.State.Revealed && ts.m_policyToken == null) {
 				return true;
 			}
 		}

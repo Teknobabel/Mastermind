@@ -38,7 +38,7 @@ public class Organization : ScriptableObject, ISubject {
 
 	public void RefillCommandPool ()
 	{
-		m_currentCommandPool = m_commandPool;
+		m_currentCommandPool = GetCommandPool();
 		Notify (this, GameEvent.Organization_CommandPoolChanged);
 	}
 
@@ -544,13 +544,27 @@ public class Organization : ScriptableObject, ISubject {
 		return cost;
 	}
 
+	private int GetCommandPool ()
+	{
+		int totalCP = m_commandPool;
+
+		foreach (Asset a in m_currentAssets) {
+
+			if (a.m_assetType == Asset.AssetType.CommandCenter) {
+				totalCP += 2;
+			}
+		}
+
+		return totalCP;
+	}
+
 	public Dictionary<int, MenuTab> menuTabs {get{return m_menuTabs; }}
 	public List<OmegaPlan> omegaPlans {get{return m_omegaPlans; }}
 	public Dictionary<int, OmegaPlan> omegaPlansByID {get{return m_omegaPlansByID; }}
 	public List<Henchmen> availableHenchmen {get{return m_availableHenchmen; }}
 	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen; }}
 	public int currentCommandPool {get{return m_currentCommandPool; }}
-	public int commandPool {get{return m_commandPool; }}
+	public int commandPool {get{return GetCommandPool(); }}
 	public int costPerTurn {get{return GetCostPerTurn();}}
 	public int maxAvailableHenchmen {get{return m_maxAvailableHenchmen;}}
 	public int currentWantedLevel {get{return m_currentWantedLevel; }}

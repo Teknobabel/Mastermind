@@ -21,7 +21,9 @@ public class Henchmen : ScriptableObject {
 	m_costPerTurn = 1,
 	m_id = -1;
 
-	private Sprite m_portrait;
+	private Sprite 
+	m_portrait,
+	m_portraitShort;
 
 	private Dictionary<TraitData.TraitClass, List<TraitData>> m_traitDict;
 
@@ -43,6 +45,7 @@ public class Henchmen : ScriptableObject {
 		m_hireCost = h.m_hireCost;
 		m_costPerTurn = h.m_costPerTurn;
 		m_portrait = h.m_portrait;
+		m_portraitShort = h.m_portraitShort;
 
 		foreach (TraitData t in h.m_startingTraits) {
 			AddTrait (t);
@@ -152,6 +155,7 @@ public class Henchmen : ScriptableObject {
 	public int hireCost {get{return m_hireCost; }}
 	public int costPerTurn {get{return m_costPerTurn; }}
 	public string henchmenName {get{return m_name; }}
+	public Sprite portraitShort {get{return m_portraitShort;}}
 	public Sprite portrait {get{return m_portrait;}}
 	public int id {get{return m_id; }}
 	public state currentState {get{return m_state;}}

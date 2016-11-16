@@ -71,6 +71,7 @@ public class Asset : ScriptableObject, ISubject {
 		LairUpgrade_BlackMarket,
 		Intel,
 		TrapRoom,
+		CommandCenter,
 	}
 
 	private List<IObserver>

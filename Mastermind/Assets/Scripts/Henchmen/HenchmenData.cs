@@ -12,7 +12,9 @@ public class HenchmenData : ScriptableObject {
 	m_hireCost = 1,
 	m_costPerTurn = 1;
 
-	public Sprite m_portrait;
+	public Sprite 
+	m_portrait,
+	m_portraitShort;
 
 	public TraitData[] m_startingTraits;
 

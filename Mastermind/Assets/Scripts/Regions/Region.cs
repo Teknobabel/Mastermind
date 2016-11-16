@@ -223,12 +223,11 @@ public class Region : ScriptableObject, ISubject {
 
 	public void AddPolicytoken (PolicyToken p, TokenSlot t)
 	{
-		if (t.m_state == TokenSlot.State.None) {
+		if (t.m_state == TokenSlot.State.Revealed && t.m_policyToken == null) {
 
 			t.m_policyToken = p;
 
 			p.StartPolicy (t);
-			t.m_state = TokenSlot.State.Revealed;
 		}
 	}
 
@@ -245,7 +244,7 @@ public class Region : ScriptableObject, ISubject {
 //				ts.m_status = TokenSlot.Status.Normal;
 
 				p.StartPolicy (ts);
-				ts.m_state = TokenSlot.State.Revealed;
+				ts.m_state = TokenSlot.State.Hidden;
 
 				tokenAdded = true;
 				break;
@@ -262,10 +261,13 @@ public class Region : ScriptableObject, ISubject {
 
 			if (p != null) {
 				p.StartPolicy (t);
-				t.m_state = TokenSlot.State.Revealed;
-			} else {
-				t.m_state = TokenSlot.State.None;
-			}
+//				t.m_state = TokenSlot.State.Hidden;
+			} 
+//			else {
+//				t.m_state = TokenSlot.State.None;
+//			}
+
+			t.m_state = TokenSlot.State.Hidden;
 
 			m_policyTokens.Add (t);
 			m_allTokens.Add (t);
