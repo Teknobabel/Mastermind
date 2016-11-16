@@ -15,9 +15,12 @@ public class WorldMenu : MenuState {
 
 	public GameObject m_regionListViewItem;
 	public GameObject m_sectionHeader;
+	public GameObject m_worldMenu;
 	public GameObject m_scrollView;
 	public GameObject m_scrollViewContent;
 	public GameObject m_sortPanelParent;
+
+	public SortModeButton[] m_sortModeButtons;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
 
@@ -41,21 +44,28 @@ public class WorldMenu : MenuState {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
 		}
 
+		m_worldMenu.SetActive (true);
+
+		ChangeSortType (m_sortType);
+
 		UpdateRegionList ();
 	}
 
 	private void UpdateRegionList ()
 	{
-		m_scrollView.gameObject.SetActive (true);
-		m_sortPanelParent.gameObject.SetActive (true);
+		while (m_listViewItems.Count > 0) {
+			GameObject g = m_listViewItems [0];
+			m_listViewItems.RemoveAt (0);
+			Destroy (g);
+		}
 
-		Dictionary<RegionData.RegionGroup, List<Region>> regionsByGroup = GameManager.instance.game.GetAllRegionsByGroup ();
+		Dictionary<string, List<Region>> sortedRegionList = GetRegionList (m_sortType);
 
-		foreach (KeyValuePair<RegionData.RegionGroup, List<Region>> pair in regionsByGroup) {
+		foreach (KeyValuePair<string, List<Region>> pair in sortedRegionList) {
 
 			GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 			h.transform.localScale = Vector3.one;
-			h.GetComponent<SectionHeader> ().Initialize (pair.Key.ToString().ToUpper());
+			h.GetComponent<SectionHeader> ().Initialize (pair.Key.ToUpper());
 			m_listViewItems.Add (h);
 
 			for (int i = 0; i < pair.Value.Count; i++) {
@@ -68,6 +78,80 @@ public class WorldMenu : MenuState {
 		}
 	}
 
+	private Dictionary<string, List<Region>> GetRegionList (SortType sortType)
+	{
+		Dictionary<string, List<Region>> regionList = new Dictionary<string, List<Region>> ();
+
+		switch (sortType) {
+		case SortType.RegionGroup:
+
+			Dictionary<RegionData.RegionGroup, List<Region>> regionsByGroup = GameManager.instance.game.GetAllRegionsByGroup ();
+	
+			foreach (KeyValuePair<RegionData.RegionGroup, List<Region>> pair in regionsByGroup) {
+	
+				List<Region> l = new List<Region> ();
+	
+				for (int i = 0; i < pair.Value.Count; i++) {
+					Region thisRegion = pair.Value [i];
+					l.Add (thisRegion);
+				}
+
+				regionList.Add (pair.Key.ToString (), l);
+			}
+
+			break;
+		case SortType.Occupied:
+
+			List<Region> occupiedList = new List<Region> ();
+			List<Region> unoccupiedList = new List<Region> ();
+
+			foreach (Region r in GameManager.instance.game.regions) {
+
+				if (r.currentHenchmen.Count == 0) {
+					unoccupiedList.Add (r);
+				} else {
+					occupiedList.Add (r);
+				}
+
+			}
+
+			regionList.Add ("OCCUPIED REGIONS", occupiedList);
+			regionList.Add ("UNOCCUPIED REGIONS", unoccupiedList);
+
+			break;
+		case SortType.RegionRank:
+
+			List<Region> rank1 = new List<Region> ();
+			List<Region> rank2 = new List<Region> ();
+			List<Region> rank3 = new List<Region> ();
+
+			foreach (Region r in GameManager.instance.game.regions) {
+
+				switch (r.rank) {
+				case RegionData.Rank.One:
+					rank1.Add (r);
+					break;
+				case RegionData.Rank.Two:
+					rank2.Add (r);
+					break;
+				case RegionData.Rank.Three:
+					rank3.Add (r);
+					break;
+				}
+
+			}
+
+			regionList.Add ("RANK ONE", rank1);
+			regionList.Add ("RANK TWO", rank2);
+			regionList.Add ("RANK THREE", rank3);
+
+			break;
+		}
+
+
+		return regionList;
+	}
+
 	public override void OnHold()
 	{
 		while (m_listViewItems.Count > 0) {
@@ -76,12 +160,12 @@ public class WorldMenu : MenuState {
 			Destroy (g);
 		}
 
-		m_scrollView.gameObject.SetActive (false);
-		m_sortPanelParent.gameObject.SetActive (false);
+		m_worldMenu.SetActive (false);
 	}
 
 	public override void OnReturn()
 	{
+		Debug.Log ("Returning to World Menu");
 		// continue going back up the stack if this is not the target menu
 
 		if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState != m_state)
@@ -92,6 +176,10 @@ public class WorldMenu : MenuState {
 		{
 			GameManager.instance.targetMenuState = MenuState.State.None;
 		}
+
+		m_worldMenu.SetActive (true);
+
+		ChangeSortType (m_sortType);
 
 		UpdateRegionList ();
 	}
@@ -109,12 +197,28 @@ public class WorldMenu : MenuState {
 			m_tabInfo = null;
 		}
 
-		m_scrollView.gameObject.SetActive (false);
-		m_sortPanelParent.gameObject.SetActive (false);
+		m_worldMenu.SetActive (false);
 	}
 
 	public override void OnUpdate()
 	{
+
+//		if (Input.GetKeyUp (KeyCode.Alpha1) && m_sortType != SortType.RegionGroup) {
+//
+//			m_sortType = SortType.RegionGroup;
+//			UpdateRegionList ();
+//
+//		} else if (Input.GetKeyUp (KeyCode.Alpha2) && m_sortType != SortType.Occupied) {
+//
+//			m_sortType = SortType.Occupied;
+//			UpdateRegionList ();
+//
+//		} else if (Input.GetKeyUp (KeyCode.Alpha3) && m_sortType != SortType.RegionRank) {
+//
+//			m_sortType = SortType.RegionRank;
+//			UpdateRegionList ();
+//
+//		} 
 
 	}
 
@@ -176,6 +280,38 @@ public class WorldMenu : MenuState {
 		GameManager.instance.currentMissionWrapper = mr;
 		GameManager.instance.PushMenuState (State.SelectMissionMenu);
 
+	}
+
+	public void SortButtonClicked (int sortType)
+	{
+		switch (sortType) {
+		case 0:
+			ChangeSortType( SortType.RegionGroup);
+			break;
+		case 1:
+			ChangeSortType( m_sortType = SortType.Occupied);
+			break;
+		case 2:
+			ChangeSortType( m_sortType = SortType.RegionRank);
+			break;
+		}
+	}
+
+	private void ChangeSortType (SortType sortType)
+	{
+
+		m_sortType = sortType;
+
+		UpdateRegionList ();
+
+		foreach (SortModeButton b in m_sortModeButtons) {
+
+			if (b.m_sortType == m_sortType && b.state != SortModeButton.State.Selected) {
+				b.ChangeState (SortModeButton.State.Selected);
+			} else if (b.m_sortType != m_sortType && b.state != SortModeButton.State.Unselected) {
+				b.ChangeState (SortModeButton.State.Unselected);
+			}
+		}
 	}
 
 	public void SelectHenchmenForTravel (int regionID)

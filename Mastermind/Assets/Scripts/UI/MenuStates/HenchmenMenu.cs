@@ -121,6 +121,9 @@ public class HenchmenMenu : MenuState, IObserver {
 			m_tabInfo = null;
 		}
 
+		m_scrollView.gameObject.SetActive (false);
+		m_sortPanelParent.gameObject.SetActive (false);
+
 		if (m_activityPaneOpen) {
 			HideActionPane ();
 		}

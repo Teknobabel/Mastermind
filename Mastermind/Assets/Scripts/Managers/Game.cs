@@ -237,4 +237,5 @@ public class Game : ScriptableObject, ISubject {
 	public Dictionary<int, Region> regionsByID {get{return m_regionsByID; }}
 	public int turnToSpawnNextIntel {get{return m_turnToSpawnNextIntel; }}
 	public List<AssetToken> intelInPlay {get{return m_intelInPlay; }}
+	public List<Region> regions {get{ return m_regions; }}
 }
