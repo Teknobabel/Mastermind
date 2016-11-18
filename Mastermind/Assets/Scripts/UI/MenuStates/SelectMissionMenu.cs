@@ -14,6 +14,8 @@ public class SelectMissionMenu : MenuState {
 
 	public GameObject m_scrollViewContent;
 
+	public RegionHenchmenButton[] m_henchmenSlots;
+
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
 
 	void Awake ()
@@ -33,6 +35,7 @@ public class SelectMissionMenu : MenuState {
 		m_backButton.gameObject.SetActive (true);
 
 		UpdateMissionList ();
+		UpdateHenchmenList ();
 
 	}
 
@@ -72,6 +75,24 @@ public class SelectMissionMenu : MenuState {
 	{
 		GameManager.instance.currentMissionWrapper = null;
 		GameManager.instance.PopMenuState ();
+	}
+
+	private void UpdateHenchmenList ()
+	{
+		for (int i = 0; i < GameManager.instance.currentMissionWrapper.m_region.henchmenSlots.Count; i++) {
+
+			Region.HenchmenSlot hs = GameManager.instance.currentMissionWrapper.m_region.henchmenSlots [i];
+
+			if (i < m_henchmenSlots.Length) {
+
+				m_henchmenSlots [i].gameObject.SetActive (true);
+				m_henchmenSlots [i].Initialize (hs);
+			} 
+//			else {
+//				m_henchmenSlots [i].Deactivate ();
+//			}
+		}
+
 	}
 
 	private void UpdateMissionList ()
@@ -118,6 +139,12 @@ public class SelectMissionMenu : MenuState {
 						}
 
 					break;
+
+					case Region.TokenSlot.TokenType.Policy:
+
+						GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.PolicyToken;
+
+						break;
 
 					}
 

@@ -18,6 +18,8 @@ public class HenchmenData : ScriptableObject {
 
 	public TraitData[] m_startingTraits;
 
+	public TraitData m_startingStatusTrait;
+
 	// Use this for initialization
 	void OnEnable () {
 

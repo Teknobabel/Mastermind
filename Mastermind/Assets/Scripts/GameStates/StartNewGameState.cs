@@ -7,6 +7,8 @@ public class StartNewGameState : IGameState {
 
 		Debug.Log ("Starting new game");
 
+		Random.InitState(MainMenu.instance.randomSeed);
+
 		Game newGame = Game.CreateInstance<Game> ();
 
 		Director newDirector = GameManager.instance.m_directorBank [Random.Range (0, GameManager.instance.m_directorBank.Length)];

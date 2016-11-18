@@ -32,6 +32,17 @@ public class PassPolicy : MissionBase {
 		}
 	}
 
+	public override string GetNameText ()
+	{
+		string s = m_name + "\n";
+
+		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+			s += "<size=18>" + m_policy.m_name + "</size>";
+		}
+
+		return s;
+	}
+
 	public override bool IsValid ()
 	{
 		// valid if the token in focus is an empty policy token

@@ -32,8 +32,31 @@ public class Base {
 		}
 	}
 
+	public void InstallAsset (Asset asset)
+	{
+		foreach (Floor f in m_floors) {
+
+			if (f.m_floorState == FloorState.Empty) {
+
+				f.m_floorState = FloorState.Occupied;
+				f.m_installedUpgrade = asset;
+
+				return;
+			}
+		}
+	}
+
 	public void InstallAsset (int floorNumber, Asset asset)
 	{
+		foreach (Floor f in m_floors) {
 
+			if (f.m_floorNumber == floorNumber) {
+
+				f.m_floorState = FloorState.Occupied;
+				f.m_installedUpgrade = asset;
+
+				return;
+			}
+		}
 	}
 }

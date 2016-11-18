@@ -51,6 +51,8 @@ public class TraitData : ScriptableObject {
 		Captured = 42,
 		Zombified = 43,
 		Agent = 44,
+		Critical = 45,
+		Healthy = 46,
 	}
 
 	public enum TraitClass

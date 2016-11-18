@@ -23,8 +23,9 @@ public class BuildAsset : MissionBase {
 
 			GameManager.instance.game.player.AddAsset (m_asset);
 
-			a.m_floorInFocus.m_floorState = Base.FloorState.Occupied;
-			a.m_floorInFocus.m_installedUpgrade = m_asset;
+			GameManager.instance.game.player.orgBase.InstallAsset (a.m_floorInFocus.m_floorNumber, m_asset);
+//			a.m_floorInFocus.m_floorState = Base.FloorState.Occupied;
+//			a.m_floorInFocus.m_installedUpgrade = m_asset;
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";

@@ -12,6 +12,7 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 	public Image m_henchmenPortrait;
 
 	public TraitButton[] m_traits;
+	public TraitButton m_statusTrait;
 
 	private int m_henchmenID = -1;
 	private int m_cost = 99;
@@ -38,6 +39,8 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 				tb.Deactivate ();
 			}
 		}
+
+		m_statusTrait.Initialize (h.statusTrait, true);
 	}
 
 	public void HireButtonClicked ()

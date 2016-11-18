@@ -27,6 +27,8 @@ public class Henchmen : ScriptableObject {
 
 	private Dictionary<TraitData.TraitClass, List<TraitData>> m_traitDict;
 
+	private TraitData m_statusTrait;
+
 	private Region m_currentRegion = null;
 
 //	private List<MissionBase> m_missions = new List<MissionBase>();
@@ -46,6 +48,7 @@ public class Henchmen : ScriptableObject {
 		m_costPerTurn = h.m_costPerTurn;
 		m_portrait = h.m_portrait;
 		m_portraitShort = h.m_portraitShort;
+		m_statusTrait = h.m_startingStatusTrait;
 
 		foreach (TraitData t in h.m_startingTraits) {
 			AddTrait (t);
@@ -70,6 +73,11 @@ public class Henchmen : ScriptableObject {
 		m_currentRegion = newRegion;
 
 
+	}
+
+	public void UpdateStatusTrait (TraitData t)
+	{
+		m_statusTrait = t;
 	}
 
 	public void AddTrait (TraitData t)
@@ -160,4 +168,5 @@ public class Henchmen : ScriptableObject {
 	public int id {get{return m_id; }}
 	public state currentState {get{return m_state;}}
 	public Region currentRegion {get{return m_currentRegion; }}
+	public TraitData statusTrait {get{return m_statusTrait;}}
 }

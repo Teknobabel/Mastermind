@@ -15,7 +15,6 @@ public class Game : ScriptableObject, ISubject {
 	private Dictionary<int, Henchmen> m_henchmenByID = new Dictionary<int, Henchmen>();
 
 	private int 
-	m_randomSeed = 0,
 	m_turnNumber = 0,
 	m_turnToSpawnNextIntel = -1;
 
@@ -28,9 +27,6 @@ public class Game : ScriptableObject, ISubject {
 
 	public void Initialize ()
 	{
-		m_randomSeed = (int)System.DateTime.Now.Ticks;
-		Random.InitState(m_randomSeed);
-
 		DetermineIntelSpawnTurn ();
 	}
 

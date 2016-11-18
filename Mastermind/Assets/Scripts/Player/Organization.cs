@@ -313,6 +313,16 @@ public class Organization : ScriptableObject, ISubject {
 		m_base = new Base ();
 		m_base.Initialize (6);
 
+		// add any starting base upgrades
+
+		if (d.m_startingBaseUpgrades.Length > 0) {
+			
+			for (int i = 0; i < d.m_startingBaseUpgrades.Length; i++) {
+				Asset a = d.m_startingBaseUpgrades [i];
+				m_base.InstallAsset (a);
+			}
+		}
+
 		// select Omega Plans
 
 		List<OmegaPlanData> ops = new List<OmegaPlanData> ();

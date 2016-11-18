@@ -149,10 +149,14 @@ public class MissionBase : ScriptableObject, IMission {
 		List<TraitData> combinedTraitList = new List<TraitData> ();
 
 		foreach (Henchmen thisH in mw.m_henchmen) {
-			List<TraitData> t = thisH.GetAllTraits();
-			foreach (TraitData thisT in t) {
-				if (!combinedTraitList.Contains (thisT)) {
-					combinedTraitList.Add (thisT);
+
+			if (thisH.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
+				
+				List<TraitData> t = thisH.GetAllTraits ();
+				foreach (TraitData thisT in t) {
+					if (!combinedTraitList.Contains (thisT)) {
+						combinedTraitList.Add (thisT);
+					}
 				}
 			}
 		}
@@ -174,6 +178,21 @@ public class MissionBase : ScriptableObject, IMission {
 
 			if (hasTrait || hasAsset) {
 				completionPercentage += mt.m_percentageContribution;
+			}
+		}
+
+		// check status of each henchmen for penalties
+
+		foreach (Henchmen h in mw.m_henchmen) {
+
+			switch (h.statusTrait.m_type) {
+
+			case TraitData.TraitType.Injured:
+				completionPercentage = Mathf.Clamp (completionPercentage - GameManager.instance.game.director.m_injuredStatusPenalty, 0, 100);
+				break;
+			case TraitData.TraitType.Critical:
+				completionPercentage = Mathf.Clamp (completionPercentage - GameManager.instance.game.director.m_criticalStatusPenalty, 0, 100);
+				break;
 			}
 		}
 			

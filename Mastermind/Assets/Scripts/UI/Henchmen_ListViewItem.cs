@@ -13,6 +13,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	public Image m_henchmenPortrait;
 
 	public TraitButton[] m_traits;
+	public TraitButton m_statusTrait;
 
 	private int m_henchmenID = -1;
 
@@ -51,6 +52,8 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 				tb.Deactivate ();
 			}
 		}
+
+		m_statusTrait.Initialize (h.statusTrait, true);
 	}
 
 	public void CallButtonClicked ()

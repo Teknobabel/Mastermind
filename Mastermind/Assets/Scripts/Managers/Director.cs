@@ -20,17 +20,17 @@ public class Director : ScriptableObject {
 	m_maxIntel = 5,
 	m_intelSpawnLowerBounds = 5,
 	m_intelSpawnUpperBounds = 20,
-	m_maxIntelInWorld = 3;
+	m_maxIntelInWorld = 3,
+	m_injuredStatusPenalty = 10,
+	m_criticalStatusPenalty = 20;
 
 	private int
 		m_maxTokenSlotsInRegion = 6;
 
 	public Asset[] m_startingAssets;
+	public Asset[] m_startingBaseUpgrades;
 	public OmegaPlanData[] m_startingOmegaPlanData;
 	public HenchmenData[] m_startingHenchmenData;
-
-	// TODO: starting player upgrades
-
 
 	public int maxTokenSlotsInRegion {get{return m_maxTokenSlotsInRegion;}}
 }

@@ -11,9 +11,11 @@ public class MainMenu : MenuState {
 
 	public TextMeshProUGUI
 		m_currentVersionText,
-		m_orgNameText;
+		m_orgNameText,
+		m_passwordText;
 
 	private string m_orgName = "Null";
+	private int m_randomSeed = -1;
 
 	void Awake ()
 	{
@@ -30,6 +32,7 @@ public class MainMenu : MenuState {
 		m_currentVersionText.text = GameManager.instance.currentVersion;
 
 		RandomizeOrgName ();
+		RandomizePassword ();
 	}
 
 	public override void OnHold()
@@ -56,6 +59,24 @@ public class MainMenu : MenuState {
 	{
 		Debug.Log ("Start New Game Button Pressed");
 		GameManager.instance.ChangeGameState (GameManager.instance.startNewGame);
+	}
+
+	public void RandomizePassword ()
+	{
+		string password = Random.Range (1000000, 999999999).ToString (); 
+
+//		string password = 1234.ToString();
+
+		string hiddenPassword = " ";
+
+		foreach (char c in password) {
+			hiddenPassword += "* ";
+		}
+
+		m_passwordText.text = password;
+
+		m_randomSeed = password.GetHashCode ();
+//		Debug.Log (m_randomSeed);
 	}
 
 	public void RandomizeOrgName ()
@@ -136,4 +157,5 @@ public class MainMenu : MenuState {
 	}
 
 	public string orgName {get{return m_orgName;}}
+	public int randomSeed {get{return m_randomSeed;}}
 }

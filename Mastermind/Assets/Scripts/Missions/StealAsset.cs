@@ -45,10 +45,10 @@ public class StealAsset : MissionBase {
 
 	public override string GetNameText ()
 	{
-		string s = m_name + " - ";
+		string s = m_name + "\n";
 
 		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
-			s += GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken.m_name;
+			s += "<size=18>" + GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken.m_name + "</size>";
 		}
 
 		return s;

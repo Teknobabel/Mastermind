@@ -38,6 +38,17 @@ public class CancelPolicy : MissionBase {
 		}
 	}
 
+	public override string GetNameText ()
+	{
+		string s = m_name + "\n";
+
+		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+			s += "<size=18>" + GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_policyToken.m_name + "</size>";
+		}
+
+		return s;
+	}
+
 	public override bool IsValid ()
 	{
 		// valid if there is a control token of m_type not under player control

@@ -244,7 +244,7 @@ public class Region : ScriptableObject, ISubject {
 //				ts.m_status = TokenSlot.Status.Normal;
 
 				p.StartPolicy (ts);
-				ts.m_state = TokenSlot.State.Hidden;
+				ts.m_state = TokenSlot.State.Revealed;
 
 				tokenAdded = true;
 				break;
@@ -267,7 +267,7 @@ public class Region : ScriptableObject, ISubject {
 //				t.m_state = TokenSlot.State.None;
 //			}
 
-			t.m_state = TokenSlot.State.Hidden;
+			t.m_state = TokenSlot.State.Revealed;
 
 			m_policyTokens.Add (t);
 			m_allTokens.Add (t);
