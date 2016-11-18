@@ -31,9 +31,9 @@ public class Region_ListViewItem : MonoBehaviour {
 		m_regionID = r.id;
 		m_regionPortrait.sprite = r.portrait;
 
-		List<Region.TokenSlot> p = r.policyTokens;
-		List<Region.TokenSlot> a = r.assetTokens;
-		List<Region.TokenSlot> c = r.controlTokens;
+		List<TokenSlot> p = r.policyTokens;
+		List<TokenSlot> a = r.assetTokens;
+		List<TokenSlot> c = r.controlTokens;
 
 		for (int i = 0; i < m_policyTokens.Length; i++) {
 			TokenButton tB = m_policyTokens [i];
@@ -74,20 +74,7 @@ public class Region_ListViewItem : MonoBehaviour {
 			}
 		}
 
-		string s = "Null";
-		switch (r.rank) {
-		case RegionData.Rank.One:
-			s = "1";
-			break;
-		case RegionData.Rank.Two:
-			s = "2";
-			break;
-		case RegionData.Rank.Three:
-			s = "3";
-			break;
-		}
-
-		m_regionRank.text = "R" + s;
+		m_regionRank.text = "R" + r.rank.ToString();
 
 		m_missionButton.Initialize (GameManager.instance.game.player.GetMission (r));
 	}
@@ -110,7 +97,7 @@ public class Region_ListViewItem : MonoBehaviour {
 	{
 		Debug.Log ("Token Button Clicked");
 
-//		if (tb.tokenSlot.m_state == Region.TokenSlot.State.Revealed) {
+//		if (tb.tokenSlot.m_state == TokenSlot.State.Revealed) {
 			WorldMenu.instance.SelectMissionForToken (tb.tokenSlot);
 //		}
 	}

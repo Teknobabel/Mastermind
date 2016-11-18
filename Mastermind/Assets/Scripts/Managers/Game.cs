@@ -28,6 +28,8 @@ public class Game : ScriptableObject, ISubject {
 	public void Initialize ()
 	{
 		DetermineIntelSpawnTurn ();
+
+		GameManager.instance.game = this;
 	}
 
 	public void AddOrganizationToGame (Organization o)
@@ -161,8 +163,8 @@ public class Game : ScriptableObject, ISubject {
 				} else {
 
 					// check for any open slots
-					foreach (Region.TokenSlot ts in thisR.assetTokens) {
-						if (ts.m_state == Region.TokenSlot.State.None) {
+					foreach (TokenSlot ts in thisR.assetTokens) {
+						if (ts.m_state == TokenSlot.State.None) {
 							r.Add (thisR);
 							break;
 						}

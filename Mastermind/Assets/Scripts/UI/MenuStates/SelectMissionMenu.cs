@@ -118,17 +118,17 @@ public class SelectMissionMenu : MenuState {
 					g.GetComponent<Mission_ListViewItem> ().Initialize ();
 				}
 
-				foreach (Region.TokenSlot t in GameManager.instance.currentMissionWrapper.m_region.allTokens) {
+				foreach (TokenSlot t in GameManager.instance.currentMissionWrapper.m_region.allTokens) {
 
 					GameManager.instance.currentMissionWrapper.m_tokenInFocus = t;
 
 				switch (t.m_type) {
-					case Region.TokenSlot.TokenType.Asset:
+					case TokenSlot.TokenType.Asset:
 						
 						GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.AssetToken;
 						break;
 
-					case Region.TokenSlot.TokenType.Control:
+					case TokenSlot.TokenType.Control:
 
 						if (t.m_controlToken.m_controlType == ControlToken.ControlType.Economic) {
 							GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.EconomicControlToken;
@@ -140,7 +140,7 @@ public class SelectMissionMenu : MenuState {
 
 					break;
 
-					case Region.TokenSlot.TokenType.Policy:
+					case TokenSlot.TokenType.Policy:
 
 						GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.PolicyToken;
 
@@ -306,7 +306,7 @@ public class SelectMissionMenu : MenuState {
 //
 //					case MissionBase.TargetType.AssetToken:
 //
-//						foreach (Region.TokenSlot ts in GameManager.instance.currentMissionWrapper.m_region.assetTokens) {
+//						foreach (TokenSlot ts in GameManager.instance.currentMissionWrapper.m_region.assetTokens) {
 //
 //							GameManager.instance.currentMissionWrapper.m_tokenInFocus = ts;
 //

@@ -26,4 +26,6 @@ public enum GameEvent {
 	Organization_IntelCaptured,
 	Organization_HenchmenFired,
 	Organization_WantedLevelIncreased,
+	Region_ControlTokenOwnerChanged,
+	Region_OwnerChanged,
 }

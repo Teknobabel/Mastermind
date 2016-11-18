@@ -11,9 +11,9 @@ public class StealAsset : MissionBase {
 		if (a.m_success) {
 
 			// find a revealed non-empty asset token
-			Region.TokenSlot at = a.m_tokenInFocus;
+			TokenSlot at = a.m_tokenInFocus;
 
-			if (at.m_state == Region.TokenSlot.State.Revealed) {
+			if (at.m_state == TokenSlot.State.Revealed) {
 
 				// remove it from region and add to player bank
 
@@ -60,7 +60,7 @@ public class StealAsset : MissionBase {
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
 
-			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == Region.TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == Region.TokenSlot.TokenType.Asset &&
+			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == TokenSlot.TokenType.Asset &&
 				GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
 
 				return true;

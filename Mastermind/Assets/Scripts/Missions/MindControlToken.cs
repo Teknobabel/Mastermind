@@ -14,11 +14,11 @@ public class MindControlToken : MissionBase {
 
 		if (a.m_success) {
 
-			List<Region.TokenSlot> validTokens = new List<Region.TokenSlot> ();
+			List<TokenSlot> validTokens = new List<TokenSlot> ();
 
-			foreach (Region.TokenSlot ts in a.m_region.controlTokens) {
+			foreach (TokenSlot ts in a.m_region.controlTokens) {
 
-				if (ts.m_state == Region.TokenSlot.State.Revealed && ts.m_controlToken == m_token && !ts.m_effects.Contains(Region.TokenSlot.Status.MindControlled)) {
+				if (ts.m_state == TokenSlot.State.Revealed && ts.m_controlToken == m_token && !ts.m_effects.Contains(TokenSlot.Status.MindControlled)) {
 					validTokens.Add (ts);
 				}
 			}
@@ -27,10 +27,10 @@ public class MindControlToken : MissionBase {
 
 				int rand = Random.Range (0, validTokens.Count);
 
-				Region.TokenSlot token = validTokens [rand];
+				TokenSlot token = validTokens [rand];
 
-//				token.m_status = Region.TokenSlot.Status.MindControlled;
-				token.m_effects.Add(Region.TokenSlot.Status.MindControlled);
+//				token.m_status = TokenSlot.Status.MindControlled;
+				token.m_effects.Add(TokenSlot.Status.MindControlled);
 
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
@@ -67,9 +67,9 @@ public class MindControlToken : MissionBase {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
-			foreach (Region.TokenSlot ts in r.controlTokens) {
+			foreach (TokenSlot ts in r.controlTokens) {
 
-				if (ts.m_state == Region.TokenSlot.State.Revealed && ts.m_controlToken == m_token && !ts.m_effects.Contains(Region.TokenSlot.Status.MindControlled)) {
+				if (ts.m_state == TokenSlot.State.Revealed && ts.m_controlToken == m_token && !ts.m_effects.Contains(TokenSlot.Status.MindControlled)) {
 					return true;
 				}
 			}

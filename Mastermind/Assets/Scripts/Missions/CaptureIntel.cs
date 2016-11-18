@@ -12,8 +12,8 @@ public class CaptureIntel : MissionBase {
 
 			// remove intel asset from region
 
-			foreach (Region.TokenSlot ts in a.m_region.assetTokens) {
-				if (ts.m_state == Region.TokenSlot.State.Revealed && ts.m_assetToken == GameManager.instance.m_intel) {
+			foreach (TokenSlot ts in a.m_region.assetTokens) {
+				if (ts.m_state == TokenSlot.State.Revealed && ts.m_assetToken == GameManager.instance.m_intel) {
 
 					a.m_region.RemoveAssetToken (ts);
 					GameManager.instance.game.IntelCaptured ();
@@ -48,8 +48,8 @@ public class CaptureIntel : MissionBase {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
-			foreach (Region.TokenSlot ts in r.assetTokens) {
-				if (ts.m_state == Region.TokenSlot.State.Revealed && ts.m_assetToken == GameManager.instance.m_intel) {
+			foreach (TokenSlot ts in r.assetTokens) {
+				if (ts.m_state == TokenSlot.State.Revealed && ts.m_assetToken == GameManager.instance.m_intel) {
 					return true;
 				}
 			}

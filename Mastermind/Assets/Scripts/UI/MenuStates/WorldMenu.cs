@@ -128,22 +128,22 @@ public class WorldMenu : MenuState {
 			foreach (Region r in GameManager.instance.game.regions) {
 
 				switch (r.rank) {
-				case RegionData.Rank.One:
+				case 1:
 					rank1.Add (r);
 					break;
-				case RegionData.Rank.Two:
+				case 2:
 					rank2.Add (r);
 					break;
-				case RegionData.Rank.Three:
+				case 3:
 					rank3.Add (r);
 					break;
 				}
 
 			}
-
-			regionList.Add ("RANK ONE", rank1);
-			regionList.Add ("RANK TWO", rank2);
+				
 			regionList.Add ("RANK THREE", rank3);
+			regionList.Add ("RANK TWO", rank2);
+			regionList.Add ("RANK ONE", rank1);
 
 			break;
 		}
@@ -243,7 +243,7 @@ public class WorldMenu : MenuState {
 		}
 	}
 
-	public void SelectMissionForToken (Region.TokenSlot ts)
+	public void SelectMissionForToken (TokenSlot ts)
 	{
 		Debug.Log("Select Mission For Token");
 
@@ -254,13 +254,13 @@ public class WorldMenu : MenuState {
 		}
 
 		switch (ts.m_type) {
-		case Region.TokenSlot.TokenType.Asset:
+		case TokenSlot.TokenType.Asset:
 			mr.m_scope = MissionBase.TargetType.AssetToken;
 			break;
-		case Region.TokenSlot.TokenType.Policy:
+		case TokenSlot.TokenType.Policy:
 			mr.m_scope = MissionBase.TargetType.PolicyToken;
 			break;
-		case Region.TokenSlot.TokenType.Control:
+		case TokenSlot.TokenType.Control:
 
 			switch (ts.m_controlToken.m_controlType) {
 			case ControlToken.ControlType.Economic:

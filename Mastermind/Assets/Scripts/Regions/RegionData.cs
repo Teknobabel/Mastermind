@@ -5,14 +5,6 @@ using System.Collections;
 [CreateAssetMenu()]
 public class RegionData : ScriptableObject {
 
-	public enum Rank
-	{
-		None,
-		One,
-		Two,
-		Three,
-	}
-
 	public enum RegionGroup
 	{
 		None,
@@ -26,7 +18,7 @@ public class RegionData : ScriptableObject {
 
 	public string m_name = "Null";
 
-	public Rank m_rank = Rank.None;
+	public int m_rank = 1;
 
 	public Sprite m_portrait;
 

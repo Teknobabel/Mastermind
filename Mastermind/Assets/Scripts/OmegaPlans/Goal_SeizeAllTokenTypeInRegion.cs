@@ -51,9 +51,9 @@ public class Goal_SeizeAllTokenTypeInRegion : OPGoalBase, IObserver {
 				// check if all control tokens of type in region belong to player
 
 				bool seizedAllTokens = true;
-				foreach (Region.TokenSlot t in r.controlTokens) {
+				foreach (TokenSlot t in r.controlTokens) {
 
-					if (t.m_type == Region.TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && t.m_owner == Region.TokenSlot.Owner.AI) {
+					if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && t.owner == Region.Owner.AI) {
 						seizedAllTokens = false;
 						break;
 					}

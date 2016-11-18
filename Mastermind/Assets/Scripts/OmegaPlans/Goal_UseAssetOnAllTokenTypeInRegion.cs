@@ -5,7 +5,7 @@ using System.Collections;
 public class Goal_UseAssetOnAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 	public Asset m_asset;
-	public Region.TokenSlot.Status m_status;
+	public TokenSlot.Status m_status;
 	public TokenBase m_tokenType;
 	public RegionData m_region;
 
@@ -57,9 +57,9 @@ public class Goal_UseAssetOnAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 				// check if all tokens of type have the correct status
 				bool allTokensOfTypeAffected = true;
-				foreach (Region.TokenSlot t in r.controlTokens) {
+				foreach (TokenSlot t in r.controlTokens) {
 
-					if (t.m_type == Region.TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && !t.m_effects.Contains(m_status)) {
+					if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && !t.m_effects.Contains(m_status)) {
 						allTokensOfTypeAffected = false;
 					}
 				}

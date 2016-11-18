@@ -547,6 +547,8 @@ public class Organization : ScriptableObject, ISubject {
 	{
 		int cost = 0;
 
+		// each employed henchmen has a cost per turn variable
+
 		foreach (Henchmen h in m_currentHenchmen) {
 			cost += h.costPerTurn;
 		}
@@ -558,10 +560,22 @@ public class Organization : ScriptableObject, ISubject {
 	{
 		int totalCP = m_commandPool;
 
+		// check for any Command Centers installed in the player's base
+
 		foreach (Asset a in m_currentAssets) {
 
 			if (a.m_assetType == Asset.AssetType.CommandCenter) {
 				totalCP += 2;
+			}
+		}
+
+		// check for regions controlled by the player
+
+		foreach (Region r in GameManager.instance.game.regions) {
+
+			if (r.owner == Region.Owner.Player) {
+
+				totalCP += r.rank;
 			}
 		}
 

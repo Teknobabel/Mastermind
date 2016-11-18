@@ -15,19 +15,19 @@ public class RevealAsset : MissionBase {
 
 			Region r = a.m_region;
 
-			List<Region.TokenSlot> hiddenTokens = new List<Region.TokenSlot> ();
+			List<TokenSlot> hiddenTokens = new List<TokenSlot> ();
 
-			foreach (Region.TokenSlot t in r.assetTokens) {
+			foreach (TokenSlot t in r.assetTokens) {
 
-				if (t.m_state == Region.TokenSlot.State.Hidden) {
+				if (t.m_state == TokenSlot.State.Hidden) {
 					hiddenTokens.Add (t);
 				}
 			}
 
 			if (hiddenTokens.Count > 0) {
-				Region.TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
-//				tB.ChangeState (Region.TokenSlot.State.Revealed);
-				tB.m_state = Region.TokenSlot.State.Revealed;
+				TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
+//				tB.ChangeState (TokenSlot.State.Revealed);
+				tB.m_state = TokenSlot.State.Revealed;
 
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
@@ -58,9 +58,9 @@ public class RevealAsset : MissionBase {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
-			foreach (Region.TokenSlot t in r.assetTokens) {
+			foreach (TokenSlot t in r.assetTokens) {
 
-				if (t.m_state == Region.TokenSlot.State.Hidden) {
+				if (t.m_state == TokenSlot.State.Hidden) {
 					return true;
 				}
 			}

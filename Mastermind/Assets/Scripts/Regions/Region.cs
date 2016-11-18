@@ -3,68 +3,70 @@ using System.Collections;
 using System.Collections.Generic;
 
 [CreateAssetMenu()]
-public class Region : ScriptableObject, ISubject {
-
-	public class TokenSlot
+public class Region : ScriptableObject, ISubject, IObserver {
+	
+	public enum Owner
 	{
-		public enum State
-		{
-			None,
-			Hidden,
-			Revealed,
-		}
-
-		public enum TokenType
-		{
-			None,
-			Asset,
-			Policy,
-			Control,
-		}
-
-		public enum Status
-		{
-			None,
-			Normal,
-			MindControlled,
-			Zombified,
-			Destroyed,
-			Infected,
-			AIControl,
-			Protected,
-			Vulnerable,
-		}
-
-		public enum Owner
-		{
-			AI,
-			Player,
-		}
-
-		public State m_state = State.None;
-		public TokenType m_type = TokenType.None;
-		public PolicyToken m_policyToken;
-		public AssetToken m_assetToken;
-		public ControlToken m_controlToken;
-		public List<TokenSlot> m_assetTokens = new List<TokenSlot> ();
-		public List<TokenSlot> m_controlTokens = new List<TokenSlot>();
-		public List<TokenSlot> m_policyTokens = new List<TokenSlot>();
-		public List<Status> m_effects = new List<Status>();
-		public Owner m_owner = Owner.AI;
-		public Region m_region = null;
-
-		public TokenBase GetBaseToken () {
-			switch (m_type) {
-			case TokenType.Asset:
-				return m_assetToken;
-			case TokenType.Policy:
-				return m_policyToken;
-			case TokenType.Control:
-				return m_controlToken;
-			}
-			return null;
-		}
+		AI,
+		Player,
 	}
+
+//	public class TokenSlot
+//	{
+//		public enum State
+//		{
+//			None,
+//			Hidden,
+//			Revealed,
+//		}
+//
+//		public enum TokenType
+//		{
+//			None,
+//			Asset,
+//			Policy,
+//			Control,
+//		}
+//
+//		public enum Status
+//		{
+//			None,
+//			Normal,
+//			MindControlled,
+//			Zombified,
+//			Destroyed,
+//			Infected,
+//			AIControl,
+//			Protected,
+//			Vulnerable,
+//		}
+//
+//
+//
+//		public State m_state = State.None;
+//		public TokenType m_type = TokenType.None;
+//		public PolicyToken m_policyToken;
+//		public AssetToken m_assetToken;
+//		public ControlToken m_controlToken;
+//		public List<TokenSlot> m_assetTokens = new List<TokenSlot> ();
+//		public List<TokenSlot> m_controlTokens = new List<TokenSlot>();
+//		public List<TokenSlot> m_policyTokens = new List<TokenSlot>();
+//		public List<Status> m_effects = new List<Status>();
+//		public Owner m_owner = Owner.AI;
+//		public Region m_region = null;
+//
+//		public TokenBase GetBaseToken () {
+//			switch (m_type) {
+//			case TokenType.Asset:
+//				return m_assetToken;
+//			case TokenType.Policy:
+//				return m_policyToken;
+//			case TokenType.Control:
+//				return m_controlToken;
+//			}
+//			return null;
+//		}
+//	}
 
 	public class HenchmenSlot
 	{
@@ -82,9 +84,10 @@ public class Region : ScriptableObject, ISubject {
 	}
 
 	private string m_regionName = "Null";
-	private RegionData.Rank m_rank = RegionData.Rank.None;
+	private int m_rank = 0;
 	private Sprite m_portrait;
 	private RegionData.RegionGroup m_regionGroup = RegionData.RegionGroup.None;
+	private Owner m_owner = Owner.AI;
 
 	private List<TokenSlot> m_assetTokens;
 	private List<TokenSlot> m_policyTokens;
@@ -216,6 +219,8 @@ public class Region : ScriptableObject, ISubject {
 		t.m_controlToken = c;
 		t.m_state = TokenSlot.State.Revealed;
 		t.m_region = this;
+
+		t.AddObserver (this);
 
 		m_controlTokens.Add (t);
 		m_allTokens.Add (t);
@@ -378,9 +383,54 @@ public class Region : ScriptableObject, ISubject {
 		}
 	}
 
+	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	{
+		switch (thisGameEvent) {
+		case GameEvent.Region_ControlTokenOwnerChanged:
+
+			TokenSlot ts = (TokenSlot)subject;
+
+			if (ts != null && ts.m_region != null) {
+
+				bool playerOwned = true;
+
+				foreach (TokenSlot thisTS in ts.m_region.controlTokens) {
+
+					if (thisTS.owner == Owner.AI) {
+						playerOwned = false;
+						break;
+					}
+				}
+
+				if (playerOwned && m_owner != Owner.Player) {
+
+					m_owner = Owner.Player;
+
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = GameManager.instance.game.player.orgName.ToUpper () + " gains control of " + m_regionName.ToUpper() + "!";
+					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper () + " gains " + m_rank.ToString() + " Command Pool!";
+					t.m_resultType = GameEvent.Region_OwnerChanged;
+					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
+				} else if (!playerOwned && m_owner == Owner.Player) {
+
+					m_owner = Owner.AI;
+
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = GameManager.instance.game.player.orgName.ToUpper () + " loses control of " + m_regionName.ToUpper() + "!";
+					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper () + " loses " + m_rank.ToString() + " Command Pool!";
+					t.m_resultType = GameEvent.Region_OwnerChanged;
+					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+				}
+			}
+
+			break;
+		}
+	}
+
 	public int id {get{return m_id;}}
 	public int numHenchmenSlots {get{return m_numHenchmenSlots;}}
-	public RegionData.Rank rank {get{return m_rank; }}
+	public int rank {get{return m_rank; }}
 	public string regionName {get{return m_regionName; }}
 	public RegionData.RegionGroup regionGroup {get{return m_regionGroup; }}
 	public List<TokenSlot> assetTokens {get{return m_assetTokens;}}
@@ -390,4 +440,5 @@ public class Region : ScriptableObject, ISubject {
 	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen;}}
 	public List<HenchmenSlot> henchmenSlots {get{return m_henchmenSlots;}}
 	public Sprite portrait {get{return m_portrait;}}
+	public Owner owner {get{return m_owner; }}
 }

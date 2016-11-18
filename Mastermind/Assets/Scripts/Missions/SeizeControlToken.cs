@@ -10,17 +10,19 @@ public class SeizeControlToken : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		a.m_success = true;
+
 		if (a.m_success) {
 
 			// find the first control token of m_type not under player control
 
-			foreach (Region.TokenSlot ts in a.m_region.controlTokens) {
+			foreach (TokenSlot ts in a.m_region.controlTokens) {
 
-				if (ts.m_controlToken.m_controlType == m_type && ts.m_owner != Region.TokenSlot.Owner.Player && ts.m_state == Region.TokenSlot.State.Revealed) {
+				if (ts.m_controlToken.m_controlType == m_type && ts.owner != Region.Owner.Player && ts.m_state == TokenSlot.State.Revealed) {
 
 					// change owner to player
 
-					ts.m_owner = Region.TokenSlot.Owner.Player;
+					ts.ChangeOwner(Region.Owner.Player);
 
 					TurnResultsEntry t = new TurnResultsEntry ();
 					t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
@@ -53,9 +55,9 @@ public class SeizeControlToken : MissionBase {
 
 		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null)
 		{
-			Region.TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
+			TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 
-			if (t.m_type == Region.TokenSlot.TokenType.Control && t.m_controlToken.m_controlType == m_type && t.m_owner != Region.TokenSlot.Owner.Player) {
+			if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken.m_controlType == m_type && t.owner != Region.Owner.Player) {
 				return true;
 			}
 		}

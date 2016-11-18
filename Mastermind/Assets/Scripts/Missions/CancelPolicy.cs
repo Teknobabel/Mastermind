@@ -55,9 +55,9 @@ public class CancelPolicy : MissionBase {
 
 		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null)
 		{
-			Region.TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
+			TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 
-			if (t.m_type == Region.TokenSlot.TokenType.Policy && t.m_state == Region.TokenSlot.State.Revealed && t.m_policyToken != null) {
+			if (t.m_type == TokenSlot.TokenType.Policy && t.m_state == TokenSlot.State.Revealed && t.m_policyToken != null) {
 				return true;
 			}
 		}

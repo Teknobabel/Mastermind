@@ -51,9 +51,9 @@ public class Drill : MissionBase {
 				return true;
 			}
 
-//			foreach (Region.TokenSlot ts in r.controlTokens) {
+//			foreach (TokenSlot ts in r.controlTokens) {
 //
-//				if (ts.m_state == Region.TokenSlot.State.Revealed && ts.m_status == Region.TokenSlot.Status.Normal) {
+//				if (ts.m_state == TokenSlot.State.Revealed && ts.m_status == TokenSlot.Status.Normal) {
 //					return true;
 //				}
 //			}

@@ -12,7 +12,7 @@ public class ControlToken : TokenBase, IToken {
 		Political,
 		Random,
 	}
-		
+
 	public ControlType m_controlType = ControlType.None;
 
 	public void ClaimToken ()

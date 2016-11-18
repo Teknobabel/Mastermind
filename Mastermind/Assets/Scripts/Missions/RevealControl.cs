@@ -15,19 +15,19 @@ public class RevealControl : MissionBase {
 
 			Region r = a.m_region;
 
-			List<Region.TokenSlot> hiddenTokens = new List<Region.TokenSlot> ();
+			List<TokenSlot> hiddenTokens = new List<TokenSlot> ();
 
-			foreach (Region.TokenSlot c in r.controlTokens) {
+			foreach (TokenSlot c in r.controlTokens) {
 
-				if (c.m_state == Region.TokenSlot.State.Hidden) {
+				if (c.m_state == TokenSlot.State.Hidden) {
 					hiddenTokens.Add (c);
 				}
 			}
 
 			if (hiddenTokens.Count > 0) {
-				Region.TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
+				TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
 //				tB.ChangeState (TokenBase.State.Revealed);
-				tB.m_state = Region.TokenSlot.State.Revealed;
+				tB.m_state = TokenSlot.State.Revealed;
 
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
@@ -58,9 +58,9 @@ public class RevealControl : MissionBase {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
-			foreach (Region.TokenSlot c in r.controlTokens) {
+			foreach (TokenSlot c in r.controlTokens) {
 
-				if (c.m_state == Region.TokenSlot.State.Hidden) {
+				if (c.m_state == TokenSlot.State.Hidden) {
 					return true;
 				}
 			}

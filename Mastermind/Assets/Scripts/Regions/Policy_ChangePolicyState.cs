@@ -5,13 +5,13 @@ using System.Collections.Generic;
 [CreateAssetMenu(menuName = "Token/Policy - Change Policy State")]
 public class Policy_ChangePolicyState : PolicyToken {
 
-	public Region.TokenSlot.Status m_newState = Region.TokenSlot.Status.None;
+	public TokenSlot.Status m_newState = TokenSlot.Status.None;
 
-	public override void StartPolicy (Region.TokenSlot t)
+	public override void StartPolicy (TokenSlot t)
 	{
-		List<Region.TokenSlot> validTokens = new List<Region.TokenSlot> ();
+		List<TokenSlot> validTokens = new List<TokenSlot> ();
 
-		foreach (Region.TokenSlot ts in t.m_region.policyTokens) {
+		foreach (TokenSlot ts in t.m_region.policyTokens) {
 			
 			validTokens.Add (ts);
 		}
@@ -20,7 +20,7 @@ public class Policy_ChangePolicyState : PolicyToken {
 
 			int rand = Random.Range (0, validTokens.Count);
 
-			Region.TokenSlot ts = validTokens [rand];
+			TokenSlot ts = validTokens [rand];
 
 			ts.m_effects.Add (m_newState);
 
@@ -28,9 +28,9 @@ public class Policy_ChangePolicyState : PolicyToken {
 		}
 	}
 
-	public override void EndPolicy (Region.TokenSlot t)
+	public override void EndPolicy (TokenSlot t)
 	{
-		foreach (Region.TokenSlot ts in t.m_region.policyTokens) {
+		foreach (TokenSlot ts in t.m_region.policyTokens) {
 
 			if (ts.m_policyToken == t.m_policyToken && ts.m_effects.Contains (m_newState)) {
 

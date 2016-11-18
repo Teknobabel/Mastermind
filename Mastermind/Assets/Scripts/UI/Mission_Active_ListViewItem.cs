@@ -49,16 +49,7 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 	{
 		// calculate mission rank
 
-		int missionRank = 1;
-
-		switch (mw.m_region.rank) {
-		case RegionData.Rank.Two:
-			missionRank += 1;
-			break;
-		case RegionData.Rank.One:
-			missionRank += 2;
-			break;
-		}
+		int missionRank = mw.m_region.rank;
 
 		if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
 
@@ -72,20 +63,20 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 
 		}
 
-		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (TokenSlot.Status.Protected)) {
 
-			foreach (Region.TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
-				if (s == Region.TokenSlot.Status.Protected) {
+			foreach (TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
+				if (s == TokenSlot.Status.Protected) {
 					missionRank += 1;
 				}
 			}
 
 		}
 
-		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (TokenSlot.Status.Vulnerable)) {
 
-			foreach (Region.TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
-				if (s == Region.TokenSlot.Status.Vulnerable) {
+			foreach (TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
+				if (s == TokenSlot.Status.Vulnerable) {
 					missionRank = Mathf.Clamp (missionRank - 1, 1, 5);
 				}
 			}

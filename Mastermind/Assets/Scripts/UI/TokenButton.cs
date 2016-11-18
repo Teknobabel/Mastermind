@@ -8,16 +8,16 @@ public class TokenButton : MonoBehaviour {
 	public TextMeshProUGUI m_tokenText;
 	public Image m_tokenImage;
 
-	private Region.TokenSlot.State m_state = Region.TokenSlot.State.None;
+	private TokenSlot.State m_state = TokenSlot.State.None;
 
-	private Region.TokenSlot m_tokenSlot = null;
+	private TokenSlot m_tokenSlot = null;
 
 	// Use this for initialization
 	void Start () {
 	
 	}
 
-	public void Initialize (Region.TokenSlot t)
+	public void Initialize (TokenSlot t)
 	{
 		m_tokenSlot = t;
 
@@ -29,27 +29,27 @@ public class TokenButton : MonoBehaviour {
 		gameObject.SetActive (false);
 	}
 
-	public void ChangeState (Region.TokenSlot.State newState)
+	public void ChangeState (TokenSlot.State newState)
 	{
 		switch (newState) {
-		case Region.TokenSlot.State.Hidden:
+		case TokenSlot.State.Hidden:
 			
 			m_tokenImage.fillCenter = true;
 
 			switch (m_tokenSlot.m_type) {
-			case Region.TokenSlot.TokenType.Policy:
+			case TokenSlot.TokenType.Policy:
 				m_tokenText.text = "P";
 				break;
-			case Region.TokenSlot.TokenType.Asset:
+			case TokenSlot.TokenType.Asset:
 				m_tokenText.text = "A";
 				break;
-			case Region.TokenSlot.TokenType.Control:
+			case TokenSlot.TokenType.Control:
 				m_tokenText.text = "C";
 				break;
 			}
 			break;
-		case Region.TokenSlot.State.None:
-		case Region.TokenSlot.State.Revealed:
+		case TokenSlot.State.None:
+		case TokenSlot.State.Revealed:
 
 			m_tokenImage.fillCenter = false;
 			
@@ -57,7 +57,7 @@ public class TokenButton : MonoBehaviour {
 			if (b != null) {
 				string s = b.m_name.ToUpper ();
 
-//				if (m_tokenSlot.m_status != Region.TokenSlot.Status.Normal) {
+//				if (m_tokenSlot.m_status != TokenSlot.Status.Normal) {
 //					s += "\n<color=red>(" + m_tokenSlot.m_status.ToString ().ToUpper () + ")</color>";
 //				}
 
@@ -66,28 +66,28 @@ public class TokenButton : MonoBehaviour {
 				m_tokenText.text = "";
 			}
 
-			if (m_tokenSlot.m_owner == Region.TokenSlot.Owner.Player) {
+			if (m_tokenSlot.owner == Region.Owner.Player) {
 				m_tokenImage.color = Color.green;
 				m_tokenText.color = Color.green;
-			} else if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+			} else if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
 				
 				m_tokenImage.color = Color.blue;
 				m_tokenText.color = Color.blue;
 
-				if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Vulnerable)) {
+				if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable)) {
 					m_tokenText.color = Color.red;
 				}
 
-			} else if (m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+			} else if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
 				m_tokenImage.color = Color.red;
 				m_tokenText.color = Color.red;
-			} else if (m_tokenSlot.m_effects.Count > 0 && !m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (Region.TokenSlot.Status.Protected)) {
+			} else if (m_tokenSlot.m_effects.Count > 0 && !m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
 				m_tokenImage.color = Color.magenta;
 				m_tokenText.color = Color.magenta;
 			}
 			break;
 
-//		case Region.TokenSlot.State.None:
+//		case TokenSlot.State.None:
 //
 //			m_tokenImage.fillCenter = false;
 //			m_tokenImage.color = Color.grey;
@@ -99,5 +99,5 @@ public class TokenButton : MonoBehaviour {
 		m_state = newState;
 	}
 	
-	public Region.TokenSlot tokenSlot {get{return m_tokenSlot;}}
+	public TokenSlot tokenSlot {get{return m_tokenSlot;}}
 }

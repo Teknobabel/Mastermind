@@ -17,36 +17,36 @@ public class UncoverToken : MissionBase {
 
 			Region r = a.m_region;
 
-			List<Region.TokenSlot> revealedTokens = new List<Region.TokenSlot> ();
+			List<TokenSlot> revealedTokens = new List<TokenSlot> ();
 
 			for (int i = 0; i < m_numTokens; i++) {
-				List<Region.TokenSlot> hiddenTokens = new List<Region.TokenSlot> ();
+				List<TokenSlot> hiddenTokens = new List<TokenSlot> ();
 
-				foreach (Region.TokenSlot aT in r.assetTokens) {
+				foreach (TokenSlot aT in r.assetTokens) {
 
-					if (aT.m_state == Region.TokenSlot.State.Hidden) {
+					if (aT.m_state == TokenSlot.State.Hidden) {
 						hiddenTokens.Add (aT);
 					}
 				}
 
-				foreach (Region.TokenSlot p in r.policyTokens) {
+				foreach (TokenSlot p in r.policyTokens) {
 
-					if (p.m_state == Region.TokenSlot.State.Hidden) {
+					if (p.m_state == TokenSlot.State.Hidden) {
 						hiddenTokens.Add (p);
 					}
 				}
 
-				foreach (Region.TokenSlot c in r.controlTokens) {
+				foreach (TokenSlot c in r.controlTokens) {
 
-					if (c.m_state == Region.TokenSlot.State.Hidden) {
+					if (c.m_state == TokenSlot.State.Hidden) {
 						hiddenTokens.Add (c);
 					}
 				}
 
 				if (hiddenTokens.Count > 0) {
-					Region.TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
+					TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
 //				tB.ChangeState (TokenBase.State.Revealed);
-					tB.m_state = Region.TokenSlot.State.Revealed;
+					tB.m_state = TokenSlot.State.Revealed;
 					TokenBase b = tB.GetBaseToken ();
 					revealedTokens.Add (tB);
 				
@@ -56,7 +56,7 @@ public class UncoverToken : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-			foreach (Region.TokenSlot ts in revealedTokens) {
+			foreach (TokenSlot ts in revealedTokens) {
 				TokenBase tb = ts.GetBaseToken ();
 				t.m_resultsText += "\n" + tb.m_name.ToUpper () + " is revealed!";
 			}
@@ -86,23 +86,23 @@ public class UncoverToken : MissionBase {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
-			foreach (Region.TokenSlot a in r.assetTokens) {
+			foreach (TokenSlot a in r.assetTokens) {
 
-				if (a.m_state == Region.TokenSlot.State.Hidden) {
+				if (a.m_state == TokenSlot.State.Hidden) {
 					return true;
 				}
 			}
 
-			foreach (Region.TokenSlot p in r.policyTokens) {
+			foreach (TokenSlot p in r.policyTokens) {
 
-				if (p.m_state == Region.TokenSlot.State.Hidden) {
+				if (p.m_state == TokenSlot.State.Hidden) {
 					return true;
 				}
 			}
 
-			foreach (Region.TokenSlot c in r.controlTokens) {
+			foreach (TokenSlot c in r.controlTokens) {
 
-				if (c.m_state == Region.TokenSlot.State.Hidden) {
+				if (c.m_state == TokenSlot.State.Hidden) {
 					return true;
 				}
 			}

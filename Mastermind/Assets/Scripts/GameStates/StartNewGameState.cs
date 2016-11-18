@@ -34,7 +34,7 @@ public class StartNewGameState : IGameState {
 		player.Initialize (newDirector, newGame, MainMenu.instance.orgName);
 		newGame.AddOrganizationToGame (player);
 
-		GameManager.instance.game = newGame;
+//		GameManager.instance.game = newGame;
 
 		GameManager.instance.PushMenuState(MenuState.State.TabMenu);
 
