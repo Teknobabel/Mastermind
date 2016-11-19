@@ -16,14 +16,11 @@ public class MissionPhaseState : IGameState {
 			
 			a.m_turnsPassed++;
 
-
-
-
 			if (a.m_turnsPassed >= a.m_mission.m_numTurns) {
+				
 				a.m_mission.CompleteMission (a);
 				completedMissions.Add (a);
-//				s = a.m_henchmen [0].henchmenName + " completes " + a.m_mission.m_name;
-//				entry.m_resultType = GameEvent.Henchmen_MissionCompleted;
+
 			} else {
 				
 				TurnResultsEntry entry = new TurnResultsEntry ();

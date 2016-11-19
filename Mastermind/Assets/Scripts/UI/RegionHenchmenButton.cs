@@ -24,7 +24,15 @@ public class RegionHenchmenButton : MonoBehaviour {
 		}
 		else if (hSlot.m_state == Region.HenchmenSlot.State.Occupied && hSlot.m_henchmen != null) {
 			m_henchmenID = hSlot.m_henchmen.id;
-			m_text.color = Color.white;
+
+			if (hSlot.m_henchmen.owner == Region.Owner.AI) {
+
+				m_text.color = Color.red;
+
+			} else {
+				
+				m_text.color = Color.white;
+			}
 			m_text.text = hSlot.m_henchmen.henchmenName.ToUpper ();
 			m_buttonImage.color = Color.white;
 			m_buttonImage.sprite = hSlot.m_henchmen.portraitShort;

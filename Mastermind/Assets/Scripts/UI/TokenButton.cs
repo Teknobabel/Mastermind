@@ -67,7 +67,15 @@ public class TokenButton : MonoBehaviour {
 			}
 
 			if (m_tokenSlot.owner == Region.Owner.Player) {
-				m_tokenImage.color = Color.green;
+
+				if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
+					m_tokenImage.color = Color.blue;
+				} else if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable)) {
+					m_tokenImage.color = Color.red;
+				} else {
+					m_tokenImage.color = Color.green;
+				}
+
 				m_tokenText.color = Color.green;
 			} else if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
 				

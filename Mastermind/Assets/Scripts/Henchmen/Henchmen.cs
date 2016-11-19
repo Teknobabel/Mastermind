@@ -35,6 +35,8 @@ public class Henchmen : ScriptableObject {
 
 	private state m_state = state.None;
 
+	private Region.Owner m_owner = Region.Owner.AI;
+
 	public void Initialize (HenchmenData h)
 	{
 		m_id = GameManager.instance.newID;
@@ -53,6 +55,11 @@ public class Henchmen : ScriptableObject {
 		foreach (TraitData t in h.m_startingTraits) {
 			AddTrait (t);
 		}
+	}
+
+	public void SetOwner (Region.Owner owner)
+	{
+		m_owner = owner;
 	}
 
 	public void SetRegion (Region newRegion)
@@ -169,4 +176,5 @@ public class Henchmen : ScriptableObject {
 	public state currentState {get{return m_state;}}
 	public Region currentRegion {get{return m_currentRegion; }}
 	public TraitData statusTrait {get{return m_statusTrait;}}
+	public Region.Owner owner {get{return m_owner;}}
 }

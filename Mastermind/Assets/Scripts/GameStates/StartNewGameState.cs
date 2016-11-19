@@ -22,6 +22,12 @@ public class StartNewGameState : IGameState {
 			newGame.AddHenchmanToGame (newHenchman);
 		}
 
+		foreach (HenchmenData h in GameManager.instance.m_agentBank) {
+			Henchmen newHenchman = Henchmen.CreateInstance<Henchmen> ();
+			newHenchman.Initialize (h);
+			newGame.AddAgentToGame (newHenchman);
+		}
+
 		foreach (RegionData r in GameManager.instance.m_regionBank) {
 			Region newRegion = Region.CreateInstance<Region> ();
 			newRegion.Initialize (r);

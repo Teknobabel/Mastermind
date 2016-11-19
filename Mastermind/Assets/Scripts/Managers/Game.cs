@@ -14,6 +14,9 @@ public class Game : ScriptableObject, ISubject {
 	private Dictionary<int, List<Henchmen>> m_henchmenByRank = new Dictionary<int, List<Henchmen>>();
 	private Dictionary<int, Henchmen> m_henchmenByID = new Dictionary<int, Henchmen>();
 
+	private List<Henchmen> m_agents = new List<Henchmen>();
+	private List<AgentWrapper> m_agentsInPlay = new List<AgentWrapper>();
+
 	private int 
 	m_turnNumber = 0,
 	m_turnToSpawnNextIntel = -1;
@@ -80,6 +83,11 @@ public class Game : ScriptableObject, ISubject {
 
 	}
 
+	public void AddAgentToGame (Henchmen a)
+	{
+		m_agents.Add (a);
+	}
+
 	public List<Henchmen> GetHenchmenByRank (int rank)
 	{
 		List<Henchmen> l = new List<Henchmen> ();
@@ -125,6 +133,75 @@ public class Game : ScriptableObject, ISubject {
 	public List<Region> GetAllRegions ()
 	{
 		return m_regions;
+	}
+
+	public void SpawnAgentInWorld ()
+	{
+		Debug.Log ("Spawning Agent");
+
+		List<Henchmen> agentBank = new List<Henchmen> ();
+		List<Henchmen> currentHenchmen = new List<Henchmen>();
+
+		// sort out currently active henchmen from bank list
+
+		foreach (AgentWrapper aw in m_agentsInPlay) {
+			currentHenchmen.Add (aw.m_agent);
+		}
+
+		foreach (Henchmen a in m_agents) {
+
+			if (!currentHenchmen.Contains (a)) {
+
+				agentBank.Add (a);
+			}
+		}
+
+		if (agentBank.Count > 0) {
+
+			// select a region to place agent in
+
+			List<Region> emptyRegions = new List<Region> ();
+			List<Region> validRegions = new List<Region> ();
+
+			foreach (Region region in GameManager.instance.game.regions) {
+
+				if (region.id != GameManager.instance.game.player.homeRegion.id) {
+
+					if (region.currentHenchmen.Count == 0) {
+
+						emptyRegions.Add (region);
+					} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {
+
+						validRegions.Add (region);
+					}
+				}
+			}
+
+			Region randRegion = null;
+
+			if (emptyRegions.Count > 0) {
+
+				randRegion = emptyRegions[Random.Range(0, emptyRegions.Count)];
+
+			} else if (validRegions.Count > 0) {
+
+				randRegion = validRegions[Random.Range(0, validRegions.Count)];
+			}
+
+			if (randRegion != null) {
+				
+				int r = Random.Range (0, agentBank.Count);
+
+				Henchmen randAgent = agentBank [r];
+
+				AgentWrapper aw = new AgentWrapper ();
+				aw.m_agent = randAgent;
+				m_agentsInPlay.Add (aw);
+
+				randRegion.AddHenchmen (randAgent);
+				Debug.Log ("Agent: " + randAgent.henchmenName + " spawning in region: " + randRegion.regionName);
+			}
+		}
 	}
 
 	public void IntelCaptured ()
@@ -236,4 +313,6 @@ public class Game : ScriptableObject, ISubject {
 	public int turnToSpawnNextIntel {get{return m_turnToSpawnNextIntel; }}
 	public List<AssetToken> intelInPlay {get{return m_intelInPlay; }}
 	public List<Region> regions {get{ return m_regions; }}
+	public List<Henchmen> agents {get{return m_agents;}}
+	public List<AgentWrapper> agentsInPlay {get{ return m_agentsInPlay; }}
 }

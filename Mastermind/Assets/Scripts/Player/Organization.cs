@@ -48,7 +48,9 @@ public class Organization : ScriptableObject, ISubject {
 		{
 			Henchmen h = m_availableHenchmen [i];
 			if (h.id == henchmenID) {
+				
 				UseCommandPoints (h.hireCost);
+				h.SetOwner (Region.Owner.Player);
 				m_currentHenchmen.Add (h);
 				m_availableHenchmen.RemoveAt (i);
 //				h.SetRegion (m_homeRegion);
@@ -67,6 +69,7 @@ public class Organization : ScriptableObject, ISubject {
 
 	public void AddHenchmen (Henchmen h)
 	{
+		h.SetOwner (Region.Owner.Player);
 		m_currentHenchmen.Add (h);
 		m_homeRegion.AddHenchmen(h);
 	}
@@ -245,6 +248,13 @@ public class Organization : ScriptableObject, ISubject {
 			t.m_resultsText = "Wanted Level has increased to " + m_currentWantedLevel.ToString() + "!";
 			t.m_resultType = GameEvent.Organization_WantedLevelIncreased;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
+			if (GameManager.instance.game != null) {
+
+				GameManager.instance.game.SpawnAgentInWorld ();
+			}
+
+			Notify (this, GameEvent.Organization_WantedLevelIncreased);
 		}
 	}
 
