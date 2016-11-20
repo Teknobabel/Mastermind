@@ -37,10 +37,14 @@ public class StartNewGameState : IGameState {
 		// initialize player
 
 		Organization player = Organization.CreateInstance<Organization> ();
-		player.Initialize (newDirector, newGame, MainMenu.instance.orgName);
+		player.Initialize (MainMenu.instance.orgName);
 		newGame.AddOrganizationToGame (player);
 
-//		GameManager.instance.game = newGame;
+		// initialize agent org
+
+		AgentOrganization agentOrg = AgentOrganization.CreateInstance<AgentOrganization> ();
+		agentOrg.Initialize ("Interpol");
+		newGame.AddAgentOrganizationToGame (agentOrg);
 
 		GameManager.instance.PushMenuState(MenuState.State.TabMenu);
 

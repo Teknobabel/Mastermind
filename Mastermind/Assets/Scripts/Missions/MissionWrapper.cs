@@ -12,6 +12,7 @@ public class MissionWrapper {
 	public Base.Floor m_floorInFocus;
 	public int m_turnsPassed = 0;
 	public MissionBase.TargetType m_scope = MissionBase.TargetType.Region;
+	public IOrganization m_organization;
 	public bool m_success = false;
 
 }

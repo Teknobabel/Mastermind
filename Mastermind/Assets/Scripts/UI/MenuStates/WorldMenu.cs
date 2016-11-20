@@ -337,6 +337,7 @@ public class WorldMenu : MenuState {
 				MissionWrapper r = new MissionWrapper ();
 				r.m_henchmen = validHenchmen;
 				r.m_mission = GameManager.instance.m_travelMission;
+				r.m_organization = GameManager.instance.game.player;
 				r.m_region = region;
 
 				GameManager.instance.currentMissionWrapper = r;

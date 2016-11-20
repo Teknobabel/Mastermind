@@ -39,6 +39,7 @@ public class MissionPhaseState : IGameState {
 
 		while (completedMissions.Count > 0) {
 			MissionWrapper a = completedMissions [0];
+//			Debug.Log ("Completing mission: " + a.m_mission.m_name);
 			completedMissions.RemoveAt (0);
 			player.MissionCompleted (a);
 		}

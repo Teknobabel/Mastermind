@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Organization : ScriptableObject, ISubject {
+public class Organization : ScriptableObject, ISubject, IOrganization {
 
 	private string m_name = "Null";
 
@@ -136,30 +136,43 @@ public class Organization : ScriptableObject, ISubject {
 		}
 	}
 
-	public void AddMission (MissionWrapper mr)
+	public void AddMission (MissionWrapper mw)
 	{
-		MissionWrapper a = new MissionWrapper ();
-		a.m_mission = mr.m_mission;
-		a.m_henchmen = mr.m_henchmen;
-		a.m_region = mr.m_region;
-		a.m_henchmenInFocus = mr.m_henchmenInFocus;
-		a.m_tokenInFocus = mr.m_tokenInFocus;
-		a.m_floorInFocus = mr.m_floorInFocus;
-		a.m_scope = mr.m_scope;
+		UseCommandPoints (mw.m_mission.m_cost);
 
-		a.m_mission.InitializeMission (a);
+//		MissionWrapper a = new MissionWrapper ();
+//		a.m_mission = mr.m_mission;
+//		a.m_henchmen = mr.m_henchmen;
+//		a.m_region = mr.m_region;
+//		a.m_henchmenInFocus = mr.m_henchmenInFocus;
+//		a.m_tokenInFocus = mr.m_tokenInFocus;
+//		a.m_floorInFocus = mr.m_floorInFocus;
+//		a.m_scope = mr.m_scope;
 
-		foreach (Henchmen thisH in a.m_henchmen) {
+//		a.m_mission.InitializeMission (a);
+		mw.m_mission.InitializeMission(mw);
+
+		foreach (Henchmen thisH in mw.m_henchmen) {
 			if (thisH.currentState != Henchmen.state.OnMission) {
 				thisH.ChangeState (Henchmen.state.OnMission);
 			}
 		}
 
-		m_activeMissions.Add (a);
+		m_activeMissions.Add (mw);
 	}
 
 	public void MissionCompleted (MissionWrapper a)
 	{
+
+		if (a.m_success && a.m_mission.m_infamyGain > 0) {
+
+			GainInfamy (a.m_mission.m_infamyGain);
+
+		} else if (!a.m_success && a.m_mission.m_missionFailInfamyGain > 0) {
+			
+			GainInfamy (a.m_mission.m_missionFailInfamyGain);
+		}
+
 		foreach (Henchmen h in a.m_henchmen) {
 			h.ChangeState (Henchmen.state.Idle);
 		}
@@ -249,10 +262,7 @@ public class Organization : ScriptableObject, ISubject {
 			t.m_resultType = GameEvent.Organization_WantedLevelIncreased;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
-			if (GameManager.instance.game != null) {
-
-				GameManager.instance.game.SpawnAgentInWorld ();
-			}
+			GameManager.instance.game.agentOrganization.PlayerWantedLevelIncreased ();
 
 			Notify (this, GameEvent.Organization_WantedLevelIncreased);
 		}
@@ -260,6 +270,8 @@ public class Organization : ScriptableObject, ISubject {
 
 	public void GainInfamy (int amount)
 	{
+		Debug.Log ("Gaining Infamy: " + amount.ToString ());
+
 		if (m_currentWantedLevel < m_maxWantedLevel)
 		{
 			m_currentInfamy += amount;
@@ -299,8 +311,11 @@ public class Organization : ScriptableObject, ISubject {
 		return null;
 	}
 
-	public void Initialize (Director d, Game g, string orgName)
+	public void Initialize (string orgName)
 	{
+		Game g = GameManager.instance.game;
+		Director d = g.director;
+
 		m_name = orgName;
 		m_currentWantedLevel = d.m_startingWantedLevel;
 		m_maxWantedLevel = d.m_maxWantedLevel;

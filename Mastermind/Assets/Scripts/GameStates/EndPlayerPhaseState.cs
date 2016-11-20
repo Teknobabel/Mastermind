@@ -44,6 +44,14 @@ public class EndPlayerPhaseState : IGameState {
 
 		}
 
+		// update infamy
+
+		int infamyGain = GameManager.instance.game.director.m_infamyGainPerTurn;
+
+		if (infamyGain > 0) {
+			GameManager.instance.game.player.GainInfamy (infamyGain);
+		}
+
 		GameManager.instance.ChangeGameState (GameManager.instance.regionPhase);
 	}
 

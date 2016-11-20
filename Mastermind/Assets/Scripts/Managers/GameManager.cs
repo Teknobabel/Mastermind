@@ -89,9 +89,18 @@ public class GameManager : MonoBehaviour {
 	public void ProcessMissionWrapper ()
 	{
 		if (m_currentMissionWrapper != null && m_currentMissionWrapper.m_mission != null && m_currentMissionWrapper.m_henchmen.Count > 0) {
+			
 			Debug.Log ("Processing Mission Request: " + m_currentMissionWrapper.m_mission.m_name);
-			GameManager.instance.game.player.UseCommandPoints (m_currentMissionWrapper.m_mission.m_cost);
-			GameManager.instance.game.player.AddMission (m_currentMissionWrapper);
+
+			if (m_currentMissionWrapper.m_organization != null) {
+
+				m_currentMissionWrapper.m_organization.AddMission (m_currentMissionWrapper);
+
+			} else {
+				
+				GameManager.instance.game.player.AddMission (m_currentMissionWrapper);
+			}
+
 			m_currentMissionWrapper = null;
 		}
 	}

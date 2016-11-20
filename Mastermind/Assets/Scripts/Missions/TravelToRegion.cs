@@ -29,14 +29,10 @@ public class TravelToRegion : MissionBase {
 			s += h.henchmenName.ToUpper () + " ";
 		}
 
-//		Henchmen h = a.m_henchmen[0];
-//
-//		h.SetRegion (a.m_region);
-//
 		TurnResultsEntry t = new TurnResultsEntry ();
 		t.m_resultsText = s + " arrives in " + a.m_region.regionName.ToUpper();
 		t.m_resultType = GameEvent.Henchmen_ArriveInRegion;
-		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+		a.m_organization.AddTurnResults (GameManager.instance.game.turnNumber, t);
 	}
 
 	public override bool IsValid ()

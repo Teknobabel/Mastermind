@@ -31,6 +31,7 @@ public class Director : ScriptableObject {
 	public Asset[] m_startingBaseUpgrades;
 	public OmegaPlanData[] m_startingOmegaPlanData;
 	public HenchmenData[] m_startingHenchmenData;
+	public HenchmenData[] m_startingAgentData;
 
 	public int maxTokenSlotsInRegion {get{return m_maxTokenSlotsInRegion;}}
 }

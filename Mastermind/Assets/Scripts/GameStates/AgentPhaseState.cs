@@ -8,26 +8,52 @@ public class AgentPhaseState : IGameState {
 
 		Debug.Log ("Starting Agent Phase");
 
-		List<MissionWrapper> missions = new List<MissionWrapper> ();
+		// do AI for any agents not already on a mission
 
-		foreach (AgentWrapper aw in GameManager.instance.game.agentsInPlay) {
+		foreach (AgentWrapper aw in GameManager.instance.game.agentOrganization.currentAgents) {
 
-			if (Random.Range (0.0f, 1.0f) > 0.65f) {
-				missions.Add (MoveToRandomRegion (aw));
+			if (aw.m_agent.currentState != Henchmen.state.OnMission && Random.Range (0.0f, 1.0f) > 0.65f) {
+				MoveToRandomRegion (aw);
 			}
 		
 		}
 
-		foreach (MissionWrapper mw in missions) {
+		// resolve any active missions
+
+		List<MissionWrapper> completedMissions = new List<MissionWrapper> ();
+
+		foreach (MissionWrapper mw in GameManager.instance.game.agentOrganization.activeMissions) {
 
 			mw.m_turnsPassed++;
 
 			if (mw.m_turnsPassed >= mw.m_mission.m_numTurns) {
 
 				mw.m_mission.CompleteMission (mw);
-
+				completedMissions.Add (mw);
 			}
 		}
+
+		// resolve any completed missions
+
+		while (completedMissions.Count > 0) {
+			MissionWrapper a = completedMissions [0];
+			completedMissions.RemoveAt (0);
+			GameManager.instance.game.agentOrganization.MissionCompleted (a);
+		}
+
+		// spawn any new agents if needed
+
+		if (GameManager.instance.game.agentOrganization.agentsToSpawn > 0) {
+			
+			for (int i = 0; i < GameManager.instance.game.agentOrganization.agentsToSpawn; i++) {
+
+				GameManager.instance.game.agentOrganization.SpawnAgentInWorld (null);
+			}
+
+			GameManager.instance.game.agentOrganization.agentsToSpawn = 0;
+		}
+
+		// go to next turn phase
 
 		GameManager.instance.ChangeGameState (GameManager.instance.endTurnPhase);
 	}
@@ -40,7 +66,7 @@ public class AgentPhaseState : IGameState {
 		Debug.Log ("Exiting Agent Phase");
 	}
 
-	private MissionWrapper MoveToRandomRegion (AgentWrapper aw)
+	private void MoveToRandomRegion (AgentWrapper aw)
 	{
 		// select a region to place agent in
 
@@ -78,10 +104,10 @@ public class AgentPhaseState : IGameState {
 			mw.m_mission = GameManager.instance.m_travelMission;
 			mw.m_henchmen.Add (aw.m_agent);
 			mw.m_region = randRegion;
+			mw.m_organization = GameManager.instance.game.agentOrganization;
 
-			return mw;
+			GameManager.instance.currentMissionWrapper = mw;
+			GameManager.instance.ProcessMissionWrapper ();
 		}
-
-		return null;
 	}
 }

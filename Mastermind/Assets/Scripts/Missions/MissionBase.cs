@@ -72,11 +72,6 @@ public class MissionBase : ScriptableObject, IMission {
 
 		a.m_success = WasMissionSuccessful (completionChance);
 
-		if (a.m_success && m_infamyGain > 0) {
-			GameManager.instance.game.player.GainInfamy (m_infamyGain);
-		} else if (!a.m_success && m_missionFailInfamyGain > 0) {
-			GameManager.instance.game.player.GainInfamy (m_missionFailInfamyGain);
-		}
 	}
 
 	public virtual string GetNameText ()

@@ -14,15 +14,6 @@ public class BeginPlayerPhaseState : IGameState {
 		player.RefillCommandPool ();
 		player.UseCommandPoints (player.costPerTurn);
 
-		// update infamy
-
-		if (GameManager.instance.game.turnNumber > 1) {
-			int infamyGain = GameManager.instance.game.director.m_infamyGainPerTurn;
-			if (infamyGain > 0) {
-				player.GainInfamy (infamyGain);
-			}
-		}
-
 		// progress turn to next phase
 
 		if (GameManager.instance.game.turnNumber != 1) {

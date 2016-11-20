@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class TurnResultsEntry {
 
 	public string m_resultsText = "Null";
