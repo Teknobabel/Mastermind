@@ -13,8 +13,8 @@ public class RemoveFloor : MissionBase {
 			// remove asset and set floor to empty
 
 			Asset asset = a.m_floorInFocus.m_installedUpgrade;
-			a.m_floorInFocus.m_installedUpgrade = null;
-			a.m_floorInFocus.m_floorState = Base.FloorState.Empty;
+
+			GameManager.instance.game.player.orgBase.RemoveAsset (a.m_floorInFocus.m_floorNumber);
 
 			if (GameManager.instance.game.player.currentAssets.Contains (asset)) {
 				GameManager.instance.game.player.currentAssets.Remove (asset);

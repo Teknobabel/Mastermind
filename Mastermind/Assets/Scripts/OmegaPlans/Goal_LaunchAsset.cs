@@ -39,11 +39,20 @@ public class Goal_LaunchAsset : OPGoalBase, IObserver {
 	{
 		switch (thisGameEvent) {
 		case GameEvent.Mission_AssetLaunched:
+			
 			Asset a = (Asset)subject;
+
 			if (a == m_asset) {
+				
 				// goal is met
+
 				m_omegaPlan.GoalCompleted(this);
 				GameManager.instance.game.player.RemoveObserver (this);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Launch: " + m_asset.m_name.ToUpper() + " into orbit.";
+				t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 			break;
 		}

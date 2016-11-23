@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AgentOrganization : ScriptableObject, IOrganization {
+public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObserver {
 
 	private Dictionary<int, List<TurnResultsEntry>> m_turnResults = new Dictionary<int, List<TurnResultsEntry>> (); // by turn number
 	private Dictionary<GameEvent, List<TurnResultsEntry>> m_turnResultsByType = new Dictionary<GameEvent, List<TurnResultsEntry>> ();
@@ -12,6 +12,9 @@ public class AgentOrganization : ScriptableObject, IOrganization {
 	private List<MissionWrapper> m_activeMissions = new List<MissionWrapper>();
 
 	private int m_agentsToSpawn = 0;
+
+	private List<IObserver>
+	m_observers = new List<IObserver> ();
 
 	public void Initialize (string orgName)
 	{
@@ -153,11 +156,48 @@ public class AgentOrganization : ScriptableObject, IOrganization {
 
 				AgentWrapper aw = new AgentWrapper ();
 				aw.m_agent = agent;
+				aw.AddObserver (this);
 				m_currentAgents.Add (aw);
 
 				randRegion.AddHenchmen (agent);
 				Debug.Log ("Agent: " + agent.henchmenName + " spawning in region: " + randRegion.regionName);
 			}
+		}
+	}
+
+	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	{
+		switch (thisGameEvent) {
+
+		case GameEvent.Agent_BecameVisible:
+			Notify (subject, GameEvent.Agent_BecameVisible);
+			break;
+		}
+	}
+
+	public void AddObserver (IObserver observer)
+	{
+		if (!m_observers.Contains(observer))
+		{
+			m_observers.Add (observer);
+		}
+	}
+
+	public void RemoveObserver (IObserver observer)
+	{
+		if (m_observers.Contains(observer))
+		{
+			m_observers.Remove(observer);
+		}
+	}
+
+	public void Notify (ISubject subject, GameEvent thisGameEvent)
+	{
+		List<IObserver> observers = new List<IObserver> (m_observers);
+
+		for (int i=0; i < observers.Count; i++)
+		{
+			observers[i].OnNotify(subject, thisGameEvent);
 		}
 	}
 

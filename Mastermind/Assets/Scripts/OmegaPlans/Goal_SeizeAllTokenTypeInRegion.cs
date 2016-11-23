@@ -61,9 +61,15 @@ public class Goal_SeizeAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 				if (seizedAllTokens)
 				{
-//				// goal is met
-				m_omegaPlan.GoalCompleted(this);
-				GameManager.instance.game.player.RemoveObserver (this);
+					// goal is met
+
+					m_omegaPlan.GoalCompleted(this);
+					GameManager.instance.game.player.RemoveObserver (this);
+
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Seize control of all : " + m_tokenType.m_name.ToUpper() + " in " + m_region.m_name.ToUpper();
+					t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 				}
 			}
 			break;

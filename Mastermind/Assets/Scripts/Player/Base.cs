@@ -40,7 +40,7 @@ public class Base {
 
 				f.m_floorState = FloorState.Occupied;
 				f.m_installedUpgrade = asset;
-
+				m_currentAssets.Add (asset);
 				return;
 			}
 		}
@@ -54,6 +54,21 @@ public class Base {
 
 				f.m_floorState = FloorState.Occupied;
 				f.m_installedUpgrade = asset;
+				m_currentAssets.Add (asset);
+				return;
+			}
+		}
+	}
+
+	public void RemoveAsset (int floorNumber)
+	{
+		foreach (Floor f in m_floors) {
+
+			if (f.m_floorNumber == floorNumber) {
+
+				f.m_floorState = FloorState.Empty;
+				m_currentAssets.Remove (f.m_installedUpgrade);
+				f.m_installedUpgrade = null;
 
 				return;
 			}

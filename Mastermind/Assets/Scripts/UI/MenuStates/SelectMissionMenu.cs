@@ -79,20 +79,30 @@ public class SelectMissionMenu : MenuState {
 
 	private void UpdateHenchmenList ()
 	{
-		for (int i = 0; i < GameManager.instance.currentMissionWrapper.m_region.henchmenSlots.Count; i++) {
+		List<Region.HenchmenSlot> occupiedSlots = new List<Region.HenchmenSlot> ();
 
-			Region.HenchmenSlot hs = GameManager.instance.currentMissionWrapper.m_region.henchmenSlots [i];
+		foreach (Region.HenchmenSlot s in GameManager.instance.currentMissionWrapper.m_region.henchmenSlots) {
 
-			if (i < m_henchmenSlots.Length) {
+			if (s.m_state == Region.HenchmenSlot.State.Occupied) {
+
+				occupiedSlots.Add (s);
+			}
+		}
+
+		for (int i = 0; i < m_henchmenSlots.Length; i++) {
+
+			if (i < occupiedSlots.Count) {
+
+				Region.HenchmenSlot hs = occupiedSlots [i];
 
 				m_henchmenSlots [i].gameObject.SetActive (true);
 				m_henchmenSlots [i].Initialize (hs);
-			} 
-//			else {
-//				m_henchmenSlots [i].Deactivate ();
-//			}
-		}
 
+			} else {
+
+				m_henchmenSlots [i].Deactivate ();
+			}
+		}
 	}
 
 	private void UpdateMissionList ()

@@ -38,11 +38,20 @@ public class Goal_UseAsset : OPGoalBase, IObserver {
 	{
 		switch (thisGameEvent) {
 		case GameEvent.Mission_AssetUsed:
+			
 			Asset a = (Asset)subject;
+
 			if (a == m_asset) {
+				
 				// goal is met
+
 				m_omegaPlan.GoalCompleted(this);
 				GameManager.instance.game.player.RemoveObserver (this);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Use: " + m_asset.m_name.ToUpper();
+				t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 			break;
 		}

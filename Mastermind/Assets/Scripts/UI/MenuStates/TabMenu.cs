@@ -7,7 +7,11 @@ using TMPro;
 public class TabMenu : MenuState, IObserver {
 	public static TabMenu instance;
 
-	public TabButton[] m_tabButtons;
+//	public TabButton[] m_tabButtons;
+
+	public GameObject m_tabButton;
+
+	public GameObject m_tabButtonScrollViewContent;
 
 	public TextMeshProUGUI
 		m_currentCommandPoints,
@@ -30,6 +34,8 @@ public class TabMenu : MenuState, IObserver {
 		m_activityPaneScrollViewContent,
 		m_activityCell_Small;
 
+	private List<TabButton> m_tabButtonList = new List<TabButton> ();
+
 	void Awake ()
 	{
 		if(!instance) {
@@ -43,31 +49,69 @@ public class TabMenu : MenuState, IObserver {
 	{
 		
 		// set up tabs
+
 		Dictionary<int, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
 		List<MenuTab> tabList = new List<MenuTab> ();
 		foreach (KeyValuePair<int, MenuTab> pair in tabDict) {
 			tabList.Add (pair.Value);
 		}
 
-		for (int i=0; i < m_tabButtons.Length; i++)
+		for (int i=0; i < tabList.Count; i++)
 		{
-			TabButton b = m_tabButtons [i];
 
-			if (i < tabList.Count) {
-				MenuTab m = tabList [i];
-				b.Initialize (m);
+			MenuTab m = tabList [i];
 
-			} else {
-				b.Deactivate ();
+			bool drawTab = true;
+
+			if (m.m_menuState == MenuState.State.OmegaPlanMenu && m.objectID != -1) { // don't draw tabs for hidden omega plans
+
+				OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [m.objectID];
+
+				if (op.state == OmegaPlan.State.Hidden) {
+
+					drawTab = false;
+				}
+			} else if (m.m_menuState == MenuState.State.AgentsMenu) { // don't draw agent tab if no visible agents in world
+
+				drawTab = false;
+
+				foreach (AgentWrapper aw in GameManager.instance.game.agentOrganization.currentAgents) {
+
+					if (aw.m_vizState == AgentWrapper.VisibilityState.Visible) {
+
+						drawTab = true;
+						break;
+					}
+				}
+
+				// if no visible henchmen, need to listen to agent organization for first appearence of henchmen to show tab
+
+				if (!drawTab) {
+
+					GameManager.instance.game.agentOrganization.AddObserver (this);
+				}
 			}
+
+			if (drawTab) {
+				
+				GameObject g = (GameObject)(Instantiate (m_tabButton, m_tabButtonScrollViewContent.transform));
+				g.transform.localScale = Vector3.one;
+				TabButton tb = g.GetComponent<TabButton> ();
+				m_tabButtonList.Add (tb);
+
+				tb.Initialize (m);
+			}
+
 		}
+
+		GameManager.instance.game.AddObserver (this);
+
+		// activate henchmen tab
 
 		if (tabList.Count > 0) {
 			MenuTab firstTab = tabList [0];
 			GameManager.instance.PushMenuState(firstTab);
 		}
-
-		GameManager.instance.game.AddObserver (this);
 	}
 
 	public override void OnHold()
@@ -76,6 +120,8 @@ public class TabMenu : MenuState, IObserver {
 
 	public override void OnReturn()
 	{
+		// pop this state if it is not the target state (continue back through the stack)
+
 		if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState != m_state)
 		{
 			GameManager.instance.PopMenuState();
@@ -117,18 +163,30 @@ public class TabMenu : MenuState, IObserver {
 			break;
 		case GameEvent.Organization_IntelSpawned:
 		case GameEvent.Organization_IntelCaptured:
-			Debug.Log ("<color=red>A;LKSDF;LSKJFD;LKSJF;DLK</color>");
-//			m_IntelInPlaySprites [0].texture = m_intelFull;
+
 			for (int i=0; i < m_IntelInPlaySprites.Length; i++)
 			{
 				if (i < GameManager.instance.game.intelInPlay.Count) {
-//					Debug.Log (GameManager.instance.game.intelInPlay.Count);
+					
 					m_IntelInPlaySprites [i].texture = m_intelFull;
+
 				} else {
-//					Debug.Log ("aljsdkfjsd");
+					
 					m_IntelInPlaySprites [i].texture = m_intelEmpty;
 				}
 			}
+			break;
+		case GameEvent.Agent_BecameVisible:
+
+			// enable the Agents menu when the first agent becomes visible
+
+			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_resultsText = "AGENTS Menu has beeen added to the Viewscreen.";
+			t.m_resultType = GameEvent.Agent_BecameVisible;
+			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
+			GameManager.instance.game.agentOrganization.RemoveObserver (this);
+
 			break;
 		}
 	}

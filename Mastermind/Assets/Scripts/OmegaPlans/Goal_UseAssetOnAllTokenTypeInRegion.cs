@@ -65,9 +65,16 @@ public class Goal_UseAssetOnAllTokenTypeInRegion : OPGoalBase, IObserver {
 				}
 					
 				if (allTokensOfTypeAffected) {
+					
 					// goal is met
+
 					m_omegaPlan.GoalCompleted (this);
 					GameManager.instance.game.player.RemoveObserver (this);
+
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Use: " + m_asset.m_name.ToUpper() + " on all " + m_tokenType.m_name.ToUpper() + " in " + m_region.m_name.ToUpper();
+					t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 				}
 			}
 			break;

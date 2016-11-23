@@ -18,13 +18,7 @@ public class TabButton : MonoBehaviour {
 	private MenuTab m_menuTab;
 
 	private Color m_selectedColor = Color.white;
-	private Color m_unselectedColor;
-
-	// Use this for initialization
-	void Start () {
-		ColorBlock cb = m_button.colors;
-		m_unselectedColor = cb.normalColor;
-	}
+	private Color m_unselectedColor = new Color(0.631f, 0.631f, 0.631f);
 
 	public void Initialize (MenuTab t)
 	{
@@ -44,13 +38,14 @@ public class TabButton : MonoBehaviour {
 
 		switch (newState) {
 		case State.Selected:
-//			m_buttonImage.color = Color.white;
+			
 			cb.normalColor = m_selectedColor;
 			m_button.colors = cb;
 			m_buttonImage.color = m_selectedColor;
 			break;
+
 		case State.Unselected:
-//			m_buttonImage.color = Color.gray;
+			
 			cb.normalColor = m_unselectedColor;
 			m_button.colors = cb;
 			m_buttonImage.color = m_unselectedColor;

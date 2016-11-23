@@ -42,11 +42,20 @@ public class Goal_CombineAssets : OPGoalBase, IObserver {
 	{
 		switch (thisGameEvent) {
 		case GameEvent.Organization_AssetGained:
+			
 			Asset a = (Asset)subject;
+
 			if (a == m_resultAsset) {
+				
 				// goal is met
+
 				m_omegaPlan.GoalCompleted(this);
 				GameManager.instance.game.player.RemoveObserver (this);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Create: " + m_resultAsset.m_name.ToUpper();
+				t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 			break;
 		}

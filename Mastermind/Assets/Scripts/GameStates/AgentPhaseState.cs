@@ -15,7 +15,7 @@ public class AgentPhaseState : IGameState {
 			if (aw.m_agent.currentState != Henchmen.state.OnMission && Random.Range (0.0f, 1.0f) > 0.65f) {
 				MoveToRandomRegion (aw);
 			}
-		
+//			aw.ChangeVisibilityState(AgentWrapper.VisibilityState.Visible);
 		}
 
 		// resolve any active missions

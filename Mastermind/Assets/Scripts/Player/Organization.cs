@@ -380,8 +380,15 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				OmegaPlan newOP = OmegaPlan.CreateInstance<OmegaPlan> ();
 
 				if (revealed < d.m_startingRevealedOmegaPlans) {
+					
 					newOP.Initialize (newOPData, OmegaPlan.State.Revealed, this);
 					revealed++;
+
+//					TurnResultsEntry t = new TurnResultsEntry ();
+//					t.m_resultsText += "\nOMEGA PLAN: " + newOP.opName.ToUpper() + " is now unlocked!";
+//					t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+//					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
 				} else {
 					newOP.Initialize (newOPData, OmegaPlan.State.Hidden, this);
 				}
@@ -536,6 +543,12 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			opTab.Initialize ();
 			m_menuTabs.Add (opTab.id, opTab);
 		}
+
+		MenuTab agentTab = new MenuTab ();
+		agentTab.m_name = "AGENTS";
+		agentTab.m_menuState = MenuState.State.AgentsMenu;
+		agentTab.Initialize ();
+		m_menuTabs.Add (agentTab.id, agentTab);
 
 		AddObserver (TabMenu.instance);
 

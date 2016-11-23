@@ -28,4 +28,6 @@ public enum GameEvent {
 	Organization_WantedLevelIncreased,
 	Region_ControlTokenOwnerChanged,
 	Region_OwnerChanged,
+	Agent_BecameVisible,
+	OmegaPlan_GoalCompleted,
 }

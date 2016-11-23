@@ -41,10 +41,18 @@ public class Goal_HireHenchmen : OPGoalBase, IObserver {
 			Organization o = (Organization)subject;
 
 			foreach (Henchmen h in o.currentHenchmen) {
+				
 				if (h.HasTrait (m_trait)) {
+					
 					// goal is met
+
 					m_omegaPlan.GoalCompleted(this);
 					GameManager.instance.game.player.RemoveObserver (this);
+
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Hire: " + m_trait.m_name.ToUpper();
+					t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 				}
 			}
 			break;

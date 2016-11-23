@@ -7,7 +7,7 @@ public class StealAsset : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-
+		a.m_success = true;
 		if (a.m_success) {
 
 			// find a revealed non-empty asset token
@@ -15,21 +15,22 @@ public class StealAsset : MissionBase {
 
 			if (at.m_state == TokenSlot.State.Revealed) {
 
-				// remove it from region and add to player bank
-
 				Asset asset = at.m_assetToken.m_asset;
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
+				t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + asset.m_name.ToUpper() + " ASSET.";
+				//				t.m_resultsText += "\n" + completionChance.ToString ();
+				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
+				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
+				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
+				// remove it from region and add to player bank
 
 				GameManager.instance.game.player.AddAsset (at.m_assetToken.m_asset);
 
 				a.m_region.RemoveAssetToken (at);
 
-				TurnResultsEntry t = new TurnResultsEntry ();
-				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-				t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + asset.m_name.ToUpper() + " ASSET.";
-//				t.m_resultsText += "\n" + completionChance.ToString ();
-				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
-				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 
 		} else {

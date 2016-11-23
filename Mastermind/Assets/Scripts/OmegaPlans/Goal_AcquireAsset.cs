@@ -36,12 +36,22 @@ public class Goal_AcquireAsset : OPGoalBase, IObserver {
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
 		switch (thisGameEvent) {
+
 		case GameEvent.Organization_AssetGained:
+			
 			Asset a = (Asset)subject;
+
 			if (a == m_asset) {
+				
 				// goal is met
+
 				m_omegaPlan.GoalCompleted(this);
 				GameManager.instance.game.player.RemoveObserver (this);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Acquire Asset: " + m_asset.m_name.ToUpper();
+				t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 			break;
 		}

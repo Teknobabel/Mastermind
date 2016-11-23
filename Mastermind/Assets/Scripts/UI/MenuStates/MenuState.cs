@@ -18,6 +18,7 @@ public abstract class MenuState : MonoBehaviour {
 		CallHenchmenMenu, // do we still use this?
 		SelectHenchmenMenu,
 		SelectMissionMenu,
+		AgentsMenu,
 	}
 
 	public State m_state = State.None;
