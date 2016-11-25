@@ -12,10 +12,11 @@ public class AgentPhaseState : IGameState {
 
 		foreach (AgentWrapper aw in GameManager.instance.game.agentOrganization.currentAgents) {
 
-			if (aw.m_agent.currentState != Henchmen.state.OnMission && Random.Range (0.0f, 1.0f) > 0.65f) {
-				MoveToRandomRegion (aw);
+			if (aw.m_currentAIState != null && aw.m_agent.currentState != Henchmen.state.OnMission) {
+
+				aw.m_currentAIState.DoAgentTurn (aw);
 			}
-//			aw.ChangeVisibilityState(AgentWrapper.VisibilityState.Visible);
+
 		}
 
 		// resolve any active missions
@@ -66,48 +67,48 @@ public class AgentPhaseState : IGameState {
 		Debug.Log ("Exiting Agent Phase");
 	}
 
-	private void MoveToRandomRegion (AgentWrapper aw)
-	{
-		// select a region to place agent in
-
-		List<Region> emptyRegions = new List<Region> ();
-		List<Region> validRegions = new List<Region> ();
-
-		foreach (Region region in GameManager.instance.game.regions) {
-
-			if (region.id != GameManager.instance.game.player.homeRegion.id) {
-
-				if (region.currentHenchmen.Count == 0) {
-
-					emptyRegions.Add (region);
-				} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {
-
-					validRegions.Add (region);
-				}
-			}
-		}
-
-		Region randRegion = null;
-
-		if (emptyRegions.Count > 0) {
-
-			randRegion = emptyRegions[Random.Range(0, emptyRegions.Count)];
-
-		} else if (validRegions.Count > 0) {
-
-			randRegion = validRegions[Random.Range(0, validRegions.Count)];
-		}
-
-		if (randRegion != null) {
-
-			MissionWrapper mw = new MissionWrapper ();
-			mw.m_mission = GameManager.instance.m_travelMission;
-			mw.m_henchmen.Add (aw.m_agent);
-			mw.m_region = randRegion;
-			mw.m_organization = GameManager.instance.game.agentOrganization;
-
-			GameManager.instance.currentMissionWrapper = mw;
-			GameManager.instance.ProcessMissionWrapper ();
-		}
-	}
+//	private void MoveToRandomRegion (AgentWrapper aw)
+//	{
+//		// select a region to place agent in
+//
+//		List<Region> emptyRegions = new List<Region> ();
+//		List<Region> validRegions = new List<Region> ();
+//
+//		foreach (Region region in GameManager.instance.game.regions) {
+//
+//			if (region.id != GameManager.instance.game.player.homeRegion.id) {
+//
+//				if (region.currentHenchmen.Count == 0) {
+//
+//					emptyRegions.Add (region);
+//				} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {
+//
+//					validRegions.Add (region);
+//				}
+//			}
+//		}
+//
+//		Region randRegion = null;
+//
+//		if (emptyRegions.Count > 0) {
+//
+//			randRegion = emptyRegions[Random.Range(0, emptyRegions.Count)];
+//
+//		} else if (validRegions.Count > 0) {
+//
+//			randRegion = validRegions[Random.Range(0, validRegions.Count)];
+//		}
+//
+//		if (randRegion != null) {
+//
+//			MissionWrapper mw = new MissionWrapper ();
+//			mw.m_mission = GameManager.instance.m_travelMission;
+//			mw.m_henchmen.Add (aw.m_agent);
+//			mw.m_region = randRegion;
+//			mw.m_organization = GameManager.instance.game.agentOrganization;
+//
+//			GameManager.instance.currentMissionWrapper = mw;
+//			GameManager.instance.ProcessMissionWrapper ();
+//		}
+//	}
 }

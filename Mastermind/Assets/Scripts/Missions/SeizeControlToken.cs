@@ -63,4 +63,14 @@ public class SeizeControlToken : MissionBase {
 		}
 		return false;
 	}
+
+	public override string GetNameText ()
+	{
+		string s = m_name + "\n";
+
+		s += "<size=18>" + m_type.ToString().ToUpper() + "</size>";
+
+
+		return s;
+	}
 }

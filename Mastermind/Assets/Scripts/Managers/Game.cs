@@ -22,6 +22,7 @@ public class Game : ScriptableObject, ISubject {
 
 	private Organization m_player;
 	private AgentOrganization m_agentOrg;
+	private Region m_limbo;
 
 	private List<IObserver>
 	m_observers = new List<IObserver> ();
@@ -30,6 +31,9 @@ public class Game : ScriptableObject, ISubject {
 
 	public void Initialize ()
 	{
+		m_limbo = Region.CreateInstance<Region> ();
+		m_limbo.Initialize (GameManager.instance.m_limboRegion);
+
 		DetermineIntelSpawnTurn ();
 
 		GameManager.instance.game = this;
@@ -150,6 +154,31 @@ public class Game : ScriptableObject, ISubject {
 		return m_regions;
 	}
 
+	public Region GetRandomRegion (bool onlyEmptyRegions)
+	{
+		Region r = null;
+
+		List<Region> validRegions = new List<Region> ();
+
+		foreach (Region region in GameManager.instance.game.regions) {
+
+			if (region.currentHenchmen.Count == 0 && onlyEmptyRegions) {
+
+				validRegions.Add (region);
+			} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {
+
+				validRegions.Add (region);
+			}
+		}
+
+		if (validRegions.Count > 0) {
+
+			r = validRegions[Random.Range(0, validRegions.Count)];
+		}
+
+		return r;
+	}
+
 	public void IntelCaptured ()
 	{
 		if (m_intelInPlay.Count > 0) {
@@ -261,4 +290,5 @@ public class Game : ScriptableObject, ISubject {
 	public List<AssetToken> intelInPlay {get{return m_intelInPlay; }}
 	public List<Region> regions {get{ return m_regions; }}
 	public List<Henchmen> agents {get{return m_agents;}}
+	public Region limbo {get{return m_limbo; }}
 }

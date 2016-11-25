@@ -314,7 +314,7 @@ public class WorldMenu : MenuState {
 		}
 	}
 
-	public void SelectHenchmenForTravel (int regionID)
+	public void SelectHenchmenForTravel (int regionID, Region.HenchmenSlot clickedSlot)
 	{
 		// gather list of henchmen that can travel
 		List<Henchmen> validHenchmen = new List<Henchmen>();
@@ -339,6 +339,7 @@ public class WorldMenu : MenuState {
 				r.m_mission = GameManager.instance.m_travelMission;
 				r.m_organization = GameManager.instance.game.player;
 				r.m_region = region;
+				r.m_henchmenSlotInFocus = clickedSlot;
 
 				GameManager.instance.currentMissionWrapper = r;
 

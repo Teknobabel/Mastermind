@@ -10,11 +10,15 @@ public class GameManager : MonoBehaviour {
 	public RegionData[] m_regionBank;
 	public Director[] m_directorBank;
 	public MissionBase[] m_missionBank;
+	public MissionBase[] m_agentMissionBank;
 	public MenuState[] m_menuStates;
 
 	public RegionData m_lairRegion;
+	public RegionData m_limboRegion;
 	public TravelToRegion m_travelMission;
 	public AssetToken m_intel;
+
+	public TraitData[] m_statusTraits;
 
 	private StartNewGameState m_startNewGame;
 	private BeginTurnState m_beginTurn;
@@ -25,6 +29,8 @@ public class GameManager : MonoBehaviour {
 	private RegionPhaseState m_regionPhase;
 	private AgentPhaseState m_agentPhase;
 	private EndTurnState m_endTurnPhase;
+
+	private AgentAIState_Idle m_agentState_Idle;
 
 	private IGameState m_currentState = null;
 
@@ -60,6 +66,8 @@ public class GameManager : MonoBehaviour {
 		m_regionPhase = new RegionPhaseState ();
 		m_agentPhase = new AgentPhaseState ();
 		m_endTurnPhase = new EndTurnState ();
+
+		m_agentState_Idle = new AgentAIState_Idle ();
 
 	}
 
@@ -190,6 +198,8 @@ public class GameManager : MonoBehaviour {
 	public RegionPhaseState regionPhase {get{return m_regionPhase; }}
 	public AgentPhaseState agentPhase {get{return m_agentPhase; }}
 	public EndTurnState endTurnPhase {get{return m_endTurnPhase; }}
+
+	public AgentAIState_Idle agentState_Idle {get{return m_agentState_Idle;}}
 
 	public Game game {get{return m_game; } set {m_game = value; }}
 	public MenuState.State currentMenuState {get{return m_menuState.m_state;}}

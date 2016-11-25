@@ -67,7 +67,12 @@ public class Henchmen : ScriptableObject {
 		// remove from current region list
 
 		if (m_currentRegion != null && m_currentRegion.currentHenchmen.Contains (this)) {
-			m_currentRegion.RemoveHenchmen (this);
+
+			if (m_owner == Region.Owner.Player) {
+				m_currentRegion.RemoveHenchmen (this);
+			} else {
+				m_currentRegion.RemoveAgent (this);
+			}
 		}
 
 		// add to new region list
@@ -125,6 +130,22 @@ public class Henchmen : ScriptableObject {
 		}
 
 		return t;
+	}
+
+	public bool HasTrait (TraitData.TraitType type)
+	{
+		foreach (KeyValuePair<TraitData.TraitClass, List<TraitData>> pair in m_traitDict)
+		{
+			foreach (TraitData t in pair.Value) {
+
+				if (t.m_type == type) {
+
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public bool HasTrait (TraitData t)

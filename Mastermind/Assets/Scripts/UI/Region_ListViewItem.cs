@@ -79,10 +79,10 @@ public class Region_ListViewItem : MonoBehaviour {
 		m_missionButton.Initialize (GameManager.instance.game.player.GetMission (r));
 	}
 
-	public void EmptyHenchmenButtonClicked ()
+	public void EmptyHenchmenButtonClicked (Region.HenchmenSlot clickedSlot)
 	{
 		if (GameManager.instance.currentMenuState == MenuState.State.WorldMenu) {
-			WorldMenu.instance.SelectHenchmenForTravel (m_regionID);
+			WorldMenu.instance.SelectHenchmenForTravel (m_regionID, clickedSlot);
 		}
 	}
 

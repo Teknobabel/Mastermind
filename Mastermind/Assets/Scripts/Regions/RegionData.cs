@@ -14,6 +14,7 @@ public class RegionData : ScriptableObject {
 		Australia,
 		EuropeanUnion,
 		Asia,
+		Invisible,
 	}
 
 	public string m_name = "Null";

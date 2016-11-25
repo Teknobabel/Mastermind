@@ -111,41 +111,22 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 
 		if (agentBank.Count > 0) {
 
-			// select a region to place agent in
+			// get a random empty region
 
-			List<Region> emptyRegions = new List<Region> ();
-			List<Region> validRegions = new List<Region> ();
+			Region region = GameManager.instance.game.GetRandomRegion (true);
 
-			foreach (Region region in GameManager.instance.game.regions) {
+			if (region == null) {
 
-				if (region.id != GameManager.instance.game.player.homeRegion.id) {
+				// if no empty regions exist, get a random region
 
-					if (region.currentHenchmen.Count == 0) {
-
-						emptyRegions.Add (region);
-					} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {
-
-						validRegions.Add (region);
-					}
-				}
+				region = GameManager.instance.game.GetRandomRegion (false);
 			}
 
-			Region randRegion = null;
-
-			if (emptyRegions.Count > 0) {
-
-				randRegion = emptyRegions[Random.Range(0, emptyRegions.Count)];
-
-			} else if (validRegions.Count > 0) {
-
-				randRegion = validRegions[Random.Range(0, validRegions.Count)];
-			}
-
-			if (randRegion != null) {
+			if (region != null) {
 
 				Henchmen agent = null;
 
-				if (henchmen == null) {
+				if (henchmen == null) { // if a specific agent isn't supplied, choose a random agent
 					
 					int r = Random.Range (0, agentBank.Count);
 					agent = agentBank [r];
@@ -156,11 +137,12 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 
 				AgentWrapper aw = new AgentWrapper ();
 				aw.m_agent = agent;
+				aw.m_currentAIState = GameManager.instance.agentState_Idle;
 				aw.AddObserver (this);
 				m_currentAgents.Add (aw);
 
-				randRegion.AddHenchmen (agent);
-				Debug.Log ("Agent: " + agent.henchmenName + " spawning in region: " + randRegion.regionName);
+				region.AddAgent (aw);
+				Debug.Log ("Agent: " + agent.henchmenName + " spawning in region: " + region.regionName);
 			}
 		}
 	}

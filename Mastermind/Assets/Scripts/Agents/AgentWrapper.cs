@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 public class AgentWrapper : ISubject {
 
+	public enum AgentEvents
+	{
+		RegionSearched,
+		BaseFound,
+		HenchmenFound,
+		PlayerControlTokenFound,
+	}
+
 	public enum State
 	{
 		Idle,
@@ -24,6 +32,8 @@ public class AgentWrapper : ISubject {
 	public State m_state = State.Idle;
 	public VisibilityState m_vizState = VisibilityState.Hidden;
 	public bool m_hasBeenRevealed = false;
+	public List<AgentEvents> m_agentEvents = new List<AgentEvents>();
+	public IAgentAIState m_currentAIState;
 
 	private List<IObserver>
 	m_observers = new List<IObserver> ();

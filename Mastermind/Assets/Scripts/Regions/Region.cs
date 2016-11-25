@@ -11,63 +11,6 @@ public class Region : ScriptableObject, ISubject, IObserver {
 		Player,
 	}
 
-//	public class TokenSlot
-//	{
-//		public enum State
-//		{
-//			None,
-//			Hidden,
-//			Revealed,
-//		}
-//
-//		public enum TokenType
-//		{
-//			None,
-//			Asset,
-//			Policy,
-//			Control,
-//		}
-//
-//		public enum Status
-//		{
-//			None,
-//			Normal,
-//			MindControlled,
-//			Zombified,
-//			Destroyed,
-//			Infected,
-//			AIControl,
-//			Protected,
-//			Vulnerable,
-//		}
-//
-//
-//
-//		public State m_state = State.None;
-//		public TokenType m_type = TokenType.None;
-//		public PolicyToken m_policyToken;
-//		public AssetToken m_assetToken;
-//		public ControlToken m_controlToken;
-//		public List<TokenSlot> m_assetTokens = new List<TokenSlot> ();
-//		public List<TokenSlot> m_controlTokens = new List<TokenSlot>();
-//		public List<TokenSlot> m_policyTokens = new List<TokenSlot>();
-//		public List<Status> m_effects = new List<Status>();
-//		public Owner m_owner = Owner.AI;
-//		public Region m_region = null;
-//
-//		public TokenBase GetBaseToken () {
-//			switch (m_type) {
-//			case TokenType.Asset:
-//				return m_assetToken;
-//			case TokenType.Policy:
-//				return m_policyToken;
-//			case TokenType.Control:
-//				return m_controlToken;
-//			}
-//			return null;
-//		}
-//	}
-
 	public class HenchmenSlot
 	{
 		public enum State
@@ -76,11 +19,52 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			Empty,
 			Reserved,
 			Occupied,
+			Occupied_Player,
+			Occupied_Agent,
 		}
 
 		public int m_id = -1;
 		public State m_state = State.None;
 		public Henchmen m_henchmen = null;
+		public AgentWrapper m_agent = null;
+
+		public List<Henchmen> m_enRoute = new List<Henchmen> ();
+
+		public void AddHenchmen (Henchmen h)
+		{
+			if (m_enRoute.Contains (h)) {
+
+				m_enRoute.Remove (h);
+			}
+
+			m_henchmen = h;
+			m_state = State.Occupied_Player;
+
+		}
+
+		public void RemoveHenchmen ()
+		{
+			m_henchmen = null;
+			m_state = State.Empty;
+		}
+
+		public void AddAgent (AgentWrapper aw)
+		{
+			if (m_enRoute.Contains (aw.m_agent)) {
+
+				m_enRoute.Remove (aw.m_agent);
+			}
+
+			m_agent = aw;
+			m_state = State.Occupied_Agent;
+
+		}
+
+		public void RemoveAgent ()
+		{
+			m_agent = null;
+			m_state = State.Empty;
+		}
 	}
 
 	private string m_regionName = "Null";
@@ -292,9 +276,28 @@ public class Region : ScriptableObject, ISubject, IObserver {
 	public void ReserveSlot (Henchmen h)
 	{
 		foreach (HenchmenSlot s in m_henchmenSlots) {
+			
 			if (s.m_state == HenchmenSlot.State.Empty) {
-				s.m_state = HenchmenSlot.State.Reserved;
-				s.m_henchmen = h;
+				
+//				s.m_state = HenchmenSlot.State.Reserved;
+//				s.m_henchmen = h;
+
+				s.m_enRoute.Add (h);
+				break;
+			}
+		}
+	}
+
+	public void ReserveSlot (Henchmen h, HenchmenSlot hs)
+	{
+		foreach (HenchmenSlot s in m_henchmenSlots) {
+			
+			if (s.m_id == hs.m_id) {
+				
+//				s.m_state = HenchmenSlot.State.Reserved;
+//				s.m_henchmen = h;
+
+				s.m_enRoute.Add (h);
 				break;
 			}
 		}
@@ -303,7 +306,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 	private HenchmenSlot HasReservation (Henchmen h)
 	{
 		foreach (HenchmenSlot s in m_henchmenSlots) {
-			if (s.m_state == HenchmenSlot.State.Reserved && s.m_henchmen != null && s.m_henchmen.id == h.id) {
+			if (s.m_enRoute.Count > 0 && s.m_enRoute.Contains(h)) {
 				return s;
 			}
 		}
@@ -311,13 +314,29 @@ public class Region : ScriptableObject, ISubject, IObserver {
 		return null;
 	}
 
+	public void RemoveAgent (Henchmen a)
+	{
+		foreach (HenchmenSlot s in m_henchmenSlots) {
+
+			if (s.m_state == HenchmenSlot.State.Occupied_Agent && s.m_agent != null && s.m_agent.m_agent == a) {
+				s.RemoveAgent ();
+
+				break;
+			}
+		}
+
+		if (m_currentHenchmen.Contains (a)) {
+			m_currentHenchmen.Remove (a);
+		}
+	}
+
 	public void RemoveHenchmen (Henchmen h)
 	{
 		foreach (HenchmenSlot s in m_henchmenSlots) {
-			if (s.m_state == HenchmenSlot.State.Occupied && s.m_henchmen != null && s.m_henchmen == h) {
-				s.m_state = HenchmenSlot.State.Empty;
-				s.m_henchmen = null;
+			
+			if (s.m_state == HenchmenSlot.State.Occupied_Player && s.m_henchmen != null && s.m_henchmen == h) {
 
+				s.RemoveHenchmen ();
 				break;
 			}
 		}
@@ -327,21 +346,49 @@ public class Region : ScriptableObject, ISubject, IObserver {
 		}
 	}
 
+	public void AddAgent (AgentWrapper aw)
+	{
+		HenchmenSlot r = HasReservation (aw.m_agent);
+
+		if (r != null) {
+			r.AddAgent (aw);
+
+		} else {
+			bool henchmenPlaced = false;
+
+			foreach (HenchmenSlot s in m_henchmenSlots) {
+				
+				if (s.m_state == HenchmenSlot.State.Empty) {
+					s.AddAgent (aw);
+					henchmenPlaced = true;
+					break;
+				}
+			}
+
+			if (!henchmenPlaced) {
+				Debug.Log (m_henchmenSlots.Count);
+				Debug.Log ("<color=red>No Henchmen Slot Found</color>");
+			}
+		}
+
+		m_currentHenchmen.Add 
+		(aw.m_agent);
+		aw.m_agent.SetRegion (this);
+	}
+
 	public void AddHenchmen (Henchmen h)
 	{
 		HenchmenSlot r = HasReservation (h);
 
 		if (r != null) {
-			r.m_state = HenchmenSlot.State.Occupied;
-			r.m_henchmen = h;
+			r.AddHenchmen(h);
 		
 		} else {
 			bool henchmenPlaced = false;
 
 			foreach (HenchmenSlot s in m_henchmenSlots) {
 				if (s.m_state == HenchmenSlot.State.Empty) {
-					s.m_state = HenchmenSlot.State.Occupied;
-					s.m_henchmen = h;
+					s.AddHenchmen (h);
 					henchmenPlaced = true;
 					break;
 				}
