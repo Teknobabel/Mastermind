@@ -106,4 +106,5 @@ public class Asset : ScriptableObject, ISubject {
 	public string m_name = "Null";
 	public AssetType m_assetType = AssetType.None;
 	public Rank m_rank = Rank.None;
+	public int m_defenseValue = 0;
 }

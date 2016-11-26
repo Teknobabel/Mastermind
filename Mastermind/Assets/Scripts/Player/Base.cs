@@ -15,6 +15,8 @@ public class Base {
 		public int m_floorNumber = -1;
 		public Asset m_installedUpgrade = null;
 		public FloorState m_floorState = FloorState.None;
+		public List<Henchmen> m_guards = new List<Henchmen> ();
+		public int m_baseDefense = 0;
 	}
 
 	public List<Floor> m_floors = new List<Floor>();
@@ -40,6 +42,7 @@ public class Base {
 
 				f.m_floorState = FloorState.Occupied;
 				f.m_installedUpgrade = asset;
+				f.m_baseDefense = asset.m_defenseValue;
 				m_currentAssets.Add (asset);
 				return;
 			}
@@ -54,6 +57,7 @@ public class Base {
 
 				f.m_floorState = FloorState.Occupied;
 				f.m_installedUpgrade = asset;
+				f.m_baseDefense = asset.m_defenseValue;
 				m_currentAssets.Add (asset);
 				return;
 			}
@@ -67,6 +71,7 @@ public class Base {
 			if (f.m_floorNumber == floorNumber) {
 
 				f.m_floorState = FloorState.Empty;
+				f.m_baseDefense = 0;
 				m_currentAssets.Remove (f.m_installedUpgrade);
 				f.m_installedUpgrade = null;
 

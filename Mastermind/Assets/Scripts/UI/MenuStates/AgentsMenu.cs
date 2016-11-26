@@ -66,7 +66,7 @@ public class AgentsMenu : MenuState {
 			
 			for (int i = 0; i < agentOrg.currentAgents.Count; i++) {
 
-				if (agentOrg.currentAgents [i].m_vizState == AgentWrapper.VisibilityState.Visible)
+				if (agentOrg.currentAgents [i].m_hasBeenRevealed)
 				{
 					
 					Henchmen thisAgent = agentOrg.currentAgents [i].m_agent;

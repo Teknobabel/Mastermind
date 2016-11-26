@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour {
 
 	public void ProcessMissionWrapper ()
 	{
-		if (m_currentMissionWrapper != null && m_currentMissionWrapper.m_mission != null && m_currentMissionWrapper.m_henchmen.Count > 0) {
+		if (m_currentMissionWrapper != null && m_currentMissionWrapper.m_mission != null) {
 			
 			Debug.Log ("Processing Mission Request: " + m_currentMissionWrapper.m_mission.m_name);
 

@@ -106,12 +106,12 @@ public class TabMenu : MenuState, IObserver {
 
 		GameManager.instance.game.AddObserver (this);
 
-		// activate henchmen tab
-
-		if (tabList.Count > 0) {
-			MenuTab firstTab = tabList [0];
-			GameManager.instance.PushMenuState(firstTab);
-		}
+//		// activate henchmen tab
+//
+//		if (tabList.Count > 0) {
+//			MenuTab firstTab = tabList [0];
+//			GameManager.instance.PushMenuState(firstTab);
+//		}
 	}
 
 	public override void OnHold()
@@ -179,6 +179,30 @@ public class TabMenu : MenuState, IObserver {
 		case GameEvent.Agent_BecameVisible:
 
 			// enable the Agents menu when the first agent becomes visible
+
+			Dictionary<int, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
+			List<MenuTab> tabList = new List<MenuTab> ();
+			foreach (KeyValuePair<int, MenuTab> pair in tabDict) {
+				tabList.Add (pair.Value);
+			}
+
+			for (int i = 0; i < tabList.Count; i++) {
+
+				MenuTab m = tabList [i];
+
+				if (m.m_menuState == MenuState.State.AgentsMenu) {
+
+					GameObject g = (GameObject)(Instantiate (m_tabButton, m_tabButtonScrollViewContent.transform));
+					g.transform.localScale = Vector3.one;
+					TabButton tb = g.GetComponent<TabButton> ();
+					m_tabButtonList.Add (tb);
+
+					tb.Initialize (m);
+
+					break;
+				}
+			}
+
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = "AGENTS Menu has beeen added to the Viewscreen.";

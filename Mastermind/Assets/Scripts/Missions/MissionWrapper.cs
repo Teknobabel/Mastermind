@@ -9,6 +9,7 @@ public class MissionWrapper {
 	public Henchmen m_henchmenInFocus;
 	public AgentWrapper m_agentInFocus;
 	public List<Henchmen> m_henchmen = new List<Henchmen>();
+	public List<AgentWrapper> m_agents = new List<AgentWrapper>();
 	public TokenSlot m_tokenInFocus;
 	public Base.Floor m_floorInFocus;
 	public Region.HenchmenSlot m_henchmenSlotInFocus;

@@ -319,6 +319,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 		foreach (HenchmenSlot s in m_henchmenSlots) {
 
 			if (s.m_state == HenchmenSlot.State.Occupied_Agent && s.m_agent != null && s.m_agent.m_agent == a) {
+				s.m_agent.m_agentEvents.Clear ();
 				s.RemoveAgent ();
 
 				break;

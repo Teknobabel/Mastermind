@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AgentAIState_Idle : IAgentAIState {
 
@@ -30,15 +31,34 @@ public class AgentAIState_Idle : IAgentAIState {
 
 				MissionWrapper mw = new MissionWrapper ();
 				mw.m_mission = GameManager.instance.m_agentMissionBank[1];
-				mw.m_henchmen.Add (aw.m_agent);
-				mw.m_henchmenInFocus = aw.m_agent;
-				mw.m_agentInFocus = aw;
+//				mw.m_henchmen.Add (aw.m_agent);
+//				mw.m_henchmenInFocus = aw.m_agent;
+
+				//add all agents in region, cancelling any missions they are currently on
+
+				foreach (Region.HenchmenSlot hs in aw.m_agent.currentRegion.henchmenSlots) {
+
+					if (hs.m_state == Region.HenchmenSlot.State.Occupied_Agent) {
+
+						if (hs.m_agent.m_agent.currentState == Henchmen.state.OnMission) {
+
+							// remove from current mission, cancel if empty
+
+							GameManager.instance.game.agentOrganization.RemoveAgentFromMissions (hs.m_agent);
+
+						}
+
+						mw.m_agents.Add (hs.m_agent);
+					}
+				}
+
+//				mw.m_agentInFocus = aw;
 				mw.m_region = aw.m_agent.currentRegion;
 				mw.m_organization = GameManager.instance.game.agentOrganization;
 
 				GameManager.instance.currentMissionWrapper = mw;
 				GameManager.instance.ProcessMissionWrapper ();
-
+//				Debug.Log (GameManager.instance.game.agentOrganization.activeMissions.Count);
 			} else if (aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.HenchmenFound)) {
 
 				// engage henchmen
@@ -83,6 +103,16 @@ public class AgentAIState_Idle : IAgentAIState {
 
 					if (r != null) {
 
+						// choose random slot in region
+						List<Region.HenchmenSlot> hsList = new List<Region.HenchmenSlot>();
+						foreach (Region.HenchmenSlot hs in r.henchmenSlots)
+						{
+							if (hs.m_state == Region.HenchmenSlot.State.Empty || hs.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+
+								hsList.Add (hs);
+							}
+						}
+
 						MissionWrapper mw = new MissionWrapper ();
 						mw.m_mission = GameManager.instance.m_travelMission;
 						mw.m_henchmen.Add (aw.m_agent);
@@ -90,6 +120,11 @@ public class AgentAIState_Idle : IAgentAIState {
 						mw.m_agentInFocus = aw;
 						mw.m_region = r;
 						mw.m_organization = GameManager.instance.game.agentOrganization;
+
+						if (hsList.Count > 0) {
+
+							mw.m_henchmenSlotInFocus = hsList[Random.Range(0, hsList.Count)];
+						}
 
 						GameManager.instance.currentMissionWrapper = mw;
 						GameManager.instance.ProcessMissionWrapper ();

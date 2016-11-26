@@ -49,9 +49,9 @@ public class ActivityMenu : MenuState, ISubject {
 		if (m_displayTurnResults) {
 			m_displayTurnResults = false;
 			int lastTurn = GameManager.instance.game.turnNumber - 1;
-			if (lastTurn > 0) {
+//			if (lastTurn > 0) {
 				TurnResultsButtonPressed (lastTurn);
-			}
+//			}
 		} else {
 			TurnResultsButtonPressed (GameManager.instance.game.turnNumber);
 		}

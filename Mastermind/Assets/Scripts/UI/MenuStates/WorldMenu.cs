@@ -107,7 +107,18 @@ public class WorldMenu : MenuState {
 
 			foreach (Region r in GameManager.instance.game.regions) {
 
-				if (r.currentHenchmen.Count == 0) {
+				bool occupied = false;
+
+				foreach (Region.HenchmenSlot hs in r.henchmenSlots)
+				{
+					if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player || (hs.m_state == Region.HenchmenSlot.State.Occupied_Agent && hs.m_agent.m_vizState != AgentWrapper.VisibilityState.Hidden)) {
+
+						occupied = true;
+						break;
+					}
+				}
+					
+				if (!occupied) {
 					unoccupiedList.Add (r);
 				} else {
 					occupiedList.Add (r);

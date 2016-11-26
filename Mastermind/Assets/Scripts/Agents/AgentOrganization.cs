@@ -34,14 +34,75 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 		}
 	}
 
+	public void RemoveAgentFromMissions (AgentWrapper aw)
+	{
+		aw.m_agent.ChangeState (Henchmen.state.Idle);
+
+		List<MissionWrapper> cancelledMissions = new List<MissionWrapper> ();
+
+		foreach (MissionWrapper mw in activeMissions) {
+
+			if (mw.m_agentInFocus == aw) {
+
+				mw.m_agentInFocus = null;
+			}
+
+			if (mw.m_agents.Contains (aw)) {
+
+				mw.m_agents.Remove (aw);
+			}
+
+			if (mw.m_henchmenInFocus = aw.m_agent) {
+
+				mw.m_henchmenInFocus = null;
+			}
+
+			if (mw.m_henchmen.Contains (aw.m_agent)) {
+
+				mw.m_henchmen.Remove(aw.m_agent);
+			}
+
+			if (mw.m_henchmenInFocus == null && mw.m_agentInFocus == null && mw.m_henchmen.Count == 0 && mw.m_agents.Count == 0) {
+
+				cancelledMissions.Add (mw);
+			}
+		}
+
+		foreach (MissionWrapper mw in cancelledMissions) {
+
+			if (activeMissions.Contains (mw)) {
+
+				activeMissions.Remove (mw);
+			}
+		}
+	}
+
 	public void AddMission (MissionWrapper mw)
 	{
+		Debug.Log ("Adding Mission: " + mw.m_mission.m_name);
+
 		mw.m_mission.InitializeMission(mw);
 
 		foreach (Henchmen thisH in mw.m_henchmen) {
 			if (thisH.currentState != Henchmen.state.OnMission) {
 				thisH.ChangeState (Henchmen.state.OnMission);
 			}
+		}
+
+		foreach (AgentWrapper aw in mw.m_agents) {
+			if (aw.m_agent.currentState != Henchmen.state.OnMission) {
+				aw.m_agent.ChangeState (Henchmen.state.OnMission);
+			}
+		}
+
+		if (mw.m_henchmenInFocus != null) {
+
+			mw.m_henchmenInFocus.ChangeState(Henchmen.state.OnMission);
+		}
+
+		if (mw.m_agentInFocus != null) {
+
+			mw.m_agentInFocus.m_agent.ChangeState(Henchmen.state.OnMission);
 		}
 
 		m_activeMissions.Add (mw);
@@ -58,8 +119,20 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 			h.ChangeState (Henchmen.state.Idle);
 		}
 
+		if (a.m_henchmenInFocus != null) {
+			a.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
+		}
+
+		if (a.m_agentInFocus != null) {
+			a.m_agentInFocus.m_agent.ChangeState (Henchmen.state.Idle);
+		}
+
 		if (m_activeMissions.Contains (a)) {
 			m_activeMissions.Remove (a);
+		}
+
+		foreach (AgentWrapper aw in a.m_agents) {
+			aw.m_agent.ChangeState (Henchmen.state.Idle);
 		}
 	}
 
@@ -127,12 +200,48 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 				Henchmen agent = null;
 
 				if (henchmen == null) { // if a specific agent isn't supplied, choose a random agent
-					
-					int r = Random.Range (0, agentBank.Count);
-					agent = agentBank [r];
+
+					// strength of valid agents is based on current wanted level
+
+					List<Henchmen> validHenchmen = new List<Henchmen> ();
+					Organization player = GameManager.instance.game.player;
+
+					foreach (Henchmen a in agentBank) {
+
+						if (player.currentWantedLevel <= 1 && a.rank == 1) {
+
+							validHenchmen.Add (a);
+						} else if (player.currentWantedLevel == GameManager.instance.game.director.m_maxWantedLevel && a.rank == 3) {
+
+							validHenchmen.Add (a);
+						} else if (player.currentWantedLevel < GameManager.instance.game.director.m_maxWantedLevel && a.rank < 3) {
+							validHenchmen.Add (a);
+						}
+					}
+						
+					if (validHenchmen.Count > 0) {
+						
+						int r = Random.Range (0, validHenchmen.Count);
+						agent = validHenchmen [r];
+
+					} else {
+
+						return;
+					}
+
 				} else {
 
 					agent = henchmen;
+				}
+
+				// choose random slot in region
+				List<Region.HenchmenSlot> validHSList = new List<Region.HenchmenSlot>();
+				foreach (Region.HenchmenSlot hs in region.henchmenSlots) {
+
+					if (hs.m_state == Region.HenchmenSlot.State.Empty) {
+
+						validHSList.Add (hs);
+					}
 				}
 
 				AgentWrapper aw = new AgentWrapper ();
@@ -141,7 +250,12 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 				aw.AddObserver (this);
 				m_currentAgents.Add (aw);
 
+				if (validHSList.Count > 0) {
+					region.ReserveSlot(aw.m_agent, validHSList[Random.Range(0, validHSList.Count)]);
+				}
+
 				region.AddAgent (aw);
+
 				Debug.Log ("Agent: " + agent.henchmenName + " spawning in region: " + region.regionName);
 			}
 		}

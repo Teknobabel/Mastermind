@@ -162,7 +162,12 @@ public class Game : ScriptableObject, ISubject {
 
 		foreach (Region region in GameManager.instance.game.regions) {
 
-			if (region.currentHenchmen.Count == 0 && onlyEmptyRegions) {
+			if (region.id == GameManager.instance.game.player.homeRegion.id) {
+
+				return region;
+			}
+
+			if (region.currentHenchmen.Count == 0 && onlyEmptyRegions && region.id != GameManager.instance.game.player.homeRegion.id) {
 
 				validRegions.Add (region);
 			} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {

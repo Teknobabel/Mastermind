@@ -16,20 +16,22 @@ public class BeginPlayerPhaseState : IGameState {
 
 		// progress turn to next phase
 
-		if (GameManager.instance.game.turnNumber != 1) {
+		// navigate to menu root if not already there to add activity menu
+
+		if (GameManager.instance.currentMenuState != MenuState.State.TabMenu) {
+			GameManager.instance.targetMenuState = MenuState.State.TabMenu;
 			GameManager.instance.PopMenuState ();
-
-			foreach (KeyValuePair<int, MenuTab> pair in player.menuTabs)
-			{
-				if (pair.Value.m_menuState == MenuState.State.ActivityMenu) {
-					ActivityMenu.instance.displayTurnResults = true;
-					GameManager.instance.PushMenuState (pair.Value);
-					break;
-				}
-			}
-
-
 		}
+
+		foreach (KeyValuePair<int, MenuTab> pair in player.menuTabs)
+		{
+			if (pair.Value.m_menuState == MenuState.State.ActivityMenu) {
+				ActivityMenu.instance.displayTurnResults = true;
+				GameManager.instance.PushMenuState (pair.Value);
+				break;
+			}
+		}
+
 		GameManager.instance.ChangeGameState (GameManager.instance.playerPhase);
 
 	}

@@ -140,22 +140,17 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	{
 		UseCommandPoints (mw.m_mission.m_cost);
 
-//		MissionWrapper a = new MissionWrapper ();
-//		a.m_mission = mr.m_mission;
-//		a.m_henchmen = mr.m_henchmen;
-//		a.m_region = mr.m_region;
-//		a.m_henchmenInFocus = mr.m_henchmenInFocus;
-//		a.m_tokenInFocus = mr.m_tokenInFocus;
-//		a.m_floorInFocus = mr.m_floorInFocus;
-//		a.m_scope = mr.m_scope;
-
-//		a.m_mission.InitializeMission (a);
 		mw.m_mission.InitializeMission(mw);
 
 		foreach (Henchmen thisH in mw.m_henchmen) {
 			if (thisH.currentState != Henchmen.state.OnMission) {
 				thisH.ChangeState (Henchmen.state.OnMission);
 			}
+		}
+
+		if (mw.m_henchmenInFocus != null) {
+
+			mw.m_henchmenInFocus.ChangeState(Henchmen.state.OnMission);
 		}
 
 		m_activeMissions.Add (mw);
@@ -176,6 +171,11 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		foreach (Henchmen h in a.m_henchmen) {
 			h.ChangeState (Henchmen.state.Idle);
 		}
+
+		if (a.m_henchmenInFocus != null) {
+			a.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
+		}
+
 		if (m_activeMissions.Contains (a)) {
 			m_activeMissions.Remove (a);
 		}
@@ -325,12 +325,23 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		m_currentIntel = d.m_startingIntel;
 		m_maxIntel = d.m_maxIntel;
 
+		TurnResultsEntry t2 = new TurnResultsEntry ();
+		t2.m_resultsText = m_name.ToUpper() + " is formed!";
+		t2.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+		AddTurnResults (0, t2);
+
 		// add any starting assets
 
 		m_currentAssets = new List<Asset> ();
 
 		foreach (Asset a in d.m_startingAssets) {
+			
 			AddAsset (a);
+
+			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_resultsText = m_name.ToUpper() + " gains Asset: " + a.m_name.ToUpper();
+			t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+			AddTurnResults (0, t);
 		}
 
 		// initialize base
@@ -343,8 +354,14 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		if (d.m_startingBaseUpgrades.Length > 0) {
 			
 			for (int i = 0; i < d.m_startingBaseUpgrades.Length; i++) {
+				
 				Asset a = d.m_startingBaseUpgrades [i];
 				m_base.InstallAsset (a);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = m_name.ToUpper() + " gains Base Upgrade: " + a.m_name.ToUpper();
+				t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+				AddTurnResults (0, t);
 			}
 		}
 
@@ -384,10 +401,10 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 					newOP.Initialize (newOPData, OmegaPlan.State.Revealed, this);
 					revealed++;
 
-//					TurnResultsEntry t = new TurnResultsEntry ();
-//					t.m_resultsText += "\nOMEGA PLAN: " + newOP.opName.ToUpper() + " is now unlocked!";
-//					t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
-//					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = "OMEGA PLAN: " + newOP.opName.ToUpper() + " is now unlocked!";
+					t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+					AddTurnResults (0, t);
 
 				} else {
 					newOP.Initialize (newOPData, OmegaPlan.State.Hidden, this);
@@ -407,6 +424,12 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				if (revealed < d.m_startingRevealedOmegaPlans) {
 					newOP.Initialize (newOPData, OmegaPlan.State.Revealed, this);
 					revealed++;
+
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = "OMEGA PLAN: " + newOP.opName.ToUpper() + " is now unlocked!";
+					t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+					AddTurnResults (0, t);
+
 				} else {
 					newOP.Initialize (newOPData, OmegaPlan.State.Hidden, this);
 				}
@@ -470,7 +493,13 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			Henchmen h = g.GetHenchmen (d.m_startingHenchmenData [i]);
 
 			if (h != null) {
+				
 				AddHenchmen (h);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = h.henchmenName + " joins " + m_name;
+				t.m_resultType = GameEvent.Organization_HenchmenHired;
+				AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 		}
 
@@ -499,10 +528,16 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 		for (int i = 0; i < d.m_startingHenchmen; i++) {
 			if (bank.Count > 0) {
+				
 				int rand = Random.Range (0, bank.Count);
 				Henchmen newH = bank [rand];
 				m_availableHenchmen.Add (newH);
 				bank.RemoveAt (rand);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = newH.henchmenName + " is available for hire";
+				t.m_resultType = GameEvent.Organization_HenchmenHired;
+				AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 		}
 

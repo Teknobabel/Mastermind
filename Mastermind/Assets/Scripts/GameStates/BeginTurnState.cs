@@ -5,8 +5,9 @@ public class BeginTurnState : IGameState {
 
 	public void EnterState (){
 
-		Debug.Log ("Begin New Turn");
 		GameManager.instance.game.turnNumber++;
+
+		Debug.Log ("Begin New Turn: " + GameManager.instance.game.turnNumber);
 
 //		// check if Intel should be spawned
 //		if (GameManager.instance.game.turnNumber == GameManager.instance.game.turnToSpawnNextIntel) {
