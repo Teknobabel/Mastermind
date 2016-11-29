@@ -19,7 +19,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	private Henchmen m_henchmen = null;
 
+	private AgentWrapper m_agent = null;
+
 	private TokenSlot m_token = null;
+
+	private Asset m_asset = null;
 
 	public void Initialize ()
 	{
@@ -44,6 +48,12 @@ public class Mission_ListViewItem : MonoBehaviour {
 			m_henchmen = mw.m_henchmenInFocus;
 		} else if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus != null) {
 			m_token = mw.m_tokenInFocus;
+		} 
+		else if (mw.m_mission.m_targetType == MissionBase.TargetType.Agent && mw.m_agentInFocus != null) {
+			m_agent = mw.m_agentInFocus;
+		}
+		else if (mw.m_mission.m_targetType == MissionBase.TargetType.OwnedAsset && mw.m_assetInFocus != null) {
+			m_asset = mw.m_assetInFocus;
 		}
 	}
 
@@ -90,6 +100,15 @@ public class Mission_ListViewItem : MonoBehaviour {
 				}
 			}
 
+		}
+
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.Agent && mw.m_agentInFocus != null) {
+
+			if (mw.m_agentInFocus.m_agent.rank == 2) {
+				missionRank += 1;
+			} else if (mw.m_agentInFocus.m_agent.rank == 3) {
+				missionRank += 2;
+			}
 		}
 
 
@@ -164,7 +183,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public void StartMissionButtonPressed ()
 	{
 		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
-//			CallHenchmenMenu.instance.Startmission (m_mission);
+
 			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {
 
 				if (m_henchmen != null) {
@@ -172,6 +191,12 @@ public class Mission_ListViewItem : MonoBehaviour {
 				}
 				if (m_token != null) {
 					GameManager.instance.currentMissionWrapper.m_tokenInFocus = m_token;
+				} 
+				if (m_agent != null) {
+					GameManager.instance.currentMissionWrapper.m_agentInFocus = m_agent;
+				}
+				if (m_asset != null) {
+					GameManager.instance.currentMissionWrapper.m_assetInFocus = m_asset;
 				}
 
 				SelectMissionMenu.instance.SelectMission (m_mission);

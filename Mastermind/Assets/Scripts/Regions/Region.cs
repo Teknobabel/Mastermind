@@ -168,7 +168,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			if (ts.m_state == TokenSlot.State.None) {
 
 				ts.m_assetToken = a;
-				ts.m_state = TokenSlot.State.Revealed;
+				ts.m_state = TokenSlot.State.Hidden;
 //				ts.m_status = TokenSlot.Status.Normal;
 				tokenAdded = true;
 				break;
@@ -179,7 +179,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			TokenSlot t = new TokenSlot ();
 			t.m_type = TokenSlot.TokenType.Asset;
 			t.m_assetToken = a;
-			t.m_state = TokenSlot.State.Revealed;
+			t.m_state = TokenSlot.State.Hidden;
 //			t.m_status = TokenSlot.Status.Normal;
 			t.m_region = this;
 
@@ -199,6 +199,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 	private void AddControlToken (ControlToken c)
 	{
 		TokenSlot t = new TokenSlot ();
+//		t.ChangeOwner(Owner.Player); // debug
 		t.m_type = TokenSlot.TokenType.Control;
 		t.m_controlToken = c;
 		t.m_state = TokenSlot.State.Revealed;

@@ -38,7 +38,12 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 			RegionHenchmenButton tB = m_henchmenTokens [i];
 			if (i < r.henchmenSlots.Count) {
 				Region.HenchmenSlot hSlot = r.henchmenSlots[i];
-				tB.Initialize (hSlot);
+
+				if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+					tB.Initialize (hSlot);
+				} else {
+					tB.Deactivate ();
+				}
 			} else if (i >= r.henchmenSlots.Count) {
 				tB.Deactivate ();
 			}
@@ -83,6 +88,14 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 
 		}
 
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.Agent && mw.m_agentInFocus != null) {
+
+			if (mw.m_agentInFocus.m_agent.rank == 2) {
+				missionRank += 1;
+			} else if (mw.m_agentInFocus.m_agent.rank == 3) {
+				missionRank += 2;
+			}
+		}
 
 		int successChance = 0;
 

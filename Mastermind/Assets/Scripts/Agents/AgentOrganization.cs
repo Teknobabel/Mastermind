@@ -247,6 +247,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 				AgentWrapper aw = new AgentWrapper ();
 				aw.m_agent = agent;
 				aw.m_currentAIState = GameManager.instance.agentState_Idle;
+				aw.ChangeVisibilityState (AgentWrapper.VisibilityState.Visible);
 				aw.AddObserver (this);
 				m_currentAgents.Add (aw);
 

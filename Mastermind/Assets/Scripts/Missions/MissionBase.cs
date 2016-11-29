@@ -25,6 +25,8 @@ public class MissionBase : ScriptableObject, IMission {
 		MilitaryControlToken,
 		BaseUpgrade,
 		Floor,
+		Agent,
+		OwnedAsset,
 	}
 	
 	public string m_name = "Null";
@@ -127,14 +129,49 @@ public class MissionBase : ScriptableObject, IMission {
 					missionRank = Mathf.Clamp (missionRank - 1, 1, 5);
 				}
 			}
+		}
 
+		if (mw.m_mission.m_targetType == TargetType.Agent && mw.m_agentInFocus != null) {
+
+			if (mw.m_agentInFocus.m_agent.rank == 2) {
+				missionRank += 1;
+			} else if (mw.m_agentInFocus.m_agent.rank == 3) {
+				missionRank += 2;
+			}
 		}
 			
 		int completionPercentage = 0;
 
 		List<TraitData> combinedTraitList = new List<TraitData> ();
 
-		foreach (Henchmen thisH in mw.m_henchmen) {
+		List<Henchmen> participatingHenchmen = new List<Henchmen> ();
+
+		if (mw.m_organization != null && mw.m_organization == GameManager.instance.game.agentOrganization) {
+			
+			foreach (AgentWrapper aw in mw.m_agents) {
+
+				participatingHenchmen.Add (aw.m_agent);
+			}
+
+			if (mw.m_agentInFocus != null && !mw.m_agents.Contains (mw.m_agentInFocus)) {
+
+				participatingHenchmen.Add (mw.m_agentInFocus.m_agent);
+			}
+
+		} else {
+
+			foreach (Henchmen thisH in mw.m_henchmen) {
+
+				participatingHenchmen.Add (thisH);
+			}
+
+			if (mw.m_henchmenInFocus != null && !mw.m_henchmen.Contains(mw.m_henchmenInFocus)) {
+
+				participatingHenchmen.Add (mw.m_henchmenInFocus);
+			}
+		}
+			
+		foreach (Henchmen thisH in participatingHenchmen) {
 
 			if (thisH.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
 				
@@ -169,7 +206,7 @@ public class MissionBase : ScriptableObject, IMission {
 
 		// check status of each henchmen for penalties
 
-		foreach (Henchmen h in mw.m_henchmen) {
+		foreach (Henchmen h in participatingHenchmen) {
 
 			switch (h.statusTrait.m_type) {
 
@@ -181,7 +218,7 @@ public class MissionBase : ScriptableObject, IMission {
 				break;
 			}
 		}
-			
+
 		return completionPercentage;
 	}
 }

@@ -245,9 +245,22 @@ public class WorldMenu : MenuState {
 				MissionWrapper mr = new MissionWrapper ();
 				mr.m_region = r;
 
-				foreach (Henchmen h in r.currentHenchmen) {
-					mr.m_henchmen.Add (h);
+//				foreach (Henchmen h in r.currentHenchmen) {
+//					mr.m_henchmen.Add (h);
+//				}
+
+				foreach (Region.HenchmenSlot hs in r.henchmenSlots) {
+
+					if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+
+						mr.m_henchmen.Add (hs.m_henchmen);
+
+					} else if (hs.m_state == Region.HenchmenSlot.State.Occupied_Agent) {
+
+						mr.m_agents.Add (hs.m_agent);
+					}
 				}
+
 				GameManager.instance.currentMissionWrapper = mr;
 				GameManager.instance.PushMenuState (State.SelectMissionMenu);
 			}

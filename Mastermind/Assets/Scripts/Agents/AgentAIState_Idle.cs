@@ -8,14 +8,15 @@ public class AgentAIState_Idle : IAgentAIState {
 	{
 		Debug.Log ("Starting Agent AI State: Idle");
 
-
 		if (!aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.RegionSearched)) {
 
 			// search region
 
+			Debug.Log ("Attempting to Search Region");
+
 			MissionWrapper mw = new MissionWrapper ();
 			mw.m_mission = GameManager.instance.m_agentMissionBank [0];
-			mw.m_henchmen.Add (aw.m_agent);
+			mw.m_agents.Add (aw);
 			mw.m_agentInFocus = aw;
 			mw.m_region = aw.m_agent.currentRegion;
 			mw.m_organization = GameManager.instance.game.agentOrganization;
@@ -63,10 +64,11 @@ public class AgentAIState_Idle : IAgentAIState {
 
 				// engage henchmen
 
+				Debug.Log ("Attempting to engage Henchmen");
+
 				MissionWrapper mw = new MissionWrapper ();
 				mw.m_mission = GameManager.instance.m_agentMissionBank[3];
-				mw.m_henchmen.Add (aw.m_agent);
-				mw.m_henchmenInFocus = aw.m_agent;
+				mw.m_agents.Add (aw);
 				mw.m_agentInFocus = aw;
 				mw.m_region = aw.m_agent.currentRegion;
 				mw.m_organization = GameManager.instance.game.agentOrganization;
@@ -78,10 +80,11 @@ public class AgentAIState_Idle : IAgentAIState {
 
 				// attempt to reclaim control token
 
+				Debug.Log ("Attempt to liberate Control Token");
+
 				MissionWrapper mw = new MissionWrapper ();
 				mw.m_mission = GameManager.instance.m_agentMissionBank[2];
-				mw.m_henchmen.Add (aw.m_agent);
-				mw.m_henchmenInFocus = aw.m_agent;
+				mw.m_agents.Add (aw);
 				mw.m_agentInFocus = aw;
 				mw.m_region = aw.m_agent.currentRegion;
 				mw.m_organization = GameManager.instance.game.agentOrganization;
@@ -90,6 +93,24 @@ public class AgentAIState_Idle : IAgentAIState {
 				GameManager.instance.ProcessMissionWrapper ();
 
 			} else {
+
+				// attempt to hide if currently visible and not tracked
+
+				Debug.Log ("Attempting to hide");
+
+				if (aw.m_vizState == AgentWrapper.VisibilityState.Visible) {
+
+					MissionWrapper mw = new MissionWrapper ();
+					mw.m_mission = GameManager.instance.m_agentMissionBank[4];
+					mw.m_agentInFocus = aw;
+					mw.m_region = aw.m_agent.currentRegion;
+					mw.m_organization = GameManager.instance.game.agentOrganization;
+
+					GameManager.instance.currentMissionWrapper = mw;
+					GameManager.instance.ProcessMissionWrapper ();
+
+					return;
+				}
 
 				// chance to move to new region
 
@@ -112,22 +133,21 @@ public class AgentAIState_Idle : IAgentAIState {
 								hsList.Add (hs);
 							}
 						}
-
-						MissionWrapper mw = new MissionWrapper ();
-						mw.m_mission = GameManager.instance.m_travelMission;
-						mw.m_henchmen.Add (aw.m_agent);
-						mw.m_henchmenInFocus = aw.m_agent;
-						mw.m_agentInFocus = aw;
-						mw.m_region = r;
-						mw.m_organization = GameManager.instance.game.agentOrganization;
-
+							
 						if (hsList.Count > 0) {
 
-							mw.m_henchmenSlotInFocus = hsList[Random.Range(0, hsList.Count)];
-						}
+							MissionWrapper mw = new MissionWrapper ();
+							mw.m_mission = GameManager.instance.m_travelMission;
+							mw.m_agents.Add (aw);
+							mw.m_agentInFocus = aw;
+							mw.m_region = r;
+							mw.m_organization = GameManager.instance.game.agentOrganization;
 
-						GameManager.instance.currentMissionWrapper = mw;
-						GameManager.instance.ProcessMissionWrapper ();
+							mw.m_henchmenSlotInFocus = hsList[Random.Range(0, hsList.Count)];
+
+							GameManager.instance.currentMissionWrapper = mw;
+							GameManager.instance.ProcessMissionWrapper ();
+						}
 					}
 
 					// clear out current events

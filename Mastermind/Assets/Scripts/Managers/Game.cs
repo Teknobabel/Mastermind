@@ -162,10 +162,10 @@ public class Game : ScriptableObject, ISubject {
 
 		foreach (Region region in GameManager.instance.game.regions) {
 
-			if (region.id == GameManager.instance.game.player.homeRegion.id) {
-
-				return region;
-			}
+//			if (region.id == GameManager.instance.game.player.homeRegion.id) {
+//
+//				return region;
+//			}
 
 			if (region.currentHenchmen.Count == 0 && onlyEmptyRegions && region.id != GameManager.instance.game.player.homeRegion.id) {
 

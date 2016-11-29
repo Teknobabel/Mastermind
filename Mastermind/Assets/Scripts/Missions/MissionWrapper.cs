@@ -11,6 +11,7 @@ public class MissionWrapper {
 	public List<Henchmen> m_henchmen = new List<Henchmen>();
 	public List<AgentWrapper> m_agents = new List<AgentWrapper>();
 	public TokenSlot m_tokenInFocus;
+	public Asset m_assetInFocus;
 	public Base.Floor m_floorInFocus;
 	public Region.HenchmenSlot m_henchmenSlotInFocus;
 	public int m_turnsPassed = 0;

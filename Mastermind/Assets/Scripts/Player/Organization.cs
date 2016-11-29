@@ -20,6 +20,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	private List<Henchmen> m_availableHenchmen;
 	private List<OmegaPlan> m_omegaPlans;
 	private List<Asset> m_currentAssets;
+	private List<Asset> m_assetsInOrbit;
 
 	private Dictionary<int, OmegaPlan> m_omegaPlansByID = new Dictionary<int, OmegaPlan> ();
 	private Dictionary<int, MenuTab> m_menuTabs;
@@ -333,6 +334,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		// add any starting assets
 
 		m_currentAssets = new List<Asset> ();
+		m_assetsInOrbit = new List<Asset> ();
 
 		foreach (Asset a in d.m_startingAssets) {
 			
@@ -672,6 +674,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	public int maxIntel {get{return m_maxIntel; }}
 	public string orgName {get{return m_name;}}
 	public List<Asset> currentAssets {get{return m_currentAssets;}}
+	public List<Asset> assetsInOrbit {get{return m_assetsInOrbit;}}
 	public List<MissionWrapper> activeMissions {get{return m_activeMissions;}}
 	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}
 	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}

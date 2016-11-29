@@ -185,8 +185,46 @@ public class SelectMissionMenu : MenuState {
 					}
 				}
 
-				GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.Region;
 				GameManager.instance.currentMissionWrapper.m_henchmenInFocus = null;
+				GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.Agent;
+
+				foreach (AgentWrapper thisAW in GameManager.instance.currentMissionWrapper.m_agents) {
+
+					GameManager.instance.currentMissionWrapper.m_agentInFocus = thisAW;
+
+					if (m.m_targetType == GameManager.instance.currentMissionWrapper.m_scope && m.IsValid ()) {
+
+						GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+						g.transform.localScale = Vector3.one;
+						m_listViewItems.Add (g);
+						g.GetComponent<Mission_ListViewItem> ().Initialize ();
+
+					}
+				}
+
+
+				GameManager.instance.currentMissionWrapper.m_agentInFocus = null;
+				GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.OwnedAsset;
+
+				if (GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.OwnedAsset) {
+
+					foreach (Asset a in GameManager.instance.game.player.currentAssets) {
+
+						GameManager.instance.currentMissionWrapper.m_assetInFocus = a;
+
+						if (m.m_targetType == GameManager.instance.currentMissionWrapper.m_scope && m.IsValid ()) {
+
+							GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+							g.transform.localScale = Vector3.one;
+							m_listViewItems.Add (g);
+							g.GetComponent<Mission_ListViewItem> ().Initialize ();
+
+						}
+					}
+
+					GameManager.instance.currentMissionWrapper.m_assetInFocus = null;
+					GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.Region;
+				}
 
 			}
 
@@ -196,7 +234,7 @@ public class SelectMissionMenu : MenuState {
 
 						GameManager.instance.currentMissionWrapper.m_henchmenInFocus = thisH;
 
-					if (m.m_targetType == GameManager.instance.currentMissionWrapper.m_scope && m.IsValid ()) {
+						if (m.m_targetType == GameManager.instance.currentMissionWrapper.m_scope && m.IsValid ()) {
 
 							GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
 							g.transform.localScale = Vector3.one;
@@ -206,6 +244,25 @@ public class SelectMissionMenu : MenuState {
 						}
 					}
 				}
+
+			if (GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.Agent) {
+
+				foreach (AgentWrapper thisAW in GameManager.instance.currentMissionWrapper.m_agents) {
+
+					GameManager.instance.currentMissionWrapper.m_agentInFocus = thisAW;
+
+					if (m.m_targetType == GameManager.instance.currentMissionWrapper.m_scope && m.IsValid ()) {
+
+						GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+						g.transform.localScale = Vector3.one;
+						m_listViewItems.Add (g);
+						g.GetComponent<Mission_ListViewItem> ().Initialize ();
+
+					}
+				}
+
+
+			}
 
 			if (GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.AssetToken || GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.EconomicControlToken || GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.MilitaryControlToken ||
 				GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.PoliticalControlToken || GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.ControlToken || 
@@ -258,6 +315,8 @@ public class SelectMissionMenu : MenuState {
 					}
 				}
 			}
+
+
 		}
 	}
 
