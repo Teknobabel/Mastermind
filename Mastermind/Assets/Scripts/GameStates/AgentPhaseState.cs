@@ -12,9 +12,13 @@ public class AgentPhaseState : IGameState {
 
 		foreach (AgentWrapper aw in GameManager.instance.game.agentOrganization.currentAgents) {
 
-			if (aw.m_currentAIState != null && aw.m_agent.currentState != Henchmen.state.OnMission) {
+			if (aw.m_currentAIState != null && aw.m_agent.currentState != Henchmen.state.OnMission && aw.m_agent.currentState != Henchmen.state.Captured) {
 
 				aw.m_currentAIState.DoAgentTurn (aw);
+
+			} else if (aw.m_agent.currentState != Henchmen.state.Captured) {
+
+				// agent attempts to break out of jail
 			}
 
 		}

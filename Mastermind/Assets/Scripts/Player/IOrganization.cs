@@ -7,4 +7,5 @@ public interface IOrganization {
 	void Initialize (string orgName);
 	void AddMission (MissionWrapper mw);
 	void MissionCompleted (MissionWrapper a);
+	void CancelMission (MissionWrapper mw);
 }

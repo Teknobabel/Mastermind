@@ -128,7 +128,8 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 					MissionWrapper mission = cancelledMissions [0];
 					cancelledMissions.RemoveAt (0);
 
-					activeMissions.Remove (mission);
+					CancelMission (mission);
+//					activeMissions.Remove (mission);
 				}
 
 				Notify (this, GameEvent.Organization_HenchmenFired);
@@ -310,6 +311,34 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			}
 		}
 		return null;
+	}
+
+	public void CancelMission (MissionWrapper mw)
+	{
+		for (int i = 0; i < m_activeMissions.Count; i++) {
+
+			MissionWrapper activeMission = m_activeMissions [i];
+
+			if (activeMission == mw) {
+
+				m_activeMissions.RemoveAt (i);
+
+				foreach (Henchmen h in mw.m_henchmen) {
+
+					if (h.currentState == Henchmen.state.OnMission) {
+
+						h.ChangeState (Henchmen.state.Idle);
+					}
+				}
+
+				if (activeMission.m_henchmenInFocus != null && activeMission.m_henchmenInFocus.currentState == Henchmen.state.OnMission) {
+
+					activeMission.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
+				}
+
+				break;
+			}
+		}
 	}
 
 	public void Initialize (string orgName)

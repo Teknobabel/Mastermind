@@ -10,11 +10,24 @@ public class CaptureAgent : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-
+		a.m_success = true;
 		if (a.m_success) {
 
+			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission underway!";
+			t.m_resultsText += "\n";
+
+			foreach (Henchmen h in a.m_henchmen) {
+
+				t.m_resultsText += h.henchmenName.ToUpper() + ", ";
+			}
+
+			t.m_resultsText += " attempt to locate " + a.m_agentInFocus.m_agent.henchmenName.ToUpper ();
+
+			t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper() + " located!";
+
 			int agentScore = 0;
-			int henchmenScore = 0;
+			int henchmenScore = 500;
 
 			List<TraitData> agentTraits = new List<TraitData> ();
 			List<TraitData> henchmenTraits = new List<TraitData> ();
@@ -133,11 +146,73 @@ public class CaptureAgent : MissionBase {
 				}
 			}
 
-			//			TurnResultsEntry t = new TurnResultsEntry ();
-			//			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission complete!";
-			//			t.m_resultsText += "\n" + a.m_assetInFocus.m_name.ToUpper() + " is now in orbit.";
-			//			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			//			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+			int scoreDifference = henchmenScore - agentScore;
+
+
+
+			if (scoreDifference < 0) {
+
+				// if agent wins, henchmen have chance to get injured
+
+				t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " gets the upper hand!";
+
+				foreach (Henchmen h in a.m_henchmen) {
+
+					float injuryChance = 0.6f;
+
+					if (h.HasTrait (TraitData.TraitType.Weak)) {
+
+						injuryChance -= 0.2f;
+					}
+
+					if (Random.Range (0.0f, 1.0f) > injuryChance) {
+
+						IncurInjury (h);
+
+						t.m_resultsText += "\n" + h.henchmenName.ToUpper () + " is " + h.statusTrait.m_name + "!";
+					}
+				}
+
+			} else if (scoreDifference >= 0 && scoreDifference < 30 && Random.Range (0.0f, 1.0f) > 0.45f) {
+
+				// if score difference is minimal, agent has chance to escape
+
+				t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " manages to escape!";
+
+			} else if (scoreDifference >= 30 && scoreDifference < 60) {
+				
+				// if score difference is moderate, agent is captured
+
+				GameManager.instance.game.player.orgBase.AgentCaptured (a.m_agentInFocus);
+				t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " is captured!";
+
+			} else if (scoreDifference >= 60) {
+
+				// if score difference is large, agent has chance to be injured
+
+				if (a.m_agentInFocus.m_agent.statusTrait.m_type != TraitData.TraitType.Critical && Random.Range (0.0f, 1.0f) > 0.65f) {
+
+					IncurInjury (a.m_agentInFocus.m_agent);
+				}
+
+				GameManager.instance.game.player.orgBase.AgentCaptured (a.m_agentInFocus);
+				t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " is captured!";
+			}
+
+			// send anyone that is incapacitated to limbo
+
+			foreach (Henchmen h in a.m_henchmen) {
+
+				if (h.statusTrait.m_type == TraitData.TraitType.Incapacitated) {
+
+					h.currentRegion.RemoveHenchmen (h);
+					GameManager.instance.game.limbo.AddHenchmen (h);
+				}
+			}
+
+
+			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
+			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
 		} else {
 
@@ -152,7 +227,7 @@ public class CaptureAgent : MissionBase {
 	public override bool IsValid ()
 	{
 		// valid if there is a non-incapacitated Agent in the region
-
+		Debug.Log("ALKSJDFLSKJDF;SLKJDF");
 		AgentWrapper aw = GameManager.instance.currentMissionWrapper.m_agentInFocus;
 
 		if (GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_requiredAsset) && aw.m_vizState != AgentWrapper.VisibilityState.Hidden && aw.m_agent.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
@@ -172,5 +247,26 @@ public class CaptureAgent : MissionBase {
 		}
 
 		return s;
+	}
+
+	private void IncurInjury (Henchmen h)
+	{
+		switch (h.statusTrait.m_type) {
+
+		case TraitData.TraitType.Healthy:
+
+			h.UpdateStatusTrait(GameManager.instance.m_statusTraits[1]);
+			break;
+
+		case TraitData.TraitType.Injured:
+
+			h.UpdateStatusTrait(GameManager.instance.m_statusTraits[2]);
+			break;
+
+		case TraitData.TraitType.Critical:
+
+			h.UpdateStatusTrait(GameManager.instance.m_statusTraits[3]);
+			break;
+		}
 	}
 }

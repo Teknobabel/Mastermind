@@ -23,6 +23,8 @@ public class Base {
 
 	public List<Asset> m_currentAssets = new List<Asset> ();
 
+	public List<AgentWrapper> m_capturedAgents = new List<AgentWrapper>();
+
 	public void Initialize (int numFloors)
 	{
 		for (int i = 0; i < numFloors; i++) {
@@ -78,5 +80,14 @@ public class Base {
 				return;
 			}
 		}
+	}
+
+	public void AgentCaptured (AgentWrapper aw)
+	{
+
+		aw.m_agent.currentRegion.RemoveAgent (aw.m_agent);
+		GameManager.instance.game.limbo.AddAgent (aw);
+		aw.m_agent.ChangeState (Henchmen.state.Captured);
+		m_capturedAgents.Add (aw);
 	}
 }

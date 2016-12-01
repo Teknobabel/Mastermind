@@ -30,4 +30,5 @@ public enum GameEvent {
 	Region_OwnerChanged,
 	Agent_BecameVisible,
 	OmegaPlan_GoalCompleted,
+	Henchmen_MissionDisrupted,
 }

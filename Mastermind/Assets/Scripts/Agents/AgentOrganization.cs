@@ -136,6 +136,68 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 		}
 	}
 
+//	public void RemoveAgentFromMission (AgentWrapper agent)
+//	{
+//		List<MissionWrapper> cancelledMissions = new List<MissionWrapper> ();
+//
+//		for (int i = 0; i < m_activeMissions.Count; i++) {
+//
+//			MissionWrapper activeMission = m_activeMissions [i];
+//
+//			if (activeMission.m_agentInFocus == agent) {
+//
+//				cancelledMissions.Add (activeMission);
+//
+//			} else if (activeMission.m_agents.Contains (agent)) {
+//				
+//				if (activeMission.m_agents.Count == 1) {
+//
+//					cancelledMissions.Add (activeMission);
+//				} else {
+//
+//					activeMission.m_agents.Remove (agent);
+//					agent.m_agent.ChangeState (Henchmen.state.Idle);
+//				}
+//			}
+//		}
+//
+//		while (cancelledMissions.Count > 0) {
+//
+//			MissionWrapper mw = cancelledMissions [0];
+//			cancelledMissions.RemoveAt (0);
+//
+//			CancelMission (mw);
+//		}
+//	}
+
+	public void CancelMission (MissionWrapper mw)
+	{
+		for (int i = 0; i < m_activeMissions.Count; i++) {
+
+			MissionWrapper activeMission = m_activeMissions [i];
+
+			if (activeMission == mw) {
+
+				m_activeMissions.RemoveAt (i);
+
+				foreach (AgentWrapper a in mw.m_agents) {
+
+					if (a.m_agent.currentState == Henchmen.state.OnMission) {
+
+						a.m_agent.ChangeState (Henchmen.state.Idle);
+					}
+				}
+
+				if (activeMission.m_agentInFocus != null && activeMission.m_agentInFocus.m_agent.currentState == Henchmen.state.OnMission) {
+
+					activeMission.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
+				}
+
+				break;
+			}
+		}
+	}
+
 	public void AddTurnResults (int turn, TurnResultsEntry t)
 	{
 		t.m_turnNumber = turn;

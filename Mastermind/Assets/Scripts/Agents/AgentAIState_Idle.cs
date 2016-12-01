@@ -32,8 +32,6 @@ public class AgentAIState_Idle : IAgentAIState {
 
 				MissionWrapper mw = new MissionWrapper ();
 				mw.m_mission = GameManager.instance.m_agentMissionBank[1];
-//				mw.m_henchmen.Add (aw.m_agent);
-//				mw.m_henchmenInFocus = aw.m_agent;
 
 				//add all agents in region, cancelling any missions they are currently on
 
@@ -52,29 +50,71 @@ public class AgentAIState_Idle : IAgentAIState {
 						mw.m_agents.Add (hs.m_agent);
 					}
 				}
-
-//				mw.m_agentInFocus = aw;
+					
 				mw.m_region = aw.m_agent.currentRegion;
 				mw.m_organization = GameManager.instance.game.agentOrganization;
 
 				GameManager.instance.currentMissionWrapper = mw;
 				GameManager.instance.ProcessMissionWrapper ();
-//				Debug.Log (GameManager.instance.game.agentOrganization.activeMissions.Count);
+
 			} else if (aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.HenchmenFound)) {
 
-				// engage henchmen
+				// check for missions in region to disrupt
 
-				Debug.Log ("Attempting to engage Henchmen");
+				foreach (MissionWrapper mw in GameManager.instance.game.player.activeMissions) {
 
-				MissionWrapper mw = new MissionWrapper ();
-				mw.m_mission = GameManager.instance.m_agentMissionBank[3];
-				mw.m_agents.Add (aw);
-				mw.m_agentInFocus = aw;
-				mw.m_region = aw.m_agent.currentRegion;
-				mw.m_organization = GameManager.instance.game.agentOrganization;
+					if (mw.m_region != null && mw.m_region.id == aw.m_agent.currentRegion.id) {
 
-				GameManager.instance.currentMissionWrapper = mw;
-				GameManager.instance.ProcessMissionWrapper ();
+						// attempt to disrupt mission
+
+						Debug.Log ("Attempting to disrupt Henchmen mission");
+
+						MissionWrapper mw2 = new MissionWrapper ();
+						mw2.m_mission = GameManager.instance.m_agentMissionBank [5];
+						mw2.m_agentInFocus = aw;
+						mw2.m_region = aw.m_agent.currentRegion;
+						mw2.m_organization = GameManager.instance.game.agentOrganization;
+
+						GameManager.instance.currentMissionWrapper = mw2;
+						GameManager.instance.ProcessMissionWrapper ();
+
+						return;
+					}
+				}
+
+				// if no active missions, engage henchmen directly
+
+				// make sure there are still henchmen here
+
+				if (aw.m_agent.currentRegion.currentHenchmen.Count > 0) {
+
+					Debug.Log ("Attempting to engage Henchmen");
+
+					MissionWrapper mw = new MissionWrapper ();
+					mw.m_mission = GameManager.instance.m_agentMissionBank [3];
+//					mw.m_agentInFocus = aw;
+					foreach (Region.HenchmenSlot hs in aw.m_agent.currentRegion.henchmenSlots) {
+
+						if (hs.m_state == Region.HenchmenSlot.State.Occupied_Agent) {
+
+							if (hs.m_agent.m_agent.currentState == Henchmen.state.OnMission) {
+
+								GameManager.instance.game.agentOrganization.RemoveAgentFromMissions (hs.m_agent);
+							}
+
+							mw.m_agents.Add (hs.m_agent);
+						}
+					}
+					mw.m_region = aw.m_agent.currentRegion;
+					mw.m_organization = GameManager.instance.game.agentOrganization;
+
+					GameManager.instance.currentMissionWrapper = mw;
+					GameManager.instance.ProcessMissionWrapper ();
+
+				} else {
+
+					aw.m_agentEvents.Remove (AgentWrapper.AgentEvents.HenchmenFound);
+				}
 
 			} else if (aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.PlayerControlTokenFound)) {
 

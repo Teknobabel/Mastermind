@@ -160,8 +160,12 @@ public class TravelToRegion : MissionBase {
 			if (slot.m_state == Region.HenchmenSlot.State.Occupied_Agent) {
 				
 //				AgentWrapper a = slot.m_agent;
-				slot.RemoveAgent ();
-				slot.AddHenchmen (henchmen);
+				Region r = slot.m_agent.m_agent.currentRegion;
+
+				r.RemoveAgent(slot.m_agent.m_agent);
+				r.AddHenchmen (henchmen);
+//				slot.RemoveAgent ();
+//				slot.AddHenchmen (henchmen);
 			}
 
 		} else if (winner == agent.m_agent) {
@@ -175,8 +179,12 @@ public class TravelToRegion : MissionBase {
 			if (slot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
 				
 //				Henchmen h = slot.m_henchmen;
-				slot.RemoveHenchmen ();
-				slot.AddAgent (agent);
+//				slot.RemoveHenchmen ();
+//				slot.AddAgent (agent);
+
+				Region r = slot.m_henchmen.currentRegion;
+				r.RemoveHenchmen (henchmen);
+				r.AddAgent (agent);
 			}
 		}
 

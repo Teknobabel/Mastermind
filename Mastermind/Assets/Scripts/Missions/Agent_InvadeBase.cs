@@ -329,19 +329,20 @@ public class Agent_InvadeBase : MissionBase {
 				t.m_resultsText += "\n\nYou have been apprehended by the Agents!";
 				t.m_resultsText += "\nThe game is over!";
 
-			}
+			} else {
 
-			// Remove all guards from base
+				// Remove all guards from base
 
-			foreach (Base.Floor f in b.m_floors) {
+				foreach (Base.Floor f in b.m_floors) {
 
-				f.m_guards.Clear ();
+					f.m_guards.Clear ();
+				}
 			}
 
 
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
-			Debug.Log (t.m_resultsText);
+//			Debug.Log (t.m_resultsText);
 		} else {
 
 		}

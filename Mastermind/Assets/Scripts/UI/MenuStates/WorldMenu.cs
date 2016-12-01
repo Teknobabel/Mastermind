@@ -351,7 +351,7 @@ public class WorldMenu : MenuState {
 
 				MissionWrapper a = player.GetMissionForHenchmen (h);
 
-				if (a == null && h.currentRegion.id != regionID) {
+				if (a == null && h.currentRegion.id != regionID && h.currentRegion.id != GameManager.instance.game.limbo.id) {
 					validHenchmen.Add (h);
 				}
 			}

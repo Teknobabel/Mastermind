@@ -28,7 +28,7 @@ public class Agent_SearchRegion : MissionBase {
 			// henchmen
 			foreach (Region.HenchmenSlot hs in a.m_region.henchmenSlots) {
 
-				if (hs.m_state == Region.HenchmenSlot.State.Occupied && hs.m_henchmen != null && hs.m_henchmen.owner == Region.Owner.Player) {
+				if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player) {
 
 					a.m_agentInFocus.m_agentEvents.Add (AgentWrapper.AgentEvents.HenchmenFound);
 					henchmenFound = true;

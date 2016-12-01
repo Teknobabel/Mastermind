@@ -13,7 +13,6 @@ public class KillAgent : MissionBase {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission underway!";
-
 			t.m_resultsText += "\n";
 
 			foreach (Henchmen h in a.m_henchmen) {
@@ -207,7 +206,6 @@ public class KillAgent : MissionBase {
 				if (h.statusTrait.m_type == TraitData.TraitType.Incapacitated) {
 
 					h.currentRegion.RemoveHenchmen (h);
-//					a.m_henchmen.Remove (h);
 					GameManager.instance.game.limbo.AddHenchmen (h);
 				}
 			}
@@ -275,10 +273,5 @@ public class KillAgent : MissionBase {
 			h.UpdateStatusTrait(GameManager.instance.m_statusTraits[3]);
 			break;
 		}
-
-//		if (h.statusTrait.m_type == TraitData.TraitType.Incapacitated) {
-//
-//			// send to limbo
-//		}
 	}
 }

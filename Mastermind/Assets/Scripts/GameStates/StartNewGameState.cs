@@ -46,7 +46,7 @@ public class StartNewGameState : IGameState {
 		agentOrg.Initialize ("Interpol");
 		newGame.AddAgentOrganizationToGame (agentOrg);
 
-		GameManager.instance.game.SpawnIntel (); // debug
+//		GameManager.instance.game.SpawnIntel (); // debug
 
 		GameManager.instance.PushMenuState(MenuState.State.TabMenu);
 

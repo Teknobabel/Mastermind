@@ -10,6 +10,7 @@ public class Henchmen : ScriptableObject {
 		None,
 		Idle,
 		OnMission,
+		Captured,
 	}
 
 	private string m_name = "Null";

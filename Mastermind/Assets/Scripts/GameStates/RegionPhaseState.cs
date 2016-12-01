@@ -15,7 +15,7 @@ public class RegionPhaseState : IGameState {
 
 				// remove agent or henchmen from limbo and place in random region
 
-				if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player && Random.Range (0.0f, 1.0f) < 0.4f) {
+				if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player && hs.m_henchmen.currentState != Henchmen.state.Captured && Random.Range (0.0f, 1.0f) < 0.4f) {
 
 					Henchmen h = hs.m_henchmen;
 					hs.RemoveHenchmen ();
@@ -26,7 +26,7 @@ public class RegionPhaseState : IGameState {
 					t.m_resultsText = h.henchmenName.ToUpper() + " appears in " + r.regionName.ToUpper() + "!";
 					t.m_resultType = GameEvent.Henchmen_ArriveInRegion;
 
-				} else if (hs.m_state == Region.HenchmenSlot.State.Occupied_Agent && Random.Range (0.0f, 1.0f) < 0.4f) {
+				} else if (hs.m_state == Region.HenchmenSlot.State.Occupied_Agent && hs.m_agent.m_agent.currentState != Henchmen.state.Captured && Random.Range (0.0f, 1.0f) < 0.4f) {
 
 					AgentWrapper aw = hs.m_agent;
 					hs.RemoveAgent ();
