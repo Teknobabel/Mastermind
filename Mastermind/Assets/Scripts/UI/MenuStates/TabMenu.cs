@@ -163,6 +163,9 @@ public class TabMenu : MenuState, IObserver {
 			break;
 		case GameEvent.Organization_IntelSpawned:
 		case GameEvent.Organization_IntelCaptured:
+			Debug.Log("A;SLKDFJSLKFDJSLKJF;SKDF'");
+
+			m_intel.text = GameManager.instance.game.player.currentIntel.ToString () + "<size=24>/" + GameManager.instance.game.player.maxIntel.ToString () + "</size>";
 
 			for (int i=0; i < m_IntelInPlaySprites.Length; i++)
 			{

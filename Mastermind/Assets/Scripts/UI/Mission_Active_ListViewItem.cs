@@ -56,6 +56,11 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 
 		int missionRank = mw.m_region.rank;
 
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.RemoteRegion) {
+
+			missionRank = mw.m_regionInFocus.rank + 2;
+		}
+
 		if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
 
 			AssetToken a = (AssetToken)mw.m_tokenInFocus.m_assetToken;

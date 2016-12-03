@@ -10,7 +10,7 @@ public class CaptureAgent : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
+//		a.m_success = true;
 		if (a.m_success) {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
@@ -227,7 +227,7 @@ public class CaptureAgent : MissionBase {
 	public override bool IsValid ()
 	{
 		// valid if there is a non-incapacitated Agent in the region
-		Debug.Log("ALKSJDFLSKJDF;SLKJDF");
+
 		AgentWrapper aw = GameManager.instance.currentMissionWrapper.m_agentInFocus;
 
 		if (GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_requiredAsset) && aw.m_vizState != AgentWrapper.VisibilityState.Hidden && aw.m_agent.statusTrait.m_type != TraitData.TraitType.Incapacitated) {

@@ -45,9 +45,8 @@ public class UncoverToken : MissionBase {
 
 				if (hiddenTokens.Count > 0) {
 					TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
-//				tB.ChangeState (TokenBase.State.Revealed);
 					tB.m_state = TokenSlot.State.Revealed;
-					TokenBase b = tB.GetBaseToken ();
+//					TokenBase b = tB.GetBaseToken ();
 					revealedTokens.Add (tB);
 				
 				}

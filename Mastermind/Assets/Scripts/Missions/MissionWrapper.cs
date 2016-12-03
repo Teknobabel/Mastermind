@@ -8,6 +8,7 @@ public class MissionWrapper {
 	public Region m_region;
 	public Henchmen m_henchmenInFocus;
 	public AgentWrapper m_agentInFocus;
+	public Region m_regionInFocus;
 	public List<Henchmen> m_henchmen = new List<Henchmen>();
 	public List<AgentWrapper> m_agents = new List<AgentWrapper>();
 	public TokenSlot m_tokenInFocus;

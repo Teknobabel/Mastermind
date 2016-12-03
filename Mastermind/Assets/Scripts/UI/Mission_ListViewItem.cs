@@ -16,14 +16,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public TraitButton[] m_traits;
 
 	private MissionBase m_mission = null;
-
 	private Henchmen m_henchmen = null;
-
 	private AgentWrapper m_agent = null;
-
 	private TokenSlot m_token = null;
-
 	private Asset m_asset = null;
+	private Region m_region = null;
 
 	public void Initialize ()
 	{
@@ -55,6 +52,9 @@ public class Mission_ListViewItem : MonoBehaviour {
 		else if (mw.m_mission.m_targetType == MissionBase.TargetType.OwnedAsset && mw.m_assetInFocus != null) {
 			m_asset = mw.m_assetInFocus;
 		}
+		else if (mw.m_mission.m_targetType == MissionBase.TargetType.RemoteRegion && mw.m_regionInFocus != null) {
+			m_region = mw.m_regionInFocus;
+		}
 	}
 
 	private void WriteBaseMissionStats (MissionBase m)
@@ -70,6 +70,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 		// calculate mission rank
 
 		int missionRank = mw.m_region.rank;
+
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.RemoteRegion) {
+
+			missionRank = mw.m_regionInFocus.rank + 2;
+		}
 
 		if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
 
@@ -197,6 +202,9 @@ public class Mission_ListViewItem : MonoBehaviour {
 				}
 				if (m_asset != null) {
 					GameManager.instance.currentMissionWrapper.m_assetInFocus = m_asset;
+				}
+				if (m_region != null) {
+					GameManager.instance.currentMissionWrapper.m_regionInFocus = m_region;
 				}
 
 				SelectMissionMenu.instance.SelectMission (m_mission);

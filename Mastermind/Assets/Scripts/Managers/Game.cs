@@ -190,6 +190,7 @@ public class Game : ScriptableObject, ISubject {
 			m_intelInPlay.RemoveAt (0);
 		}
 
+		GameManager.instance.game.m_player.currentIntel++;
 		Notify (this, GameEvent.Organization_IntelCaptured);
 	}
 
@@ -210,7 +211,7 @@ public class Game : ScriptableObject, ISubject {
 		List<Region> r = new List<Region> ();
 
 		foreach (Region thisR in GameManager.instance.game.m_regions) {
-
+//			thisR.AddAssetToken (GameManager.instance.m_intel); //debug
 			if (thisR.id != GameManager.instance.game.player.homeRegion.id) {
 				
 				if (thisR.assetTokens.Count < GameManager.instance.game.m_director.maxTokenSlotsInRegion && thisR.id != GameManager.instance.game.player.homeRegion.id) {

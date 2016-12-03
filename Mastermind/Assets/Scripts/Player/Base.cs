@@ -84,10 +84,14 @@ public class Base {
 
 	public void AgentCaptured (AgentWrapper aw)
 	{
+		GameManager.instance.game.agentOrganization.RemoveAgentFromMissions (aw);
+		aw.m_agentEvents.Clear ();
 
 		aw.m_agent.currentRegion.RemoveAgent (aw.m_agent);
 		GameManager.instance.game.limbo.AddAgent (aw);
 		aw.m_agent.ChangeState (Henchmen.state.Captured);
 		m_capturedAgents.Add (aw);
 	}
+
+//	public List<AgentWrapper> capturedAgents {get{return m_capturedAgents;}}
 }

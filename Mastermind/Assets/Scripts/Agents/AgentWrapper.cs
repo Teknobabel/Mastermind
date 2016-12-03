@@ -10,6 +10,7 @@ public class AgentWrapper : ISubject {
 		BaseFound,
 		HenchmenFound,
 		PlayerControlTokenFound,
+		IntelFound,
 	}
 
 	public enum State

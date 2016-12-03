@@ -16,6 +16,7 @@ public class Agent_SearchRegion : MissionBase {
 			bool baseFound = false;
 			bool henchmenFound = false;
 			bool controlTokensFound = false;
+			bool intelFound = false;
 
 			// base
 
@@ -47,21 +48,36 @@ public class Agent_SearchRegion : MissionBase {
 				}
 			}
 
+			// intel
+			foreach (TokenSlot ts in a.m_region.assetTokens) {
+
+				if (ts.m_assetToken != null && ts.m_assetToken == GameManager.instance.m_intel) {
+
+					a.m_agentInFocus.m_agentEvents.Add (AgentWrapper.AgentEvents.IntelFound);
+					intelFound = true;
+					break;
+				}
+			}
+
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + ": " + a.m_region.regionName.ToUpper() + " mission complete!";
 			if (baseFound) {
-				t.m_resultsText += "\n Base found!";
+				t.m_resultsText += "\nBase found!";
 			}
 			if (henchmenFound) {
-				t.m_resultsText += "\n Henchmen found!";
+				t.m_resultsText += "\nHenchmen found!";
 			}
 			if (controlTokensFound) {
-				t.m_resultsText += "\n Player owned Control Tokens found!";
+				t.m_resultsText += "\nPlayer owned Control Tokens found!";
+			}
+			if (intelFound) {
+				t.m_resultsText += "\nIntel found!";
 			}
 
-			if (!baseFound && !henchmenFound && !controlTokensFound) {
-				t.m_resultsText += "\n Nothing found.";
+			if (!baseFound && !henchmenFound && !controlTokensFound && !intelFound) {
+				t.m_resultsText += "\nNothing found.";
 			}
+
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 

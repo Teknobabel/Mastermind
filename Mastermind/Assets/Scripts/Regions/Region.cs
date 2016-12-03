@@ -202,7 +202,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 //		t.ChangeOwner(Owner.Player); // debug
 		t.m_type = TokenSlot.TokenType.Control;
 		t.m_controlToken = c;
-		t.m_state = TokenSlot.State.Revealed;
+		t.m_state = TokenSlot.State.Hidden;
 		t.m_region = this;
 
 		t.AddObserver (this);
@@ -234,7 +234,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 //				ts.m_status = TokenSlot.Status.Normal;
 
 				p.StartPolicy (ts);
-				ts.m_state = TokenSlot.State.Revealed;
+				ts.m_state = TokenSlot.State.Hidden;
 
 				tokenAdded = true;
 				break;
@@ -257,7 +257,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 //				t.m_state = TokenSlot.State.None;
 //			}
 
-			t.m_state = TokenSlot.State.Revealed;
+			t.m_state = TokenSlot.State.Hidden;
 
 			m_policyTokens.Add (t);
 			m_allTokens.Add (t);

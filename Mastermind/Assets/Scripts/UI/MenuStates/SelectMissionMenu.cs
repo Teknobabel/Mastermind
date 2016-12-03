@@ -314,6 +314,23 @@ public class SelectMissionMenu : MenuState {
 
 					}
 				}
+
+//				if (GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.RemoteRegion) {
+
+				foreach (Region r in GameManager.instance.game.regions) {
+
+					GameManager.instance.currentMissionWrapper.m_regionInFocus = r;
+
+					if (m.m_targetType == MissionBase.TargetType.RemoteRegion && m.IsValid ()) {
+
+						GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+						g.transform.localScale = Vector3.one;
+						m_listViewItems.Add (g);
+						g.GetComponent<Mission_ListViewItem> ().Initialize ();
+
+					}
+				}
+//				}
 			}
 
 

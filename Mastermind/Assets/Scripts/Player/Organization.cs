@@ -699,7 +699,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	public int maxWantedLevel {get{return m_maxWantedLevel; }}
 	public int currentInfamy {get{return m_currentInfamy; }}
 	public int maxInfamy {get{return m_maxInfamy; }}
-	public int currentIntel {get{return m_currentIntel; }}
+	public int currentIntel {get{return m_currentIntel; } set{ m_currentIntel = value; }}
 	public int maxIntel {get{return m_maxIntel; }}
 	public string orgName {get{return m_name;}}
 	public List<Asset> currentAssets {get{return m_currentAssets;}}

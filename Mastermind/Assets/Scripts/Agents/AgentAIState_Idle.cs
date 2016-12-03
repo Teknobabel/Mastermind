@@ -31,7 +31,7 @@ public class AgentAIState_Idle : IAgentAIState {
 				// invade base
 
 				MissionWrapper mw = new MissionWrapper ();
-				mw.m_mission = GameManager.instance.m_agentMissionBank[1];
+				mw.m_mission = GameManager.instance.m_agentMissionBank [1];
 
 				//add all agents in region, cancelling any missions they are currently on
 
@@ -51,6 +51,19 @@ public class AgentAIState_Idle : IAgentAIState {
 					}
 				}
 					
+				mw.m_region = aw.m_agent.currentRegion;
+				mw.m_organization = GameManager.instance.game.agentOrganization;
+
+				GameManager.instance.currentMissionWrapper = mw;
+				GameManager.instance.ProcessMissionWrapper ();
+
+			} else if (aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.IntelFound)) {
+
+				Debug.Log ("Attempting to capture intel");
+
+				MissionWrapper mw = new MissionWrapper ();
+				mw.m_mission = GameManager.instance.m_agentMissionBank [6];
+				mw.m_agentInFocus = aw;
 				mw.m_region = aw.m_agent.currentRegion;
 				mw.m_organization = GameManager.instance.game.agentOrganization;
 

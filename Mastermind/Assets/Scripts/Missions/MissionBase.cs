@@ -27,6 +27,7 @@ public class MissionBase : ScriptableObject, IMission {
 		Floor,
 		Agent,
 		OwnedAsset,
+		RemoteRegion,
 	}
 	
 	public string m_name = "Null";
@@ -100,6 +101,11 @@ public class MissionBase : ScriptableObject, IMission {
 	public int CalculateCompletionPercentage (MissionWrapper mw)
 	{
 		int missionRank = mw.m_region.rank;
+
+		if (mw.m_mission.m_targetType == MissionBase.TargetType.RemoteRegion) {
+
+			missionRank = mw.m_regionInFocus.rank + 2;
+		}
 
 		if (mw.m_mission.m_targetType == TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
 

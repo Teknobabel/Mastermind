@@ -8,7 +8,7 @@ public class SearchForAgentInRegion : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
+
 		if (a.m_success) {
 
 			Region r = a.m_region;
