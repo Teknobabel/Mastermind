@@ -42,7 +42,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 
 		foreach (MissionWrapper mw in activeMissions) {
 
-			if (mw.m_agentInFocus == aw) {
+			if (mw.m_agentInFocus != null && mw.m_agentInFocus.m_agent.id == aw.m_agent.id) {
 
 				mw.m_agentInFocus = null;
 			}
@@ -52,7 +52,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 				mw.m_agents.Remove (aw);
 			}
 
-			if (mw.m_henchmenInFocus = aw.m_agent) {
+			if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.id == aw.m_agent.id) {
 
 				mw.m_henchmenInFocus = null;
 			}

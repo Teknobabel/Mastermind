@@ -57,7 +57,7 @@ public class SeizeControlToken : MissionBase {
 		{
 			TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 
-			if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken.m_controlType == m_type && t.owner != Region.Owner.Player) {
+			if (t.m_state == TokenSlot.State.Revealed && t.m_type == TokenSlot.TokenType.Control && t.m_controlToken.m_controlType == m_type && t.owner != Region.Owner.Player) {
 				return true;
 			}
 		}

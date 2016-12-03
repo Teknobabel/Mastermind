@@ -317,10 +317,21 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 	public void RemoveAgent (Henchmen a)
 	{
+
 		foreach (HenchmenSlot s in m_henchmenSlots) {
 
-			if (s.m_state == HenchmenSlot.State.Occupied_Agent && s.m_agent != null && s.m_agent.m_agent == a) {
+			if (s.m_state == HenchmenSlot.State.Occupied_Agent && s.m_agent != null && s.m_agent.m_agent.id == a.id) {
+
+				// remove from any missions
+
+				GameManager.instance.game.agentOrganization.RemoveAgentFromMissions (s.m_agent);
+
+				// clear location based events
+
 				s.m_agent.m_agentEvents.Clear ();
+
+				// remove from region
+
 				s.RemoveAgent ();
 
 				break;
@@ -334,9 +345,16 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 	public void RemoveHenchmen (Henchmen h)
 	{
+
 		foreach (HenchmenSlot s in m_henchmenSlots) {
-			
-			if (s.m_state == HenchmenSlot.State.Occupied_Player && s.m_henchmen != null && s.m_henchmen == h) {
+
+			if (s.m_state == HenchmenSlot.State.Occupied_Player && s.m_henchmen != null && s.m_henchmen.id == h.id) {
+
+				// remove from any missions
+
+				GameManager.instance.game.player.RemoveHenchmenFromMissions (s.m_henchmen);
+
+				// remove from region
 
 				s.RemoveHenchmen ();
 				break;

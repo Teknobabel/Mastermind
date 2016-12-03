@@ -341,6 +341,44 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		}
 	}
 
+	public void RemoveHenchmenFromMissions (Henchmen h)
+	{
+		h.ChangeState (Henchmen.state.Idle);
+
+		List<MissionWrapper> cancelledMissions = new List<MissionWrapper> ();
+
+		foreach (MissionWrapper mw in activeMissions) {
+
+			if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.id == h.id) {
+
+				mw.m_henchmenInFocus = null;
+			}
+
+			if (mw.m_henchmen.Contains (h)) {
+
+				mw.m_henchmen.Remove(h);
+			}
+
+			if (mw.m_henchmenInFocus == null && mw.m_henchmen.Count == 0) {
+
+				cancelledMissions.Add (mw);
+			}
+		}
+
+		foreach (MissionWrapper mw in cancelledMissions) {
+
+			if (activeMissions.Contains (mw)) {
+
+				activeMissions.Remove (mw);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_resultsText = mw.m_mission.m_name.ToUpper() + " Mission is cancelled!";
+				t.m_resultType = GameEvent.Henchmen_MissionDisrupted;
+				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+			}
+		}
+	}
+
 	public void Initialize (string orgName)
 	{
 		Game g = GameManager.instance.game;

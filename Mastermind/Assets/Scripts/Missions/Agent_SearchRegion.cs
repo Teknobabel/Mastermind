@@ -22,8 +22,23 @@ public class Agent_SearchRegion : MissionBase {
 
 			if (a.m_region.id == GameManager.instance.game.player.homeRegion.id) {
 
-				a.m_agentInFocus.m_agentEvents.Add (AgentWrapper.AgentEvents.BaseFound);
-				baseFound = true;
+				// check for cloak
+
+				bool hasCloak = false;
+				foreach (Asset asset in GameManager.instance.game.player.orgBase.m_currentAssets)
+				{
+					if (asset.m_assetType == Asset.AssetType.LairUpgrade_Cloak) {
+
+						hasCloak = true;
+						break;
+					}
+				}
+
+				if (!hasCloak || (hasCloak && Random.Range(0.0f, 1.0f) > 0.4f))
+				{
+					a.m_agentInFocus.m_agentEvents.Add (AgentWrapper.AgentEvents.BaseFound);
+					baseFound = true;
+				}
 			}
 
 			// henchmen

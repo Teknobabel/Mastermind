@@ -16,7 +16,7 @@ public class BuildAsset : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-
+//		a.m_success = true;
 		if (a.m_success) {
 			
 			// add asset to player's inventory

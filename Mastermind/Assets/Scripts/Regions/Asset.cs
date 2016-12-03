@@ -72,6 +72,7 @@ public class Asset : ScriptableObject, ISubject {
 		Intel,
 		TrapRoom,
 		CommandCenter,
+		LairUpgrade_Cloak,
 	}
 
 	private List<IObserver>

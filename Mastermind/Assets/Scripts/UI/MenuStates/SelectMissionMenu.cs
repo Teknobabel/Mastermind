@@ -114,6 +114,8 @@ public class SelectMissionMenu : MenuState {
 		h.GetComponent<SectionHeader> ().Initialize ("AVAILABLE MISSIONS");
 		m_listViewItems.Add (h);
 
+//		List<MissionBase> validMissions = new List<MissionBase> ();
+
 		foreach (MissionBase m in GameManager.instance.m_missionBank) {
 
 			GameManager.instance.currentMissionWrapper.m_mission = m;
@@ -335,6 +337,16 @@ public class SelectMissionMenu : MenuState {
 
 
 		}
+
+		// spawn mission list view items
+
+//		foreach (MissionBase m in validMissions) {
+//
+//			GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+//			g.transform.localScale = Vector3.one;
+//			m_listViewItems.Add (g);
+//			g.GetComponent<Mission_ListViewItem> ().Initialize ();
+//		}
 	}
 
 	public void SelectMission (MissionBase m)
