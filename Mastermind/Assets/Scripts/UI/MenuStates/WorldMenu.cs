@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class WorldMenu : MenuState {
 	public static WorldMenu instance;
@@ -14,6 +15,12 @@ public class WorldMenu : MenuState {
 		Name,
 	}
 
+	public enum SortDirection
+	{
+		Normal,
+		Reverse,
+	}
+
 	public GameObject m_regionListViewItem;
 	public GameObject m_sectionHeader;
 	public GameObject m_worldMenu;
@@ -22,10 +29,13 @@ public class WorldMenu : MenuState {
 	public GameObject m_sortPanelParent;
 
 	public SortModeButton[] m_sortModeButtons;
+	public SortDirectionButton m_sortDirectionButton;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
 
 	private SortType m_sortType = SortType.RegionGroup;
+
+	private SortDirection m_sortDirection = SortDirection.Normal;
 
 	void Awake ()
 	{
@@ -62,20 +72,63 @@ public class WorldMenu : MenuState {
 
 		Dictionary<string, List<Region>> sortedRegionList = GetRegionList (m_sortType);
 
-		foreach (KeyValuePair<string, List<Region>> pair in sortedRegionList) {
+		if (m_sortDirection == SortDirection.Normal) {
+			
+			foreach (KeyValuePair<string, List<Region>> pair in sortedRegionList) {
 
-			GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
-			h.transform.localScale = Vector3.one;
-			h.GetComponent<SectionHeader> ().Initialize (pair.Key.ToUpper());
-			m_listViewItems.Add (h);
+				GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+				h.transform.localScale = Vector3.one;
+				h.GetComponent<SectionHeader> ().Initialize (pair.Key.ToUpper ());
+				m_listViewItems.Add (h);
 
-			for (int i = 0; i < pair.Value.Count; i++) {
-				Region thisRegion = pair.Value [i];
-				GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
-				g.transform.localScale = Vector3.one;
-				m_listViewItems.Add (g);
-				g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+				for (int i = 0; i < pair.Value.Count; i++) {
+					Region thisRegion = pair.Value [i];
+					GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
+					g.transform.localScale = Vector3.one;
+					m_listViewItems.Add (g);
+					g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+				}
 			}
+		} else {
+
+//			if (sortedRegionList.Count == 1) {
+//
+//
+//
+//			} else if (sortedRegionList.Count > 1) {
+
+				foreach (KeyValuePair<string, List<Region>> pair in sortedRegionList.Reverse()) {
+
+					GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+					h.transform.localScale = Vector3.one;
+					h.GetComponent<SectionHeader> ().Initialize (pair.Key.ToUpper ());
+					m_listViewItems.Add (h);
+
+				if (sortedRegionList.Count == 1) {
+
+					List<Region> regions = new List<Region>(pair.Value);
+
+					for (int i = regions.Count-1; i >= 0; i--) {
+						Region thisRegion = pair.Value [i];
+						GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
+						g.transform.localScale = Vector3.one;
+						m_listViewItems.Add (g);
+						g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+					}
+
+
+				} else {
+
+					for (int i = 0; i < pair.Value.Count; i++) {
+						Region thisRegion = pair.Value [i];
+						GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
+						g.transform.localScale = Vector3.one;
+						m_listViewItems.Add (g);
+						g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+					}
+				}
+				}
+//			}
 		}
 	}
 
@@ -231,6 +284,11 @@ public class WorldMenu : MenuState {
 
 	public override void OnUpdate()
 	{
+		if (Input.GetKeyUp (KeyCode.Alpha1)) {
+
+			SortDirectionButtonclicked ();
+
+		}
 
 //		if (Input.GetKeyUp (KeyCode.Alpha1) && m_sortType != SortType.RegionGroup) {
 //
@@ -322,6 +380,22 @@ public class WorldMenu : MenuState {
 		GameManager.instance.currentMissionWrapper = mr;
 		GameManager.instance.PushMenuState (State.SelectMissionMenu);
 
+	}
+
+	public void SortDirectionButtonclicked ()
+	{
+		if (m_sortDirection == SortDirection.Normal) {
+
+			m_sortDirection = SortDirection.Reverse;
+
+		} else {
+
+			m_sortDirection = SortDirection.Normal;
+		}
+
+		m_sortDirectionButton.UpdateState (m_sortDirection);
+
+		UpdateRegionList ();
 	}
 
 	public void SortButtonClicked (int sortType)
