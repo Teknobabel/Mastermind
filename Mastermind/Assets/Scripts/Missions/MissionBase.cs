@@ -98,6 +98,11 @@ public class MissionBase : ScriptableObject, IMission {
 		return missionSuccess;
 	}
 
+	public virtual void CancelMission (MissionWrapper a)
+	{
+
+	}
+
 	public int CalculateCompletionPercentage (MissionWrapper mw)
 	{
 		int missionRank = mw.m_region.rank;

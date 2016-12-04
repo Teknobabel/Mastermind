@@ -15,7 +15,7 @@ public class LaunchIntoOrbit : MissionBase {
 
 		if (a.m_success) {
 
-			GameManager.instance.game.player.assetsInOrbit.Add (a.m_assetInFocus);
+			GameManager.instance.game.player.LaunchAssetIntoOrbit (a.m_assetInFocus);
 
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission complete!";

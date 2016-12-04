@@ -72,6 +72,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 
 			if (activeMissions.Contains (mw)) {
 
+				mw.m_mission.CancelMission (mw);
 				activeMissions.Remove (mw);
 			}
 		}
@@ -179,6 +180,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 			if (activeMission == mw) {
 
 				m_activeMissions.RemoveAt (i);
+				mw.m_mission.CancelMission (mw);
 
 				foreach (AgentWrapper a in mw.m_agents) {
 

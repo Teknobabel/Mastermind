@@ -294,6 +294,13 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		Notify (a, GameEvent.Organization_AssetGained);
 	}
 
+	public void LaunchAssetIntoOrbit (Asset a)
+	{
+		m_assetsInOrbit.Add (a);
+
+		Notify (a, GameEvent.Mission_AssetLaunched);
+	}
+
 	public void RemoveAsset (Asset a)
 	{
 		if (m_currentAssets.Contains (a)) {
@@ -322,6 +329,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			if (activeMission == mw) {
 
 				m_activeMissions.RemoveAt (i);
+				mw.m_mission.CancelMission (mw);
 
 				foreach (Henchmen h in mw.m_henchmen) {
 
@@ -369,6 +377,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 			if (activeMissions.Contains (mw)) {
 
+				mw.m_mission.CancelMission (mw);
 				activeMissions.Remove (mw);
 
 				TurnResultsEntry t = new TurnResultsEntry ();

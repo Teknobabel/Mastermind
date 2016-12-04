@@ -15,8 +15,12 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 	public TraitButton[] m_traits;
 	public RegionHenchmenButton[] m_henchmenTokens;
 
+	private MissionWrapper m_missionWrapper = null;
+
 	public void Initialize (MissionWrapper a)
 	{
+		m_missionWrapper = a;
+
 		m_missionName.text = a.m_mission.m_name.ToUpper();
 		m_missionDescription.text = a.m_mission.m_description;
 
@@ -48,6 +52,12 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 				tB.Deactivate ();
 			}
 		}
+	}
+
+	public void CancelMission ()
+	{
+		GameManager.instance.game.player.CancelMission (m_missionWrapper);
+		ActivityMenu.instance.UpdateActiveTurnView (GameManager.instance.game.turnNumber);
 	}
 
 	private void CalculateTraits (MissionWrapper mw)

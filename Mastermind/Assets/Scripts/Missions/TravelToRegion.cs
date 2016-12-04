@@ -93,6 +93,32 @@ public class TravelToRegion : MissionBase {
 		return true;
 	}
 
+	public override void CancelMission (MissionWrapper a)
+	{
+		base.CancelMission (a);
+
+		// clear any reserved slot
+
+		if (a.m_henchmenSlotInFocus != null && ( a.m_henchmenInFocus != null || a.m_henchmen.Count > 0)) {
+
+			if (a.m_henchmen.Count > 0 && a.m_henchmenInFocus == null) {
+				a.m_henchmenInFocus = a.m_henchmen [0];
+			}
+
+			if (a.m_henchmenSlotInFocus.m_enRoute.Contains (a.m_henchmenInFocus)) {
+				a.m_henchmenSlotInFocus.m_enRoute.Remove (a.m_henchmenInFocus);
+			}
+		}
+
+		if (a.m_agentInFocus != null && a.m_henchmenSlotInFocus != null) {
+
+			if (a.m_henchmenSlotInFocus.m_enRoute.Contains (a.m_agentInFocus.m_agent)) {
+				a.m_henchmenSlotInFocus.m_enRoute.Remove (a.m_agentInFocus.m_agent);
+			}
+
+		}
+
+	}
 
 	private void DoAmbush (AgentWrapper agent, Henchmen henchmen, Region.HenchmenSlot slot)
 	{

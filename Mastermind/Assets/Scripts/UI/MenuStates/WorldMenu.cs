@@ -11,6 +11,7 @@ public class WorldMenu : MenuState {
 		RegionGroup,
 		Occupied,
 		RegionRank,
+		Name,
 	}
 
 	public GameObject m_regionListViewItem;
@@ -156,6 +157,23 @@ public class WorldMenu : MenuState {
 			regionList.Add ("RANK TWO", rank2);
 			regionList.Add ("RANK ONE", rank1);
 
+			break;
+		case SortType.Name:
+
+			List<Region> alphaList = new List<Region> ();
+
+			foreach (Region r in GameManager.instance.game.regions) {
+
+				alphaList.Add (r);
+			}
+
+			alphaList.Sort (
+				delegate(Region i1, Region i2) { 
+					return i1.regionName.CompareTo (i2.regionName); 
+				}
+			);
+
+			regionList.Add ("Alpha", alphaList);
 			break;
 		}
 
@@ -317,6 +335,9 @@ public class WorldMenu : MenuState {
 			break;
 		case 2:
 			ChangeSortType( m_sortType = SortType.RegionRank);
+			break;
+		case 3:
+			ChangeSortType( m_sortType = SortType.Name);
 			break;
 		}
 	}
