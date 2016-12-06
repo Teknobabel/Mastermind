@@ -31,4 +31,5 @@ public enum GameEvent {
 	Agent_BecameVisible,
 	OmegaPlan_GoalCompleted,
 	Henchmen_MissionDisrupted,
+	UI_SectionHeader_MinimizeButtonClicked,
 }

@@ -8,6 +8,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 	private Dictionary<GameEvent, List<TurnResultsEntry>> m_turnResultsByType = new Dictionary<GameEvent, List<TurnResultsEntry>> ();
 
 	private List<AgentWrapper> m_currentAgents = new List<AgentWrapper>();
+	private Dictionary<IAgentAIState, List<AgentWrapper>> m_agentsByState = new Dictionary<IAgentAIState, List<AgentWrapper>>();
 
 	private List<MissionWrapper> m_activeMissions = new List<MissionWrapper>();
 
@@ -16,12 +17,24 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 	private List<IObserver>
 	m_observers = new List<IObserver> ();
 
+	private AgentAIState_Idle m_agentAIState_Idle;
+	private AgentAIState_AttackBase m_agentAIState_AttackBase;
+	private AgentAIState_AttackHenchmen m_agentAIState_AttackHenchmen;
+	private AgentAIState_FreeRegion m_agentAIState_FreeRegion;
+	private AgentAIState_CaptureIntel m_agentAIState_CaptureIntel;
+
 	public void Initialize (string orgName)
 	{
 		// spawn any starting agent as per director
 
 		Director d = GameManager.instance.game.director;
 		Game g = GameManager.instance.game;
+
+		m_agentAIState_Idle = new AgentAIState_Idle ();
+		m_agentAIState_AttackBase = new AgentAIState_AttackBase ();
+		m_agentAIState_FreeRegion = new AgentAIState_FreeRegion ();
+		m_agentAIState_CaptureIntel = new AgentAIState_CaptureIntel ();
+		m_agentAIState_AttackHenchmen = new AgentAIState_AttackHenchmen ();
 
 		if (GameManager.instance.game.director.m_startingAgentData.Length > 0) {
 
@@ -42,29 +55,32 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 
 		foreach (MissionWrapper mw in activeMissions) {
 
-			if (mw.m_agentInFocus != null && mw.m_agentInFocus.m_agent.id == aw.m_agent.id) {
+			if (mw != GameManager.instance.currentlyExecutingMission) {
+				
+				if (mw.m_agentInFocus != null && mw.m_agentInFocus.m_agent.id == aw.m_agent.id) {
 
-				mw.m_agentInFocus = null;
-			}
+					mw.m_agentInFocus = null;
+				}
 
-			if (mw.m_agents.Contains (aw)) {
+				if (mw.m_agents.Contains (aw)) {
 
-				mw.m_agents.Remove (aw);
-			}
+					mw.m_agents.Remove (aw);
+				}
 
-			if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.id == aw.m_agent.id) {
+				if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.id == aw.m_agent.id) {
 
-				mw.m_henchmenInFocus = null;
-			}
+					mw.m_henchmenInFocus = null;
+				}
 
-			if (mw.m_henchmen.Contains (aw.m_agent)) {
+				if (mw.m_henchmen.Contains (aw.m_agent)) {
 
-				mw.m_henchmen.Remove(aw.m_agent);
-			}
+					mw.m_henchmen.Remove (aw.m_agent);
+				}
 
-			if (mw.m_henchmenInFocus == null && mw.m_agentInFocus == null && mw.m_henchmen.Count == 0 && mw.m_agents.Count == 0) {
+				if (mw.m_henchmenInFocus == null && mw.m_agentInFocus == null && mw.m_henchmen.Count == 0 && mw.m_agents.Count == 0) {
 
-				cancelledMissions.Add (mw);
+					cancelledMissions.Add (mw);
+				}
 			}
 		}
 
@@ -310,7 +326,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 
 				AgentWrapper aw = new AgentWrapper ();
 				aw.m_agent = agent;
-				aw.m_currentAIState = GameManager.instance.agentState_Idle;
+				aw.ChangeAIState (m_agentAIState_Idle);
 				aw.ChangeVisibilityState (AgentWrapper.VisibilityState.Visible);
 				aw.AddObserver (this);
 				m_currentAgents.Add (aw);
@@ -365,4 +381,11 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 	public List<AgentWrapper> currentAgents {get{ return m_currentAgents;}}
 	public List<MissionWrapper> activeMissions {get{return m_activeMissions;}}
 	public int agentsToSpawn {get{ return m_agentsToSpawn;} set{m_agentsToSpawn = value;}}
+	public Dictionary<IAgentAIState, List<AgentWrapper>> agentsByState {get{ return m_agentsByState; } set{ m_agentsByState = value; }}
+
+	public AgentAIState_Idle agentAIState_Idle {get{return m_agentAIState_Idle;}}
+	public AgentAIState_AttackBase agentAIState_AttackBase {get{return m_agentAIState_AttackBase;}}
+	public AgentAIState_AttackHenchmen agentAIState_AttackHenchmen {get{return m_agentAIState_AttackHenchmen;}}
+	public AgentAIState_FreeRegion agentAIState_FreeRegion {get{return m_agentAIState_FreeRegion;}}
+	public AgentAIState_CaptureIntel agentAIState_CaptureIntel {get{return m_agentAIState_CaptureIntel;}}
 }

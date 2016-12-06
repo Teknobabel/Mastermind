@@ -53,10 +53,12 @@ public class TravelToRegion : MissionBase {
 			if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Occupied_Player) {
 
 				ambush = true;
-			} else if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Empty) {
+				a.m_henchmenInFocus = a.m_henchmenSlotInFocus.m_henchmen;
 
+			} else if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Empty) {
+				
 				a.m_region.AddAgent (a.m_agentInFocus);
-				s += a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " ";
+				s = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " ";
 			}
 
 		} else if (a.m_henchmenInFocus != null || a.m_henchmen.Count > 0) {
@@ -72,7 +74,7 @@ public class TravelToRegion : MissionBase {
 			} else if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Empty) {
 
 				a.m_region.AddHenchmen (a.m_henchmenInFocus);
-				s += a.m_henchmenInFocus.henchmenName.ToUpper () + " ";
+				s = a.m_henchmenInFocus.henchmenName.ToUpper () + " ";
 			}
 
 		}

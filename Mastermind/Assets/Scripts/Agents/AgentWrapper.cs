@@ -56,6 +56,30 @@ public class AgentWrapper : ISubject {
 		}
 	}
 
+	public void ChangeAIState (IAgentAIState newState)
+	{
+
+		if (!GameManager.instance.game.agentOrganization.agentsByState.ContainsKey (newState)) {
+
+			List<AgentWrapper> awList = new List<AgentWrapper> ();
+			awList.Add (this);
+			GameManager.instance.game.agentOrganization.agentsByState.Add (newState, awList);
+
+		} else {
+			
+			GameManager.instance.game.agentOrganization.agentsByState [newState].Add (this);
+
+		}
+
+		if (m_currentAIState != null) {
+			m_currentAIState.ExitState (this);
+		}
+
+		m_currentAIState = newState;
+
+		m_currentAIState.EnterState (this);
+	}
+
 	public void AddObserver (IObserver observer)
 	{
 		if (!m_observers.Contains(observer))

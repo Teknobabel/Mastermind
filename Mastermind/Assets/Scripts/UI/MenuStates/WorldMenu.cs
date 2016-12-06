@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class WorldMenu : MenuState {
+public class WorldMenu : MenuState, IObserver {
 	public static WorldMenu instance;
 
 	public enum SortType
@@ -78,15 +78,21 @@ public class WorldMenu : MenuState {
 
 				GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 				h.transform.localScale = Vector3.one;
-				h.GetComponent<SectionHeader> ().Initialize (pair.Key.ToUpper ());
+				SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
+				sh.Initialize (pair.Key.ToUpper ());
+//				sh.AddObserver (this);
+
 				m_listViewItems.Add (h);
 
-				for (int i = 0; i < pair.Value.Count; i++) {
-					Region thisRegion = pair.Value [i];
-					GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
-					g.transform.localScale = Vector3.one;
-					m_listViewItems.Add (g);
-					g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+				if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
+					
+					for (int i = 0; i < pair.Value.Count; i++) {
+						Region thisRegion = pair.Value [i];
+						GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
+						g.transform.localScale = Vector3.one;
+						m_listViewItems.Add (g);
+						g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+					}
 				}
 			}
 		} else {
@@ -101,30 +107,37 @@ public class WorldMenu : MenuState {
 
 					GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 					h.transform.localScale = Vector3.one;
-					h.GetComponent<SectionHeader> ().Initialize (pair.Key.ToUpper ());
+				SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
+					sh.Initialize (pair.Key.ToUpper ());
+//				sh.AddObserver (this);
 					m_listViewItems.Add (h);
 
 				if (sortedRegionList.Count == 1) {
 
-					List<Region> regions = new List<Region>(pair.Value);
+					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
+						
+						List<Region> regions = new List<Region> (pair.Value);
 
-					for (int i = regions.Count-1; i >= 0; i--) {
-						Region thisRegion = pair.Value [i];
-						GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
-						g.transform.localScale = Vector3.one;
-						m_listViewItems.Add (g);
-						g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+						for (int i = regions.Count - 1; i >= 0; i--) {
+							Region thisRegion = pair.Value [i];
+							GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
+							g.transform.localScale = Vector3.one;
+							m_listViewItems.Add (g);
+							g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+						}
 					}
-
 
 				} else {
 
-					for (int i = 0; i < pair.Value.Count; i++) {
-						Region thisRegion = pair.Value [i];
-						GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
-						g.transform.localScale = Vector3.one;
-						m_listViewItems.Add (g);
-						g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
+						
+						for (int i = 0; i < pair.Value.Count; i++) {
+							Region thisRegion = pair.Value [i];
+							GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
+							g.transform.localScale = Vector3.one;
+							m_listViewItems.Add (g);
+							g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+						}
 					}
 				}
 				}
@@ -464,6 +477,16 @@ public class WorldMenu : MenuState {
 
 				GameManager.instance.PushMenuState (State.SelectHenchmenMenu);
 			}
+		}
+	}
+
+	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
+	{
+		switch (thisGameEvent) {
+		case GameEvent.UI_SectionHeader_MinimizeButtonClicked:
+			
+			UpdateRegionList ();
+			break;
 		}
 	}
 }

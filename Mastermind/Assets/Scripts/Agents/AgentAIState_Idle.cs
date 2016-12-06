@@ -24,6 +24,8 @@ public class AgentAIState_Idle : IAgentAIState {
 			GameManager.instance.currentMissionWrapper = mw;
 			GameManager.instance.ProcessMissionWrapper ();
 
+			return;
+
 		} else {
 
 			if (aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.BaseFound)) {
@@ -57,6 +59,8 @@ public class AgentAIState_Idle : IAgentAIState {
 				GameManager.instance.currentMissionWrapper = mw;
 				GameManager.instance.ProcessMissionWrapper ();
 
+				return;
+
 			} else if (aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.IntelFound)) {
 
 				Debug.Log ("Attempting to capture intel");
@@ -69,6 +73,8 @@ public class AgentAIState_Idle : IAgentAIState {
 
 				GameManager.instance.currentMissionWrapper = mw;
 				GameManager.instance.ProcessMissionWrapper ();
+
+				return;
 
 			} else if (aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.HenchmenFound)) {
 
@@ -124,6 +130,8 @@ public class AgentAIState_Idle : IAgentAIState {
 					GameManager.instance.currentMissionWrapper = mw;
 					GameManager.instance.ProcessMissionWrapper ();
 
+					return;
+
 				} else {
 
 					aw.m_agentEvents.Remove (AgentWrapper.AgentEvents.HenchmenFound);
@@ -144,6 +152,8 @@ public class AgentAIState_Idle : IAgentAIState {
 
 				GameManager.instance.currentMissionWrapper = mw;
 				GameManager.instance.ProcessMissionWrapper ();
+
+				return;
 
 			} else {
 
@@ -200,6 +210,8 @@ public class AgentAIState_Idle : IAgentAIState {
 
 							GameManager.instance.currentMissionWrapper = mw;
 							GameManager.instance.ProcessMissionWrapper ();
+
+							return;
 						}
 					}
 
@@ -209,5 +221,15 @@ public class AgentAIState_Idle : IAgentAIState {
 				}
 			}
 		}
+	}
+
+	public void EnterState (AgentWrapper aw)
+	{
+
+	}
+
+	public void ExitState (AgentWrapper aw)
+	{
+
 	}
 }

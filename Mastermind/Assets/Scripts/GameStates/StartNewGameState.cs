@@ -43,8 +43,8 @@ public class StartNewGameState : IGameState {
 		// initialize agent org
 
 		AgentOrganization agentOrg = AgentOrganization.CreateInstance<AgentOrganization> ();
-		agentOrg.Initialize ("Interpol");
 		newGame.AddAgentOrganizationToGame (agentOrg);
+		agentOrg.Initialize ("Interpol");
 
 //		GameManager.instance.game.SpawnIntel (); // debug
 

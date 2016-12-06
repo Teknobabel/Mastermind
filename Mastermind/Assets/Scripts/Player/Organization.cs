@@ -105,32 +105,35 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				h.SetRegion(null);
 
 				// remove from current missions
-				List<MissionWrapper> cancelledMissions = new List<MissionWrapper>();
 
-				foreach (MissionWrapper mission in m_activeMissions) {
+				RemoveHenchmenFromMissions (h);
 
-					if (mission.m_henchmenInFocus != null && mission.m_henchmenInFocus == h) {
-
-						cancelledMissions.Add (mission);
-					}
-					else if (mission.m_henchmen.Count > 0 && mission.m_henchmen.Contains (h)) {
-
-						mission.m_henchmen.Remove (h);
-
-						if (mission.m_henchmen.Count == 0) {
-							cancelledMissions.Add (mission);
-						}
-					}
-				}
-
-				while (cancelledMissions.Count > 0) {
-
-					MissionWrapper mission = cancelledMissions [0];
-					cancelledMissions.RemoveAt (0);
-
-					CancelMission (mission);
-//					activeMissions.Remove (mission);
-				}
+//				List<MissionWrapper> cancelledMissions = new List<MissionWrapper>();
+//
+//				foreach (MissionWrapper mission in m_activeMissions) {
+//
+//					if (mission.m_henchmenInFocus != null && mission.m_henchmenInFocus == h) {
+//
+//						cancelledMissions.Add (mission);
+//					}
+//					else if (mission.m_henchmen.Count > 0 && mission.m_henchmen.Contains (h)) {
+//
+//						mission.m_henchmen.Remove (h);
+//
+//						if (mission.m_henchmen.Count == 0) {
+//							cancelledMissions.Add (mission);
+//						}
+//					}
+//				}
+//
+//				while (cancelledMissions.Count > 0) {
+//
+//					MissionWrapper mission = cancelledMissions [0];
+//					cancelledMissions.RemoveAt (0);
+//
+//					CancelMission (mission);
+////					activeMissions.Remove (mission);
+//				}
 
 				Notify (this, GameEvent.Organization_HenchmenFired);
 				break;
@@ -357,19 +360,22 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 		foreach (MissionWrapper mw in activeMissions) {
 
-			if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.id == h.id) {
+			if (mw != GameManager.instance.currentlyExecutingMission) {
+				
+				if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.id == h.id) {
 
-				mw.m_henchmenInFocus = null;
-			}
+					mw.m_henchmenInFocus = null;
+				}
 
-			if (mw.m_henchmen.Contains (h)) {
+				if (mw.m_henchmen.Contains (h)) {
 
-				mw.m_henchmen.Remove(h);
-			}
+					mw.m_henchmen.Remove (h);
+				}
 
-			if (mw.m_henchmenInFocus == null && mw.m_henchmen.Count == 0) {
+				if (mw.m_henchmenInFocus == null && mw.m_henchmen.Count == 0) {
 
-				cancelledMissions.Add (mw);
+					cancelledMissions.Add (mw);
+				}
 			}
 		}
 

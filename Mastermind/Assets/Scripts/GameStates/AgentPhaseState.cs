@@ -29,6 +29,7 @@ public class AgentPhaseState : IGameState {
 
 		foreach (MissionWrapper mw in GameManager.instance.game.agentOrganization.activeMissions) {
 
+			GameManager.instance.currentlyExecutingMission = mw;
 			mw.m_turnsPassed++;
 
 			if (mw.m_turnsPassed >= mw.m_mission.m_numTurns) {
@@ -36,6 +37,8 @@ public class AgentPhaseState : IGameState {
 				mw.m_mission.CompleteMission (mw);
 				completedMissions.Add (mw);
 			}
+
+			GameManager.instance.currentlyExecutingMission = null;
 		}
 
 		// resolve any completed missions

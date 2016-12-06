@@ -391,8 +391,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			}
 		}
 
-		m_currentHenchmen.Add 
-		(aw.m_agent);
+		m_currentHenchmen.Add (aw.m_agent);
 		aw.m_agent.SetRegion (this);
 	}
 

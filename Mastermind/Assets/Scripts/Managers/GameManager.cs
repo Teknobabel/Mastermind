@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
 	private int m_currentID = 0;
 
 	private MissionWrapper m_currentMissionWrapper;
+	private MissionWrapper m_currentlyExecutingMission;
 
 	private string m_currentVersion = "VER 0.0.1";
 
@@ -208,5 +209,6 @@ public class GameManager : MonoBehaviour {
 	public string currentVersion {get{return m_currentVersion; }}
 	public int newID {get{m_currentID++; return m_currentID;}}
 	public MissionWrapper currentMissionWrapper {get{return m_currentMissionWrapper;}set{m_currentMissionWrapper = value;}}
+	public MissionWrapper currentlyExecutingMission {get{return m_currentlyExecutingMission;}set{m_currentlyExecutingMission = value;}}
 	public MenuState.State targetMenuState {get{ return m_targetMenuState; }set{m_targetMenuState = value; }}
 }

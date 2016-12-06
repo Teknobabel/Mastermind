@@ -13,7 +13,7 @@ public class MissionPhaseState : IGameState {
 		List<MissionWrapper> completedMissions = new List<MissionWrapper> ();
 
 		foreach (MissionWrapper a in player.activeMissions) {
-			
+			GameManager.instance.currentlyExecutingMission = a;
 			a.m_turnsPassed++;
 
 			if (a.m_turnsPassed >= a.m_mission.m_numTurns) {
@@ -35,6 +35,8 @@ public class MissionPhaseState : IGameState {
 				player.AddTurnResults (GameManager.instance.game.turnNumber, entry);
 
 			}
+
+			GameManager.instance.currentlyExecutingMission = null;
 		}
 
 		while (completedMissions.Count > 0) {
