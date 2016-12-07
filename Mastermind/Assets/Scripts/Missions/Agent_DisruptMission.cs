@@ -24,9 +24,9 @@ public class Agent_DisruptMission : MissionBase {
 
 			if (missionToDisrupt != null) {
 
-				float cancelChance = 1.0f;
+				float cancelChance = 0.75f;
 
-				if (Random.Range (0.0f, 0.75f) < cancelChance) {
+				if (Random.Range (0.0f, 1.0f) < cancelChance) {
 
 					GameManager.instance.game.player.CancelMission (missionToDisrupt);
 

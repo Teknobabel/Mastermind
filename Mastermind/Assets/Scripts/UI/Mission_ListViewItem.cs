@@ -25,8 +25,12 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public void Initialize ()
 	{
 		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
-//		Debug.Log (mw.m_mission);
-		WriteBaseMissionStats (mw.m_mission);
+
+		m_mission = mw.m_mission;
+		m_missionName.text = mw.m_mission.GetNameText().ToUpper();
+		m_missionDescription.text = mw.m_mission.m_description;
+		m_missionCost.text = mw.m_mission.m_cost.ToString ();
+		m_missionSuccessChance.text = m_mission.CalculateCompletionPercentage(mw).ToString() + "% SUCCESS";
 
 		int turnsLeft = mw.m_mission.m_numTurns;
 		string duration = turnsLeft.ToString ();
@@ -38,7 +42,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 		m_missionDuration.text = duration;
 
-		CalculateTraits (mw);
+		DrawTraits (mw);
 
 		if (mw.m_mission.m_targetType == MissionBase.TargetType.Henchmen && mw.m_henchmenInFocus != null) {
 
@@ -57,86 +61,10 @@ public class Mission_ListViewItem : MonoBehaviour {
 		}
 	}
 
-	private void WriteBaseMissionStats (MissionBase m)
+	private void DrawTraits (MissionWrapper mw)
 	{
-		m_mission = m;
-		m_missionName.text = m.GetNameText().ToUpper();
-		m_missionDescription.text = m.m_description;
-		m_missionCost.text = m.m_cost.ToString ();
-	}
-
-	private void CalculateTraits (MissionWrapper mw)
-	{
-		// calculate mission rank
-
-		int missionRank = mw.m_region.rank;
-
-		if (mw.m_mission.m_targetType == MissionBase.TargetType.RemoteRegion) {
-
-			missionRank = mw.m_regionInFocus.rank + 2;
-		}
-
-		if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
-
-			AssetToken a = (AssetToken)mw.m_tokenInFocus.m_assetToken;
-
-			if (a.m_asset.m_rank == Asset.Rank.Three) {
-				missionRank++;
-			} else if (a.m_asset.m_rank == Asset.Rank.Four) {
-				missionRank += 2;
-			}
-		}
-
-		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (TokenSlot.Status.Protected)) {
-
-			foreach (TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
-				if (s == TokenSlot.Status.Protected) {
-					missionRank += 1;
-				}
-			}
-
-		}
-
-		if (mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_effects.Contains (TokenSlot.Status.Vulnerable)) {
-
-			foreach (TokenSlot.Status s in mw.m_tokenInFocus.m_effects) {
-				if (s == TokenSlot.Status.Vulnerable) {
-					missionRank = Mathf.Clamp (missionRank - 1, 1, 5);
-				}
-			}
-
-		}
-
-		if (mw.m_mission.m_targetType == MissionBase.TargetType.Agent && mw.m_agentInFocus != null) {
-
-			if (mw.m_agentInFocus.m_agent.rank == 2) {
-				missionRank += 1;
-			} else if (mw.m_agentInFocus.m_agent.rank == 3) {
-				missionRank += 2;
-			}
-		}
-
-
-		int successChance = 0;
-
-		// gather traits from all henchmen
-
-		List<TraitData> combinedTraitList = new List<TraitData> ();
-
-		foreach (Henchmen thisH in mw.m_henchmen) {
-
-			if (thisH.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
-				
-				List<TraitData> t = thisH.GetAllTraits ();
-				foreach (TraitData thisT in t) {
-					if (!combinedTraitList.Contains (thisT)) {
-						combinedTraitList.Add (thisT);
-					}
-				}
-			}
-		}
-
-		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (missionRank);
+		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (mw.m_mission.GetMissionRank(mw));
+		List<TraitData> combinedTraitList = mw.m_mission.GetCombinedTraitList (mw);
 
 		for (int i = 0; i < m_traits.Length; i++) {
 			
@@ -158,33 +86,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 					t.Initialize (mT.m_asset, hasAsset);
 				}
 
-				if (hasAsset || hasTrait) {
-					successChance = Mathf.Clamp (successChance + mT.m_percentageContribution, 0, 100);
-				}
-
 			} else {
 				t.Deactivate ();
 			}
 		}
-
-		// check status of each henchmen for penalties
-
-		foreach (Henchmen h in mw.m_henchmen) {
-
-			switch (h.statusTrait.m_type) {
-
-			case TraitData.TraitType.Injured:
-				successChance = Mathf.Clamp (successChance - GameManager.instance.game.director.m_injuredStatusPenalty, 0, 100);
-				break;
-			case TraitData.TraitType.Critical:
-				successChance = Mathf.Clamp (successChance - GameManager.instance.game.director.m_criticalStatusPenalty, 0, 100);
-				break;
-			}
-		}
-
-		m_missionSuccessChance.text = successChance.ToString() + "% SUCCESS";
 	}
-
 	public void StartMissionButtonPressed ()
 	{
 		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {

@@ -16,9 +16,24 @@ public class AgentPhaseState : IGameState {
 
 				aw.m_currentAIState.DoAgentTurn (aw);
 
-			} else if (aw.m_agent.currentState != Henchmen.state.Captured) {
+			} else if (aw.m_agent.currentState == Henchmen.state.Captured) {
 
 				// agent attempts to break out of jail
+
+				Debug.Log ("Attempting to Escape Jail");
+
+				MissionWrapper mw = new MissionWrapper ();
+				mw.m_mission = GameManager.instance.m_agentMissionBank [7];
+				mw.m_agents.Add (aw);
+				mw.m_agentInFocus = aw;
+				mw.m_region = aw.m_agent.currentRegion;
+				mw.m_organization = GameManager.instance.game.agentOrganization;
+
+				GameManager.instance.currentMissionWrapper = mw;
+				GameManager.instance.ProcessMissionWrapper ();
+
+				return;
+
 			}
 
 		}
@@ -73,49 +88,4 @@ public class AgentPhaseState : IGameState {
 	public void ExitState (){
 		Debug.Log ("Exiting Agent Phase");
 	}
-
-//	private void MoveToRandomRegion (AgentWrapper aw)
-//	{
-//		// select a region to place agent in
-//
-//		List<Region> emptyRegions = new List<Region> ();
-//		List<Region> validRegions = new List<Region> ();
-//
-//		foreach (Region region in GameManager.instance.game.regions) {
-//
-//			if (region.id != GameManager.instance.game.player.homeRegion.id) {
-//
-//				if (region.currentHenchmen.Count == 0) {
-//
-//					emptyRegions.Add (region);
-//				} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {
-//
-//					validRegions.Add (region);
-//				}
-//			}
-//		}
-//
-//		Region randRegion = null;
-//
-//		if (emptyRegions.Count > 0) {
-//
-//			randRegion = emptyRegions[Random.Range(0, emptyRegions.Count)];
-//
-//		} else if (validRegions.Count > 0) {
-//
-//			randRegion = validRegions[Random.Range(0, validRegions.Count)];
-//		}
-//
-//		if (randRegion != null) {
-//
-//			MissionWrapper mw = new MissionWrapper ();
-//			mw.m_mission = GameManager.instance.m_travelMission;
-//			mw.m_henchmen.Add (aw.m_agent);
-//			mw.m_region = randRegion;
-//			mw.m_organization = GameManager.instance.game.agentOrganization;
-//
-//			GameManager.instance.currentMissionWrapper = mw;
-//			GameManager.instance.ProcessMissionWrapper ();
-//		}
-//	}
 }

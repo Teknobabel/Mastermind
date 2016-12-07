@@ -12,7 +12,7 @@ public class InterrogateAgent : MissionBase {
 	
 		TurnResultsEntry t = new TurnResultsEntry ();
 
-		if (GameManager.instance.game.player.orgBase.m_capturedAgents.Count == 0) {
+		if (a.m_floorInFocus.m_capturedAgent == null) {
 
 			t.m_resultsText = "There are no Agents to interrogate";
 			t.m_resultType = GameEvent.Henchmen_MissionDisrupted;
@@ -20,7 +20,7 @@ public class InterrogateAgent : MissionBase {
 			return;
 		}
 
-		AgentWrapper agent = GameManager.instance.game.player.orgBase.m_capturedAgents [0];
+		AgentWrapper agent = a.m_floorInFocus.m_capturedAgent;
 
 		if (a.m_henchmenInFocus != null) {
 
@@ -144,13 +144,11 @@ public class InterrogateAgent : MissionBase {
 	{
 		string s = m_name + "\n";
 
-		if (GameManager.instance.currentMissionWrapper.m_regionInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper.m_floorInFocus.m_capturedAgent != null) {
+			
+			AgentWrapper agent = GameManager.instance.currentMissionWrapper.m_floorInFocus.m_capturedAgent;
+			s += "<size=18>" + agent.m_agent.henchmenName.ToUpper () + "</size>";
 
-			if (GameManager.instance.game.player.orgBase.m_capturedAgents.Count > 0) {
-				
-				AgentWrapper agent = GameManager.instance.game.player.orgBase.m_capturedAgents [0];
-				s += "<size=18>" + agent.m_agent.henchmenName.ToUpper () + "</size>";
-			}
 		}
 
 		return s;
@@ -161,9 +159,9 @@ public class InterrogateAgent : MissionBase {
 		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
 
 		if (mw.m_scope == TargetType.Floor && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_Jail &&
-			GameManager.instance.game.player.orgBase.m_capturedAgents.Count > 0) {
+			mw.m_floorInFocus.m_capturedAgent != null ) {
 
-			AgentWrapper agent = GameManager.instance.game.player.orgBase.m_capturedAgents [0];
+			AgentWrapper agent = mw.m_floorInFocus.m_capturedAgent;
 
 			if (agent.m_agent.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
 				return true;

@@ -103,7 +103,7 @@ public class MissionBase : ScriptableObject, IMission {
 
 	}
 
-	public int CalculateCompletionPercentage (MissionWrapper mw)
+	public int GetMissionRank (MissionWrapper mw)
 	{
 		int missionRank = mw.m_region.rank;
 
@@ -115,7 +115,7 @@ public class MissionBase : ScriptableObject, IMission {
 		if (mw.m_mission.m_targetType == TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
 
 			AssetToken a = (AssetToken)mw.m_tokenInFocus.m_assetToken;
-				
+
 			if (a.m_asset.m_rank == Asset.Rank.Three) {
 				missionRank++;
 			} else if (a.m_asset.m_rank == Asset.Rank.Four) {
@@ -150,15 +150,18 @@ public class MissionBase : ScriptableObject, IMission {
 				missionRank += 2;
 			}
 		}
-			
-		int completionPercentage = 0;
 
+		return missionRank;
+	}
+
+	public List<TraitData> GetCombinedTraitList (MissionWrapper mw)
+	{
 		List<TraitData> combinedTraitList = new List<TraitData> ();
 
 		List<Henchmen> participatingHenchmen = new List<Henchmen> ();
 
 		if (mw.m_organization != null && mw.m_organization == GameManager.instance.game.agentOrganization) {
-			
+
 			foreach (AgentWrapper aw in mw.m_agents) {
 
 				participatingHenchmen.Add (aw.m_agent);
@@ -181,19 +184,31 @@ public class MissionBase : ScriptableObject, IMission {
 				participatingHenchmen.Add (mw.m_henchmenInFocus);
 			}
 		}
-			
+
 		foreach (Henchmen thisH in participatingHenchmen) {
 
 			if (thisH.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
-				
+
 				List<TraitData> t = thisH.GetAllTraits ();
 				foreach (TraitData thisT in t) {
 					if (!combinedTraitList.Contains (thisT)) {
 						combinedTraitList.Add (thisT);
 					}
 				}
+				combinedTraitList.Add (thisH.statusTrait);
 			}
 		}
+
+		return combinedTraitList;
+	}
+
+	public int CalculateCompletionPercentage (MissionWrapper mw)
+	{
+		int missionRank = GetMissionRank (mw);
+			
+		int completionPercentage = 0;
+
+		List<TraitData> combinedTraitList = GetCombinedTraitList (mw);
 
 		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (missionRank);
 
@@ -217,9 +232,9 @@ public class MissionBase : ScriptableObject, IMission {
 
 		// check status of each henchmen for penalties
 
-		foreach (Henchmen h in participatingHenchmen) {
+		foreach (TraitData t in combinedTraitList) {
 
-			switch (h.statusTrait.m_type) {
+			switch (t.m_type) {
 
 			case TraitData.TraitType.Injured:
 				completionPercentage = Mathf.Clamp (completionPercentage - GameManager.instance.game.director.m_injuredStatusPenalty, 0, 100);

@@ -230,7 +230,8 @@ public class CaptureAgent : MissionBase {
 
 		AgentWrapper aw = GameManager.instance.currentMissionWrapper.m_agentInFocus;
 
-		if (GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_requiredAsset) && aw.m_vizState != AgentWrapper.VisibilityState.Hidden && aw.m_agent.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
+		if (GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_requiredAsset) && aw.m_vizState != AgentWrapper.VisibilityState.Hidden && aw.m_agent.statusTrait.m_type != TraitData.TraitType.Incapacitated && 
+			GameManager.instance.game.player.orgBase.CanCaptureAgent()) {
 
 			return true;
 		}
