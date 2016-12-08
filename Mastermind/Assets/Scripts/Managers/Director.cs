@@ -33,5 +33,7 @@ public class Director : ScriptableObject {
 	public HenchmenData[] m_startingHenchmenData;
 	public HenchmenData[] m_startingAgentData;
 
+	public EventTriggerBase[] m_events;
+
 	public int maxTokenSlotsInRegion {get{return m_maxTokenSlotsInRegion;}}
 }

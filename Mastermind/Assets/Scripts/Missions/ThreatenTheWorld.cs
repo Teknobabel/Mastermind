@@ -25,17 +25,7 @@ public class ThreatenTheWorld : MissionBase {
 			
 			foreach (OmegaPlan op in GameManager.instance.game.player.omegaPlans) {
 
-				int goalsCompleted = 0;
-
-				foreach (OmegaPlan.Goal opGoal in op.goals) {
-
-					if (opGoal.m_state == OmegaPlan.Goal.State.Completed) {
-
-						goalsCompleted++;
-					}
-				}
-
-				if (goalsCompleted == op.goals.Count - 1) {
+				if (op.GetNumGoalsCompleted() == op.goals.Count - 1) {
 
 					return true;
 				}

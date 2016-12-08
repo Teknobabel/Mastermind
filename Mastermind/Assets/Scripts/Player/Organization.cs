@@ -91,6 +91,32 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		}
 	}
 
+	public int GetNumOwnedRegions ()
+	{
+		int owned = 0;
+
+		foreach (Region r in GameManager.instance.game.regions) {
+
+			bool playerOwned = true;
+
+			foreach (TokenSlot ts in r.controlTokens) {
+
+				if (ts.owner == Region.Owner.AI) {
+
+					playerOwned = false;
+					break;
+				}
+			}
+
+			if (playerOwned) {
+
+				owned++;
+			}
+		}
+
+		return owned;
+	}
+
 	public void FireHenchmen (int henchmenID)
 	{
 		for (int i=0; i < m_currentHenchmen.Count; i++)

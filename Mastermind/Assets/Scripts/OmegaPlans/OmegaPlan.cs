@@ -79,6 +79,20 @@ public class OmegaPlan : ScriptableObject, ISubject {
 		}
 	}
 
+	public int GetNumGoalsCompleted ()
+	{
+		int completed = 0;
+
+		foreach (Goal g in m_goals) {
+			if (g.m_state == Goal.State.Completed) {
+
+				completed++;
+			}
+		}
+
+		return completed;
+	}
+
 	public void AddObserver (IObserver observer)
 	{
 		if (!m_observers.Contains(observer))

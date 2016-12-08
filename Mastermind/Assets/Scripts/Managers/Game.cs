@@ -16,6 +16,8 @@ public class Game : ScriptableObject, ISubject {
 
 	private List<Henchmen> m_agents = new List<Henchmen>();
 
+	private List<EventTriggerBase> m_events = new List<EventTriggerBase>();
+
 	private int 
 	m_turnNumber = 0,
 	m_turnToSpawnNextIntel = -1;
@@ -52,6 +54,14 @@ public class Game : ScriptableObject, ISubject {
 	public void AddDirectorToGame (Director d)
 	{
 		m_director = d;
+
+		// get list of event triggers
+
+		foreach (EventTriggerBase et in d.m_events) {
+
+			m_events.Add (et);
+		}
+
 	}
 
 	public void AddRegionToGame (Region r)
@@ -297,4 +307,5 @@ public class Game : ScriptableObject, ISubject {
 	public List<Region> regions {get{ return m_regions; }}
 	public List<Henchmen> agents {get{return m_agents;}}
 	public Region limbo {get{return m_limbo; }}
+	public List<EventTriggerBase> events {get{return m_events;}}
 }
