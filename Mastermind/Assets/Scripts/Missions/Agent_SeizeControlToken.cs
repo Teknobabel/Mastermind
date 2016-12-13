@@ -31,6 +31,7 @@ public class Agent_SeizeControlToken : MissionBase {
 				ts.ChangeOwner (Region.Owner.AI);
 
 				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Agent;
 				t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " has liberated a " + ts.m_controlToken.m_controlType.ToString().ToUpper() + " Control Point in " + a.m_region.regionName.ToUpper() + "!";
 				t.m_resultsText += "\n" + ts.m_controlToken.m_controlType.ToString().ToUpper() + " is no longer under your control!";
 				t.m_resultType = GameEvent.Region_ControlTokenOwnerChanged;

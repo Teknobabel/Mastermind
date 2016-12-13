@@ -36,6 +36,7 @@ public class EndPlayerPhaseState : IGameState {
 					h.RemoveAt (rand);
 
 					TurnResultsEntry entry = new TurnResultsEntry ();
+					entry.m_iconType = TurnResultsEntry.IconType.Henchmen;
 					entry.m_resultType = GameEvent.Organization_HenchmenForHireArrived;
 					entry.m_resultsText = newH.henchmenName + " is now available for hire";
 					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, entry);

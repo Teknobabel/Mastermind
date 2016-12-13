@@ -141,11 +141,6 @@ public class Region : ScriptableObject, ISubject, IObserver {
 					AddPolicyToken (pt);
 
 				} 
-//				else {
-//					
-//					// add empty policy token
-//					AddPolicyToken (null);
-//				}
 			} else {
 				AddPolicyToken (p);
 			}
@@ -169,7 +164,6 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 				ts.m_assetToken = a;
 				ts.m_state = TokenSlot.State.Hidden;
-//				ts.m_status = TokenSlot.Status.Normal;
 				tokenAdded = true;
 				break;
 			}
@@ -180,7 +174,6 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			t.m_type = TokenSlot.TokenType.Asset;
 			t.m_assetToken = a;
 			t.m_state = TokenSlot.State.Hidden;
-//			t.m_status = TokenSlot.Status.Normal;
 			t.m_region = this;
 
 			m_assetTokens.Add (t);
@@ -192,7 +185,6 @@ public class Region : ScriptableObject, ISubject, IObserver {
 	{
 		ts.m_state = TokenSlot.State.None;
 		ts.m_assetToken = null;
-//		ts.m_status = TokenSlot.Status.None;
 		ts.m_effects.Clear();
 	}
 
@@ -246,16 +238,11 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			t.m_type = TokenSlot.TokenType.Policy;
 			t.m_policyToken = p;
 
-//			t.m_status = TokenSlot.Status.Normal;
 			t.m_region = this;
 
 			if (p != null) {
 				p.StartPolicy (t);
-//				t.m_state = TokenSlot.State.Hidden;
 			} 
-//			else {
-//				t.m_state = TokenSlot.State.None;
-//			}
 
 			t.m_state = TokenSlot.State.Hidden;
 
@@ -270,7 +257,6 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 		ts.m_state = TokenSlot.State.None;
 		ts.m_policyToken = null;
-//		ts.m_status = TokenSlot.Status.None;
 		ts.m_effects.Clear();
 	}
 

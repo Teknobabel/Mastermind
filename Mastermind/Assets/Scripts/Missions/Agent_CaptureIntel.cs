@@ -33,6 +33,7 @@ public class Agent_CaptureIntel : MissionBase {
 		}
 
 		TurnResultsEntry t = new TurnResultsEntry ();
+		t.m_iconType = TurnResultsEntry.IconType.Agent;
 		t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper() + " uncovers the Intel!";
 		t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

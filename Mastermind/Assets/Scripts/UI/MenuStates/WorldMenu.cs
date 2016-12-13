@@ -413,6 +413,12 @@ public class WorldMenu : MenuState, IObserver {
 
 	public void SortButtonClicked (int sortType)
 	{
+		if (m_sortDirection == SortDirection.Reverse) {
+
+			m_sortDirection = SortDirection.Normal;
+			m_sortDirectionButton.UpdateState (m_sortDirection);
+		}
+
 		switch (sortType) {
 		case 0:
 			ChangeSortType( SortType.RegionGroup);
@@ -427,6 +433,8 @@ public class WorldMenu : MenuState, IObserver {
 			ChangeSortType( m_sortType = SortType.Name);
 			break;
 		}
+
+
 	}
 
 	private void ChangeSortType (SortType sortType)

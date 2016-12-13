@@ -8,6 +8,14 @@ public class AgentAIState_AttackHenchmen : IAgentAIState {
 	{
 		Debug.Log ("Starting Agent AI State: Attack Henchmen");
 
+		// revert back to idle state after a few turns
+
+		if (GameManager.instance.game.turnNumber - aw.m_turnEnteredState >= 5) {
+
+			aw.ChangeAIState (GameManager.instance.game.agentOrganization.agentAIState_Idle);
+			return;
+		}
+
 		// if in region w henchmen, attack
 
 		foreach (Region.HenchmenSlot hs in aw.m_agent.currentRegion.henchmenSlots) {
@@ -132,11 +140,11 @@ public class AgentAIState_AttackHenchmen : IAgentAIState {
 
 	public void EnterState (AgentWrapper aw)
 	{
-
+		aw.m_turnEnteredState = GameManager.instance.game.turnNumber;
 	}
 
 	public void ExitState (AgentWrapper aw)
 	{
-
+		
 	}
 }

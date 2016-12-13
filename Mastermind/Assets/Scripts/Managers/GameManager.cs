@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 	public RegionData m_limboRegion;
 	public TravelToRegion m_travelMission;
 	public AssetToken m_intel;
+	public Policy_War m_declareWar;
 
 	public TraitData[] m_statusTraits;
 

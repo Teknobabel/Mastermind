@@ -12,6 +12,7 @@ public class Agent_InvadeBase : MissionBase {
 		if (a.m_success) {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_iconType = TurnResultsEntry.IconType.Agent;
 			t.m_resultsText = GameManager.instance.game.player.orgName.ToUpper () + "'s base is being invaded!\n";
 
 			// gather henchmen and agents
@@ -257,7 +258,11 @@ public class Agent_InvadeBase : MissionBase {
 
 						float fleeChance = 0.75f;
 
-						if (h.statusTrait.m_type == TraitData.TraitType.Critical) {
+						if (h.statusTrait.m_type == TraitData.TraitType.Incapacitated) {
+
+							fleeChance = 0.0f;
+						}
+						else if (h.statusTrait.m_type == TraitData.TraitType.Critical) {
 
 							fleeChance = 0.5f;
 						}
@@ -289,7 +294,11 @@ public class Agent_InvadeBase : MissionBase {
 
 						float fleeChance = 0.75f;
 
-						if (aw.m_agent.statusTrait.m_type == TraitData.TraitType.Critical) {
+						if (aw.m_agent.statusTrait.m_type == TraitData.TraitType.Incapacitated) {
+
+							fleeChance = 0.0f;
+						}
+						else if (aw.m_agent.statusTrait.m_type == TraitData.TraitType.Critical) {
 
 							fleeChance = 0.5f;
 						}
@@ -302,6 +311,8 @@ public class Agent_InvadeBase : MissionBase {
 						if (Random.Range (0.0f, 1.0f) > fleeChance) {
 							
 							// send to limbo
+
+							aw.ChangeAIState (GameManager.instance.game.agentOrganization.agentAIState_Idle);
 							aw.m_agent.currentRegion.RemoveAgent (aw.m_agent);
 							GameManager.instance.game.limbo.AddAgent (aw);
 							agents.RemoveAt (i);

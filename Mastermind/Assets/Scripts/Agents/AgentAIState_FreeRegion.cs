@@ -8,6 +8,14 @@ public class AgentAIState_FreeRegion : IAgentAIState {
 	{
 		Debug.Log ("Starting Agent AI State: Free Region");
 
+		// revert back to idle state after a few turns
+
+		if (GameManager.instance.game.turnNumber - aw.m_turnEnteredState >= 5) {
+
+			aw.ChangeAIState (GameManager.instance.game.agentOrganization.agentAIState_Idle);
+			return;
+		}
+
 		// if player owned control tokens in region, attempt to seize
 
 		List<TokenSlot> validTokenSlots = new List<TokenSlot> ();
@@ -128,12 +136,12 @@ public class AgentAIState_FreeRegion : IAgentAIState {
 
 	public void EnterState (AgentWrapper aw)
 	{
-
+		aw.m_turnEnteredState = GameManager.instance.game.turnNumber;
 	}
 
 	public void ExitState (AgentWrapper aw)
 	{
-
+		
 	}
 }
 

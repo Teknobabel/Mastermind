@@ -178,10 +178,10 @@ public class Game : ScriptableObject, ISubject {
 //			}
 
 			if (region.currentHenchmen.Count == 0 && onlyEmptyRegions && region.id != GameManager.instance.game.player.homeRegion.id) {
-
+				
 				validRegions.Add (region);
-			} else if (region.currentHenchmen.Count < region.henchmenSlots.Count) {
-
+			} else if (region.currentHenchmen.Count < region.henchmenSlots.Count && !onlyEmptyRegions) {
+				
 				validRegions.Add (region);
 			}
 		}

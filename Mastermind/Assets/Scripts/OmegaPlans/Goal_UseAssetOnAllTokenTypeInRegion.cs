@@ -50,34 +50,38 @@ public class Goal_UseAssetOnAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		switch (thisGameEvent) {
-		case GameEvent.Region_TokenStatusChanged:
-			Region r = (Region)subject;
-			if (r == m_region) {
+		if (m_omegaPlan.state == OmegaPlan.State.Revealed) {
+			
+			switch (thisGameEvent) {
+			case GameEvent.Region_TokenStatusChanged:
+				Region r = (Region)subject;
+				if (r == m_region) {
 
-				// check if all tokens of type have the correct status
-				bool allTokensOfTypeAffected = true;
-				foreach (TokenSlot t in r.controlTokens) {
+					// check if all tokens of type have the correct status
+					bool allTokensOfTypeAffected = true;
+					foreach (TokenSlot t in r.controlTokens) {
 
-					if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && !t.m_effects.Contains(m_status)) {
-						allTokensOfTypeAffected = false;
+						if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && !t.m_effects.Contains (m_status)) {
+							allTokensOfTypeAffected = false;
+						}
+					}
+					
+					if (allTokensOfTypeAffected) {
+					
+						// goal is met
+
+						m_omegaPlan.GoalCompleted (this);
+						GameManager.instance.game.player.RemoveObserver (this);
+
+						TurnResultsEntry t = new TurnResultsEntry ();
+						t.m_iconType = TurnResultsEntry.IconType.OmegaPlan;
+						t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper () + " Goal Completed - Use: " + m_asset.m_name.ToUpper () + " on all " + m_tokenType.m_name.ToUpper () + " in " + m_region.m_name.ToUpper ();
+						t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+						GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 					}
 				}
-					
-				if (allTokensOfTypeAffected) {
-					
-					// goal is met
-
-					m_omegaPlan.GoalCompleted (this);
-					GameManager.instance.game.player.RemoveObserver (this);
-
-					TurnResultsEntry t = new TurnResultsEntry ();
-					t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Use: " + m_asset.m_name.ToUpper() + " on all " + m_tokenType.m_name.ToUpper() + " in " + m_region.m_name.ToUpper();
-					t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
-					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
-				}
+				break;
 			}
-			break;
 		}
 	}
 }

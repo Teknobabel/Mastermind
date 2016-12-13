@@ -58,6 +58,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				m_homeRegion.AddHenchmen(h);
 
 				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Henchmen;
 				t.m_resultsText = h.henchmenName + " joins " + m_name;
 				t.m_resultType = GameEvent.Organization_HenchmenHired;
 				AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -289,6 +290,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			m_currentWantedLevel++;
 
 			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_iconType = TurnResultsEntry.IconType.WantedLevel;
 			t.m_resultsText = "Wanted Level has increased to " + m_currentWantedLevel.ToString() + "!";
 			t.m_resultType = GameEvent.Organization_WantedLevelIncreased;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -435,6 +437,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		m_maxIntel = d.m_maxIntel;
 
 		TurnResultsEntry t2 = new TurnResultsEntry ();
+		t2.m_iconType = TurnResultsEntry.IconType.Organization;
 		t2.m_resultsText = m_name.ToUpper() + " is formed!";
 		t2.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
 		AddTurnResults (0, t2);
@@ -449,6 +452,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			AddAsset (a);
 
 			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_iconType = TurnResultsEntry.IconType.Organization;
 			t.m_resultsText = m_name.ToUpper() + " gains Asset: " + a.m_name.ToUpper();
 			t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
 			AddTurnResults (0, t);
@@ -469,6 +473,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				m_base.InstallAsset (a);
 
 				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Organization;
 				t.m_resultsText = m_name.ToUpper() + " gains Base Upgrade: " + a.m_name.ToUpper();
 				t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
 				AddTurnResults (0, t);
@@ -512,6 +517,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 					revealed++;
 
 					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_iconType = TurnResultsEntry.IconType.OmegaPlan;
 					t.m_resultsText = "OMEGA PLAN: " + newOP.opName.ToUpper() + " is now unlocked!";
 					t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
 					AddTurnResults (0, t);
@@ -536,6 +542,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 					revealed++;
 
 					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_iconType = TurnResultsEntry.IconType.OmegaPlan;
 					t.m_resultsText = "OMEGA PLAN: " + newOP.opName.ToUpper() + " is now unlocked!";
 					t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
 					AddTurnResults (0, t);
@@ -607,6 +614,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				AddHenchmen (h);
 
 				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Henchmen;
 				t.m_resultsText = h.henchmenName + " joins " + m_name;
 				t.m_resultType = GameEvent.Organization_HenchmenHired;
 				AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -645,6 +653,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				bank.RemoveAt (rand);
 
 				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Henchmen;
 				t.m_resultsText = newH.henchmenName + " is available for hire";
 				t.m_resultType = GameEvent.Organization_HenchmenHired;
 				AddTurnResults (GameManager.instance.game.turnNumber, t);

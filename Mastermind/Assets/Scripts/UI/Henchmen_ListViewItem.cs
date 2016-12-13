@@ -17,10 +17,24 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 
 	private int m_henchmenID = -1;
 
+	public void Initialize (AgentWrapper a)
+	{
+		DisplayMenu(a.m_agent);
+
+		m_currentMission.gameObject.SetActive (false);
+
+		string location = "REGION:\n";
+		if (a.m_vizState == AgentWrapper.VisibilityState.Hidden) {
+			location += "UNKNOWN";
+		} else {
+			location += a.m_agent.currentRegion.regionName.ToUpper ();
+		}
+		m_currentLocation.text = location;
+	}
+
 	public void Initialize (Henchmen h)
 	{
-		m_henchmenID = h.id;
-		m_henchmenName.text = h.henchmenName.ToUpper();
+		DisplayMenu (h);
 
 		string mission = "MISSION:\n";
 		if (h.currentState == Henchmen.state.OnMission) {
@@ -32,11 +46,16 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_currentMission.text = mission;
 
 		string location = "REGION:\n";
-//		Debug.Log (h.currentRegion);
 		location += h.currentRegion.regionName.ToUpper ();
 		m_currentLocation.text = location;
+	}
 
-//		m_turnCost.text = h.costPerTurn.ToString() + "CP / TURN";
+	private void DisplayMenu ( Henchmen h)
+	{
+		m_henchmenID = h.id;
+		m_henchmenName.text = h.henchmenName.ToUpper();
+
+		//		m_turnCost.text = h.costPerTurn.ToString() + "CP / TURN";
 		m_henchmenPortrait.sprite = h.portrait;
 
 		List<TraitData> traits = h.GetAllTraits ();

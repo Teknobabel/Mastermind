@@ -31,6 +31,7 @@ public class Agent_DisruptMission : MissionBase {
 					GameManager.instance.game.player.CancelMission (missionToDisrupt);
 
 					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_iconType = TurnResultsEntry.IconType.Agent;
 					t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " shows up to disrupt the mission: " + missionToDisrupt.m_mission.m_name.ToUpper() + "!";
 					t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " is successful!";
 					t.m_resultsText = missionToDisrupt.m_mission.m_name.ToUpper() + " is cancelled!";
@@ -39,6 +40,7 @@ public class Agent_DisruptMission : MissionBase {
 				} else {
 
 					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_iconType = TurnResultsEntry.IconType.Agent;
 					t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " shows up to disrupt the mission: " + missionToDisrupt.m_mission.m_name.ToUpper() + "!";
 					t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " fails.";
 					t.m_resultType = GameEvent.Henchmen_MissionDisrupted;

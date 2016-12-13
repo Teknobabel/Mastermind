@@ -43,36 +43,39 @@ public class Goal_SeizeAllTokenTypeInRegion : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		switch (thisGameEvent) {
-		case GameEvent.Region_ControlTokenSeized:
-			Region r = (Region)subject;
-			if (r == m_region) {
+		if (m_omegaPlan.state == OmegaPlan.State.Revealed) {
+			
+			switch (thisGameEvent) {
+			case GameEvent.Region_ControlTokenSeized:
+				Region r = (Region)subject;
+				if (r == m_region) {
 
-				// check if all control tokens of type in region belong to player
+					// check if all control tokens of type in region belong to player
 
-				bool seizedAllTokens = true;
-				foreach (TokenSlot t in r.controlTokens) {
+					bool seizedAllTokens = true;
+					foreach (TokenSlot t in r.controlTokens) {
 
-					if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && t.owner == Region.Owner.AI) {
-						seizedAllTokens = false;
-						break;
+						if (t.m_type == TokenSlot.TokenType.Control && t.m_controlToken == ((TokenBase)m_tokenType) && t.owner == Region.Owner.AI) {
+							seizedAllTokens = false;
+							break;
+						}
+					}
+
+					if (seizedAllTokens) {
+						// goal is met
+
+						m_omegaPlan.GoalCompleted (this);
+						GameManager.instance.game.player.RemoveObserver (this);
+
+						TurnResultsEntry t = new TurnResultsEntry ();
+						t.m_iconType = TurnResultsEntry.IconType.OmegaPlan;
+						t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper () + " Goal Completed - Seize control of all : " + m_tokenType.m_name.ToUpper () + " in " + m_region.m_name.ToUpper ();
+						t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+						GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 					}
 				}
-
-				if (seizedAllTokens)
-				{
-					// goal is met
-
-					m_omegaPlan.GoalCompleted(this);
-					GameManager.instance.game.player.RemoveObserver (this);
-
-					TurnResultsEntry t = new TurnResultsEntry ();
-					t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Seize control of all : " + m_tokenType.m_name.ToUpper() + " in " + m_region.m_name.ToUpper();
-					t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
-					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
-				}
+				break;
 			}
-			break;
 		}
 	}
 }

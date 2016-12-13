@@ -35,6 +35,7 @@ public class AgentWrapper : ISubject {
 	public bool m_hasBeenRevealed = false;
 	public List<AgentEvents> m_agentEvents = new List<AgentEvents>();
 	public IAgentAIState m_currentAIState;
+	public int m_turnEnteredState = 0;
 
 	private List<IObserver>
 	m_observers = new List<IObserver> ();

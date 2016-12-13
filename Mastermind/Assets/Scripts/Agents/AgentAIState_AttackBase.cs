@@ -150,11 +150,11 @@ public class AgentAIState_AttackBase : IAgentAIState {
 
 	public void EnterState (AgentWrapper aw)
 	{
-
+		aw.m_turnEnteredState = GameManager.instance.game.turnNumber;
 	}
 
 	public void ExitState (AgentWrapper aw)
 	{
-
+		
 	}
 }

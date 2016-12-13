@@ -69,7 +69,7 @@ public class AgentsMenu : MenuState {
 				if (agentOrg.currentAgents [i].m_hasBeenRevealed)
 				{
 					
-					Henchmen thisAgent = agentOrg.currentAgents [i].m_agent;
+					AgentWrapper thisAgent = agentOrg.currentAgents [i];
 					GameObject g = (GameObject)(Instantiate (m_agentListViewItem, m_scrollViewContent.transform));
 					g.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g);

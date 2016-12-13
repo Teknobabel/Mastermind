@@ -80,6 +80,7 @@ public class TravelToRegion : MissionBase {
 		}
 
 		TurnResultsEntry t = new TurnResultsEntry ();
+		t.m_iconType = TurnResultsEntry.IconType.Travel;
 		t.m_resultsText = s + " arrives in " + a.m_region.regionName.ToUpper();
 		t.m_resultType = GameEvent.Henchmen_ArriveInRegion;
 		a.m_organization.AddTurnResults (GameManager.instance.game.turnNumber, t);

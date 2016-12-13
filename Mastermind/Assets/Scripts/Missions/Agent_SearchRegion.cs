@@ -99,6 +99,7 @@ public class Agent_SearchRegion : MissionBase {
 		} else {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_iconType = TurnResultsEntry.IconType.Agent;
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + ": " + a.m_region.regionName.ToUpper() + " mission complete!";
 			t.m_resultsText += "\n Nothing found.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;

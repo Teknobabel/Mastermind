@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,6 +15,8 @@ public class ActivityMenu : MenuState, ISubject {
 	public GameObject m_scrollViewContent;
 	public GameObject m_sortPane;
 	public GameObject m_sortPaneScrollViewContent;
+
+	public Sprite[] m_turnResultsIcons;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
 	private List<TurnResultsButton> m_sortPaneListViewItems = new List<TurnResultsButton> ();

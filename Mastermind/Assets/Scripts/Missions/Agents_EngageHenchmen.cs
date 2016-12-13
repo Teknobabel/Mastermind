@@ -8,6 +8,7 @@ public class Agents_EngageHenchmen : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		TurnResultsEntry t = new TurnResultsEntry ();
+		t.m_iconType = TurnResultsEntry.IconType.Agent;
 		t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission underway!";
 		t.m_resultsText += "\n";
 

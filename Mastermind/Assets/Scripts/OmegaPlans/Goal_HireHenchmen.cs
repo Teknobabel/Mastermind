@@ -36,26 +36,30 @@ public class Goal_HireHenchmen : OPGoalBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		switch (thisGameEvent) {
-		case GameEvent.Organization_HenchmenHired:
-			Organization o = (Organization)subject;
+		if (m_omegaPlan.state == OmegaPlan.State.Revealed) {
+			
+			switch (thisGameEvent) {
+			case GameEvent.Organization_HenchmenHired:
+				Organization o = (Organization)subject;
 
-			foreach (Henchmen h in o.currentHenchmen) {
+				foreach (Henchmen h in o.currentHenchmen) {
 				
-				if (h.HasTrait (m_trait)) {
+					if (h.HasTrait (m_trait)) {
 					
-					// goal is met
+						// goal is met
 
-					m_omegaPlan.GoalCompleted(this);
-					GameManager.instance.game.player.RemoveObserver (this);
+						m_omegaPlan.GoalCompleted (this);
+						GameManager.instance.game.player.RemoveObserver (this);
 
-					TurnResultsEntry t = new TurnResultsEntry ();
-					t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper() + " Goal Completed - Hire: " + m_trait.m_name.ToUpper();
-					t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
-					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+						TurnResultsEntry t = new TurnResultsEntry ();
+						t.m_iconType = TurnResultsEntry.IconType.OmegaPlan;
+						t.m_resultsText = "OMEGA PLAN: " + m_omegaPlan.opName.ToUpper () + " Goal Completed - Hire: " + m_trait.m_name.ToUpper ();
+						t.m_resultType = GameEvent.OmegaPlan_GoalCompleted;
+						GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+					}
 				}
+				break;
 			}
-			break;
 		}
 	}
 }

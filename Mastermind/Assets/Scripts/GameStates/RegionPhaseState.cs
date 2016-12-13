@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RegionPhaseState : IGameState {
 
@@ -106,6 +107,70 @@ public class RegionPhaseState : IGameState {
 				}
 			}
 		}
+
+
+
+
+
+		foreach (Region r in GameManager.instance.game.regions) {
+
+			// update step on any policies
+			List<TokenSlot> emptyPolicySlots = new List<TokenSlot>();
+
+			foreach (TokenSlot ts in r.policyTokens) {
+
+				if (ts.m_policyToken != null) {
+
+					ts.m_policyToken.UpdatePolicy (ts);
+				} else {
+					emptyPolicySlots.Add (ts);
+				}
+			}
+
+			// check to add new policies
+
+			// War
+
+			if (emptyPolicySlots.Count > 0)
+			{
+				float warChance = 0.0f;
+				int playerOwnedCP = 0;
+
+				foreach (TokenSlot ts in r.controlTokens) {
+
+					if (ts.owner == Region.Owner.Player) {
+
+						warChance += 0.025f;
+						playerOwnedCP++;
+					}
+				}
+
+				if (playerOwnedCP == r.controlTokens.Count) {
+
+					warChance += 0.1f;
+				}
+
+				if (Random.Range (0.0f, 1.0f) < warChance) {
+
+					// add war policy
+
+					TokenSlot ts = emptyPolicySlots[Random.Range(0, emptyPolicySlots.Count)];
+
+					r.AddPolicytoken (GameManager.instance.m_declareWar, ts);
+
+					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_resultsText = r.regionName.ToUpper() + " declares war on " + GameManager.instance.game.player.orgName.ToUpper() + "!";
+					t.m_resultType = GameEvent.Region_WarDeclared;
+					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+				}
+			}
+
+		}
+
+
+
+
+
 
 		GameManager.instance.ChangeGameState (GameManager.instance.agentPhase);
 	}

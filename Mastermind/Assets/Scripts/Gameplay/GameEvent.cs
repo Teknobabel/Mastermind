@@ -32,4 +32,5 @@ public enum GameEvent {
 	OmegaPlan_GoalCompleted,
 	Henchmen_MissionDisrupted,
 	UI_SectionHeader_MinimizeButtonClicked,
+	Region_WarDeclared,
 }

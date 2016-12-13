@@ -8,6 +8,14 @@ public class AgentAIState_CaptureIntel : IAgentAIState {
 	{
 		Debug.Log ("Starting Agent AI State: Capture Intel");
 
+		// revert back to idle state after a few turns
+
+		if (GameManager.instance.game.turnNumber - aw.m_turnEnteredState >= 5) {
+
+			aw.ChangeAIState (GameManager.instance.game.agentOrganization.agentAIState_Idle);
+			return;
+		}
+
 		// capture intel if it exists
 
 		foreach (TokenSlot ts in aw.m_agent.currentRegion.assetTokens) {
@@ -102,11 +110,11 @@ public class AgentAIState_CaptureIntel : IAgentAIState {
 
 	public void EnterState (AgentWrapper aw)
 	{
-
+		aw.m_turnEnteredState = GameManager.instance.game.turnNumber;
 	}
 
 	public void ExitState (AgentWrapper aw)
 	{
-
+		
 	}
 }

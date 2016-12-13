@@ -18,4 +18,9 @@ public class PolicyToken : TokenBase, IToken {
 	{
 
 	}
+
+	public virtual void UpdatePolicy (TokenSlot t)
+	{
+
+	}
 }
