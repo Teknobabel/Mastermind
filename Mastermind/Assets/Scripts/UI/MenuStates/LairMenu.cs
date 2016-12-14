@@ -13,6 +13,8 @@ public class LairMenu : MenuState {
 
 	public TextMeshProUGUI m_lairText;
 
+	public TokenButton[] m_assets;
+
 	void Awake ()
 	{
 		if (!instance) {
@@ -36,6 +38,7 @@ public class LairMenu : MenuState {
 
 		UpdateText ();
 		UpdateBase ();
+		UpdateAssets ();
 	}
 
 	public override void OnHold()
@@ -62,6 +65,7 @@ public class LairMenu : MenuState {
 
 		UpdateText ();
 		UpdateBase ();
+		UpdateAssets ();
 	}
 
 	public override void OnDeactivate()
@@ -93,17 +97,45 @@ public class LairMenu : MenuState {
 		}
 	} 
 
+	private void UpdateAssets ()
+	{
+		Organization player = GameManager.instance.game.player;
+
+		for (int i = 0; i < LairMenu.instance.m_assets.Length; i++) {
+
+			TokenButton tb = LairMenu.instance.m_assets [i];
+
+			if (i < player.maxAssets) {
+
+				if (i < player.currentAssets.Count) {
+					Asset a = player.currentAssets [i];
+					tb.gameObject.SetActive (true);
+					tb.m_tokenText.gameObject.SetActive (true);
+					tb.m_tokenText.text = a.m_name.ToUpper();
+				} else {
+
+					tb.gameObject.SetActive (true);
+					tb.m_tokenText.gameObject.SetActive (false);
+				}
+
+			} else {
+
+				tb.Deactivate ();
+			}
+		}
+	}
+
 	private void UpdateText ()
 	{
 		Organization player = GameManager.instance.game.player;
 
-		string s = "ORG NAME: " + player.orgName;
-		s += "\n UPGRADES:";
-		s += "\n ASSETS:";
-
-		foreach (Asset a in player.currentAssets) {
-			s += "\n  - " + a.m_name.ToUpper();
-		}
+		string s = player.orgName;
+//		s += "\n UPGRADES:";
+//		s += "\n ASSETS:";
+//
+//		foreach (Asset a in player.currentAssets) {
+//			s += "\n  - " + a.m_name.ToUpper();
+//		}
 
 		m_lairText.text = s;
 	}

@@ -8,6 +8,10 @@ public class StealAsset : MissionBase {
 	{
 		base.CompleteMission (a);
 		a.m_success = true;
+
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			// find a revealed non-empty asset token
@@ -17,27 +21,29 @@ public class StealAsset : MissionBase {
 
 				Asset asset = at.m_assetToken.m_asset;
 
-				TurnResultsEntry t = new TurnResultsEntry ();
-				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-				t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + asset.m_name.ToUpper() + " ASSET.";
-				//				t.m_resultsText += "\n" + completionChance.ToString ();
+				// remove it from region and add to player bank
+
+				if (GameManager.instance.game.player.currentAssets.Count < GameManager.instance.game.player.maxAssets) {
+
+					t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
+					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper () + " GAINS A " + asset.m_name.ToUpper () + " ASSET.";
+
+					GameManager.instance.game.player.AddAsset (at.m_assetToken.m_asset);
+					a.m_region.RemoveAssetToken (at);
+				} else {
+
+					t.m_resultsText += "\n" + a.m_mission.m_name.ToUpper () + " mission aborted: No room for Asset in Lair";
+				}
+
 				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
-
-				// remove it from region and add to player bank
-
-				GameManager.instance.game.player.AddAsset (at.m_assetToken.m_asset);
-
-				a.m_region.RemoveAssetToken (at);
 
 			}
 
 		} else {
 			
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -59,7 +65,7 @@ public class StealAsset : MissionBase {
 	{
 		// valid if there is a revealed, non empty asset token in the region
 
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null && GameManager.instance.game.player.currentAssets.Count < GameManager.instance.game.player.maxAssets) {
 
 			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == TokenSlot.TokenType.Asset &&
 				GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {

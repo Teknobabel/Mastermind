@@ -13,9 +13,11 @@ public class SwitchStatusTrait : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		a.m_henchmenInFocus.UpdateStatusTrait (m_newTrait);
 
-		TurnResultsEntry t = new TurnResultsEntry ();
 		t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 		t.m_resultsText += "\n" + a.m_henchmenInFocus.henchmenName.ToUpper () + "'s status is now " + m_newTrait.m_name.ToUpper();
 		//			t.m_resultsText += "\n" + completionChance.ToString ();

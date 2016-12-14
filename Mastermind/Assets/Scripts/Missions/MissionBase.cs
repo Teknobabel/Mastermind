@@ -100,7 +100,12 @@ public class MissionBase : ScriptableObject, IMission {
 
 	public virtual void CancelMission (MissionWrapper a)
 	{
+		// return command points if the mission was started this turn
 
+		if (a.m_turnsPassed == 0) {
+
+			GameManager.instance.game.player.GainCommandPoints (a.m_mission.m_cost);
+		}
 	}
 
 	public int GetMissionRank (MissionWrapper mw)

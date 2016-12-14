@@ -13,6 +13,9 @@ public class CombineAssets : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			// check if player still meets requirements
@@ -31,21 +34,10 @@ public class CombineAssets : MissionBase {
 
 				if (hasAllSourceAssets) {
 
-//					foreach (Asset asset in m_sourceAssets) {
-//						GameManager.instance.game.player.RemoveAsset (asset);
-//					}
-
 					GameManager.instance.game.player.AddAsset (m_createdAsset);
 
-					TurnResultsEntry t = new TurnResultsEntry ();
 					t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-
-//					foreach (Asset asset in m_sourceAssets) {
-//						t.m_resultsText += "\n" + asset.m_name.ToUpper () + " IS REMOVED.";
-//					}
-
 					t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper () + " GAINS " + m_createdAsset.m_name.ToUpper () + " ASSET.";
-//					t.m_resultsText += "\n" + completionChance.ToString ();
 					t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 					t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -54,9 +46,7 @@ public class CombineAssets : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

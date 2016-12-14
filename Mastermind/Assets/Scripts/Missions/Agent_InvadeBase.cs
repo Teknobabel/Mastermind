@@ -30,7 +30,16 @@ public class Agent_InvadeBase : MissionBase {
 
 				if (aw.m_vizState == AgentWrapper.VisibilityState.Hidden) {
 
-					sneakAttackBonus += 30;
+					// security center has a chance to cancel sneak attack bonus
+
+					if (Random.Range (0.0f, 1.0f) >= b.chanceToNegateAmbushBonus) {
+
+						sneakAttackBonus += 30;
+					} else {
+
+						t.m_resultsText += "\n" + aw.m_agent.henchmenName.ToUpper() + " is detected by security!";
+					}
+
 					aw.ChangeVisibilityState (AgentWrapper.VisibilityState.Visible);
 				}
 

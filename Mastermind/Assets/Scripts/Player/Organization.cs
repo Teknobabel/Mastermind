@@ -15,6 +15,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	private int m_maxAvailableHenchmen = 1;
 	private int m_currentIntel = 0;
 	private int m_maxIntel = 1;
+	private int m_maxAssets = 99;
 
 	private List<Henchmen> m_currentHenchmen;
 	private List<Henchmen> m_availableHenchmen;
@@ -270,6 +271,12 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		}
 	}
 
+	public void GainCommandPoints (int points)
+	{
+		m_currentCommandPool = Mathf.Clamp (m_currentCommandPool + points, 0, 99);
+		Notify (this, GameEvent.Organization_CommandPoolChanged);
+	}
+
 	public void UseCommandPoints (int points)
 	{
 		m_currentCommandPool = Mathf.Clamp (m_currentCommandPool - points, 0, 99);
@@ -435,6 +442,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		m_maxAvailableHenchmen = d.m_startingHenchmen;
 		m_currentIntel = d.m_startingIntel;
 		m_maxIntel = d.m_maxIntel;
+		m_maxAssets = 6;
 
 		TurnResultsEntry t2 = new TurnResultsEntry ();
 		t2.m_iconType = TurnResultsEntry.IconType.Organization;
@@ -747,7 +755,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 		return cost;
 	}
-
+		
 	private int GetCommandPool ()
 	{
 		int totalCP = m_commandPool;
@@ -797,5 +805,6 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}
 	public Region homeRegion {get{return m_homeRegion;}}
 	public Base orgBase {get{return m_base;}}
+	public int maxAssets {get{return m_maxAssets;} set { m_maxAssets = value; }}
 
 }

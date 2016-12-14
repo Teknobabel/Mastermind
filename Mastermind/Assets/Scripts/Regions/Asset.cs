@@ -73,6 +73,8 @@ public class Asset : ScriptableObject, ISubject {
 		TrapRoom,
 		CommandCenter,
 		LairUpgrade_Cloak,
+		LairUpgrade_SecurityStation,
+		LairUpgrade_Warehouse,
 	}
 
 	private List<IObserver>

@@ -9,7 +9,11 @@ public class UncoverRemoteIntel : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
+//		a.m_success = true;
+
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			foreach (Region r in GameManager.instance.game.regions) {
@@ -22,7 +26,6 @@ public class UncoverRemoteIntel : MissionBase {
 
 						ts.m_state = TokenSlot.State.Revealed;
 
-						TurnResultsEntry t = new TurnResultsEntry ();
 						t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission complete!";
 						t.m_resultsText += "\nIntel discovered in " + r.regionName.ToUpper() + "!";
 						t.m_resultType = GameEvent.Henchmen_MissionCompleted;
@@ -35,7 +38,6 @@ public class UncoverRemoteIntel : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission complete!";
 			t.m_resultsText += "\nNothing found.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;

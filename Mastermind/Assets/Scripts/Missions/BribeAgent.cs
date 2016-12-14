@@ -8,13 +8,16 @@ public class BribeAgent : MissionBase {
 	{
 		base.CompleteMission (a);
 //		a.m_success = true;
+
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			// send agent to Limbo if successful
 			a.m_agentInFocus.m_agent.currentRegion.RemoveAgent (a.m_agentInFocus.m_agent);
 			GameManager.instance.game.limbo.AddAgent (a.m_agentInFocus);
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 			t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper() + " disappears.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
@@ -22,7 +25,6 @@ public class BribeAgent : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

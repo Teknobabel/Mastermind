@@ -13,11 +13,13 @@ public class LaunchIntoOrbit : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			GameManager.instance.game.player.LaunchAssetIntoOrbit (a.m_assetInFocus);
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission complete!";
 			t.m_resultsText += "\n" + a.m_assetInFocus.m_name.ToUpper() + " is now in orbit.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
@@ -25,7 +27,6 @@ public class LaunchIntoOrbit : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

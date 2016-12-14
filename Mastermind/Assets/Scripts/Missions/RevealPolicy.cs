@@ -9,6 +9,9 @@ public class RevealPolicy : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			// gather all hidden tokens
@@ -29,23 +32,19 @@ public class RevealPolicy : MissionBase {
 //				tB.ChangeState (TokenBase.State.Revealed);
 				tB.m_state = TokenSlot.State.Revealed;
 
-				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 				if (tB.m_policyToken != null) {
 					t.m_resultsText += "\n" + tB.m_policyToken.m_name.ToUpper () + " is revealed!";
 				} else {
 					t.m_resultsText += "\n Empty Policy Slot is revealed!";
 				}
-//				t.m_resultsText += "\n" + completionChance.ToString ();
 				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
-//			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

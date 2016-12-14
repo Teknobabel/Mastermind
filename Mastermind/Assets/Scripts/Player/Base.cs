@@ -24,10 +24,11 @@ public class Base {
 	}
 
 	public List<Floor> m_floors = new List<Floor>();
-
 	public List<Asset> m_currentAssets = new List<Asset> ();
 
-//	public List<AgentWrapper> m_capturedAgents = new List<AgentWrapper>();
+	private float 
+	m_chanceToNegateAmbushBonus = 0,
+	m_chanceToRevealHiddenAgents = 0;
 
 	public void Initialize (int numFloors)
 	{
@@ -50,6 +51,7 @@ public class Base {
 				f.m_installedUpgrade = asset;
 				f.m_baseDefense = asset.m_defenseValue;
 				m_currentAssets.Add (asset);
+
 				return;
 			}
 		}
@@ -121,7 +123,6 @@ public class Base {
 		aw.m_agent.currentRegion.RemoveAgent (aw.m_agent);
 		GameManager.instance.game.limbo.AddAgent (aw);
 		aw.m_agent.ChangeState (Henchmen.state.Captured);
-//		m_capturedAgents.Add (aw);
 
 		foreach (Floor f in m_floors) {
 
@@ -132,4 +133,7 @@ public class Base {
 			}
 		}
 	}
+
+	public float chanceToNegateAmbushBonus {get { return m_chanceToNegateAmbushBonus; }set{ m_chanceToNegateAmbushBonus = value; }}
+	public float chanceToRevealHiddenAgents {get{ return m_chanceToRevealHiddenAgents; }set{ m_chanceToRevealHiddenAgents = value; }}
 }

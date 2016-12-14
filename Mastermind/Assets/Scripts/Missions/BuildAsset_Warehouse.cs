@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu(menuName = "Missions/Build Asset")]
-public class BuildAsset : MissionBase {
+[CreateAssetMenu(menuName = "Missions/Build Asset: Warehouse")]
+public class BuildAsset_Warehouse : MissionBase {
 
 	public Asset m_asset;
+
+	public int m_numAssetSlots = 6;
 
 	public override void InitializeMission (MissionWrapper a)
 	{
@@ -16,21 +18,22 @@ public class BuildAsset : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-//		a.m_success = true;
+//				a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
 
 		if (a.m_success) {
-			
+
 			// add asset to player's inventory
 
 			GameManager.instance.game.player.AddAsset (m_asset);
-
+			GameManager.instance.game.player.maxAssets += m_numAssetSlots;
 			GameManager.instance.game.player.orgBase.InstallAsset (a.m_floorInFocus.m_floorNumber, m_asset);
 
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
-			t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + m_asset.m_name.ToUpper() + " ASSET.";
+			t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + m_asset.m_name.ToUpper() + ".";
+			t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " can hold " + m_numAssetSlots.ToString() + " more Assets.";
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
@@ -48,7 +51,7 @@ public class BuildAsset : MissionBase {
 
 	public override bool IsValid ()
 	{
-		
+
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null &&
 			GameManager.instance.currentMissionWrapper.m_scope == m_targetType) {
 

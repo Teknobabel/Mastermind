@@ -14,6 +14,7 @@ public class CaptureAgent : MissionBase {
 		if (a.m_success) {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
+			if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission underway!";
 			t.m_resultsText += "\n";
 

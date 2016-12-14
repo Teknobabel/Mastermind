@@ -7,10 +7,11 @@ public class RevealAgentsInRegions : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
+//		a.m_success = true;
 		TurnResultsEntry t = new TurnResultsEntry ();
 
 		if (a.m_henchmenInFocus != null) {
+			t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);
 			t.m_resultsText = a.m_henchmenInFocus.henchmenName.ToUpper () + " begins sweeping " + a.m_regionInFocus.regionName.ToUpper ();
 		} else {
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission begins in " + a.m_regionInFocus.regionName.ToUpper ();

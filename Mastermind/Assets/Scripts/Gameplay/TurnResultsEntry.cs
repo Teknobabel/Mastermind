@@ -22,4 +22,5 @@ public class TurnResultsEntry {
 	public int m_turnNumber = -1;
 	public GameEvent m_resultType = GameEvent.None;
 	public IconType m_iconType = IconType.Mission;
+	public List<int> m_henchmenIDs = new List<int>();
 }

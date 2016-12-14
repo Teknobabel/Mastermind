@@ -12,6 +12,9 @@ public class SeizeControlToken : MissionBase {
 
 		a.m_success = true;
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			// find the first control token of m_type not under player control
@@ -24,7 +27,6 @@ public class SeizeControlToken : MissionBase {
 
 					ts.ChangeOwner(Region.Owner.Player);
 
-					TurnResultsEntry t = new TurnResultsEntry ();
 					t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 					t.m_resultsText += "\n" + ts.GetBaseToken().m_name.ToUpper() + " is now under " + GameManager.instance.game.player.orgName.ToUpper() + " control!";
 //					t.m_resultsText += "\n" + completionChance.ToString ();
@@ -40,7 +42,6 @@ public class SeizeControlToken : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 //			t.m_resultsText += "\n" + completionChance.ToString ();
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";

@@ -9,6 +9,9 @@ public class SearchForAgentInRegion : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			Region r = a.m_region;
@@ -23,7 +26,6 @@ public class SearchForAgentInRegion : MissionBase {
 				}
 			}
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + ": " + a.m_region.regionName.ToUpper() + " mission complete!\n";
 			if (l.Count == 0) {
 				t.m_resultsText += "No Agents found";
@@ -37,7 +39,6 @@ public class SearchForAgentInRegion : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + ": " + a.m_region.regionName.ToUpper() + " mission complete!\n";
 			t.m_resultsText += "No Agents found";
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

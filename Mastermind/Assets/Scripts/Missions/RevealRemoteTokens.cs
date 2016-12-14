@@ -11,6 +11,10 @@ public class RevealRemoteTokens : MissionBase {
 	{
 		base.CompleteMission (a);
 //		a.m_success = true;
+
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
 		if (a.m_success) {
 
 			// gather all hidden tokens
@@ -51,7 +55,6 @@ public class RevealRemoteTokens : MissionBase {
 				}
 			}
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 			foreach (TokenSlot ts in revealedTokens) {
 				
@@ -70,7 +73,6 @@ public class RevealRemoteTokens : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;

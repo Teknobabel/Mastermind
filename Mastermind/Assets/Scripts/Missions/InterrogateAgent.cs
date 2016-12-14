@@ -11,6 +11,7 @@ public class InterrogateAgent : MissionBase {
 //				a.m_success = true;
 	
 		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
 
 		if (a.m_floorInFocus.m_capturedAgent == null) {
 

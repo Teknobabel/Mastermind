@@ -46,7 +46,7 @@ public class TravelToRegion : MissionBase {
 		Debug.Log ("Completing Mission: " + m_name);
 
 		bool ambush = false;
-		string s = null;
+		TurnResultsEntry t = new TurnResultsEntry ();
 
 		if (a.m_agentInFocus != null) {
 
@@ -58,7 +58,23 @@ public class TravelToRegion : MissionBase {
 			} else if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Empty) {
 				
 				a.m_region.AddAgent (a.m_agentInFocus);
-				s = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " ";
+				t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " arrives in " + a.m_region.regionName.ToUpper();
+			}
+
+			// chance to reveal hidden agent entering region w base
+
+			if (a.m_region.id == GameManager.instance.game.player.homeRegion.id && GameManager.instance.game.player.orgBase.chanceToRevealHiddenAgents > 0.0f) {
+
+				if (Random.Range (0.0f, 1.0f) > GameManager.instance.game.player.orgBase.chanceToRevealHiddenAgents) {
+
+					a.m_agentInFocus.ChangeVisibilityState (AgentWrapper.VisibilityState.Visible);
+
+					TurnResultsEntry t2 = new TurnResultsEntry ();
+					t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " has been discovered sneaking around your Lair!";
+					t2.m_iconType = TurnResultsEntry.IconType.Agent;
+					t2.m_resultType = GameEvent.Henchmen_ArriveInRegion;
+					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t2);
+				}
 			}
 
 		} else if (a.m_henchmenInFocus != null || a.m_henchmen.Count > 0) {
@@ -67,6 +83,8 @@ public class TravelToRegion : MissionBase {
 				a.m_henchmenInFocus = a.m_henchmen [0];
 			}
 
+			t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);
+
 			if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Occupied_Agent) {
 				
 				a.m_agentInFocus = a.m_henchmenSlotInFocus.m_agent;
@@ -74,14 +92,13 @@ public class TravelToRegion : MissionBase {
 			} else if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Empty) {
 
 				a.m_region.AddHenchmen (a.m_henchmenInFocus);
-				s = a.m_henchmenInFocus.henchmenName.ToUpper () + " ";
+				t.m_resultsText = a.m_henchmenInFocus.henchmenName.ToUpper () + " arrives in " + a.m_region.regionName.ToUpper();
 			}
 
 		}
 
-		TurnResultsEntry t = new TurnResultsEntry ();
+
 		t.m_iconType = TurnResultsEntry.IconType.Travel;
-		t.m_resultsText = s + " arrives in " + a.m_region.regionName.ToUpper();
 		t.m_resultType = GameEvent.Henchmen_ArriveInRegion;
 		a.m_organization.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
@@ -129,11 +146,14 @@ public class TravelToRegion : MissionBase {
 
 		// calculate score for each, based on presence of specific traits + some randomness
 
+		TurnResultsEntry t = new TurnResultsEntry ();
 		Dictionary<Henchmen, int> ambushDict = new Dictionary<Henchmen, int> ();
 		List<Henchmen> l = new List<Henchmen> ();
 		Henchmen winner = null;
 		Henchmen loser = null;
 		int winningScore = -1;
+
+		t.m_henchmenIDs.Add (henchmen.id);
 
 		l.Add (henchmen);
 		l.Add (agent.m_agent);
@@ -216,8 +236,7 @@ public class TravelToRegion : MissionBase {
 				r.AddAgent (agent);
 			}
 		}
-
-		TurnResultsEntry t = new TurnResultsEntry ();
+			
 		t.m_resultsText = "An ambush occurs between " + henchmen.henchmenName.ToUpper() + " and " + agent.m_agent.henchmenName.ToUpper() + "!";
 		t.m_resultsText += "\n " + agent.m_agent.henchmenName.ToUpper () + " Score: " + ambushDict [agent.m_agent].ToString ();
 		t.m_resultsText += "\n " + henchmen.henchmenName.ToUpper () + " Score: " + ambushDict [henchmen].ToString ();
