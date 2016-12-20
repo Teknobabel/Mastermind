@@ -47,7 +47,8 @@ public class PassPolicy : MissionBase {
 	{
 		// valid if the token in focus is an empty policy token
 
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null && 
+			!SelectMissionMenu.instance.missionsInList.Contains(this)) {
 
 			TokenSlot ts = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 

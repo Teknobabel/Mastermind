@@ -712,6 +712,12 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		agentTab.Initialize ();
 		m_menuTabs.Add (agentTab.id, agentTab);
 
+		MenuTab databaseTab = new MenuTab ();
+		databaseTab.m_name = "DATABASE";
+		databaseTab.m_menuState = MenuState.State.DatabaseMenu;
+		databaseTab.Initialize ();
+		m_menuTabs.Add (databaseTab.id, databaseTab);
+
 		AddObserver (TabMenu.instance);
 
 		Notify (this, GameEvent.Organization_Initialized);

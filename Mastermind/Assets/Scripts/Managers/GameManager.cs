@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 	private AgentPhaseState m_agentPhase;
 	private EndTurnState m_endTurnPhase;
 
-	private AgentAIState_Idle m_agentState_Idle;
+//	private AgentAIState_Idle m_agentState_Idle;
 
 	private IGameState m_currentState = null;
 
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour {
 		m_agentPhase = new AgentPhaseState ();
 		m_endTurnPhase = new EndTurnState ();
 
-		m_agentState_Idle = new AgentAIState_Idle ();
+//		m_agentState_Idle = new AgentAIState_Idle ();
 
 	}
 
@@ -201,7 +201,7 @@ public class GameManager : MonoBehaviour {
 	public AgentPhaseState agentPhase {get{return m_agentPhase; }}
 	public EndTurnState endTurnPhase {get{return m_endTurnPhase; }}
 
-	public AgentAIState_Idle agentState_Idle {get{return m_agentState_Idle;}}
+//	public AgentAIState_Idle agentState_Idle {get{return m_agentState_Idle;}}
 
 	public Game game {get{return m_game; } set {m_game = value; }}
 	public MenuState.State currentMenuState {get{return m_menuState.m_state;}}

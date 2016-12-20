@@ -8,6 +8,10 @@ public class Agent_DisruptMission : MissionBase {
 	{
 		base.CompleteMission (a);
 		a.m_success = true;
+
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
+
 		if (a.m_success) {
 
 			MissionWrapper missionToDisrupt = null;
@@ -30,7 +34,6 @@ public class Agent_DisruptMission : MissionBase {
 
 					GameManager.instance.game.player.CancelMission (missionToDisrupt);
 
-					TurnResultsEntry t = new TurnResultsEntry ();
 					t.m_iconType = TurnResultsEntry.IconType.Agent;
 					t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " shows up to disrupt the mission: " + missionToDisrupt.m_mission.m_name.ToUpper() + "!";
 					t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " is successful!";
@@ -39,7 +42,6 @@ public class Agent_DisruptMission : MissionBase {
 					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 				} else {
 
-					TurnResultsEntry t = new TurnResultsEntry ();
 					t.m_iconType = TurnResultsEntry.IconType.Agent;
 					t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " shows up to disrupt the mission: " + missionToDisrupt.m_mission.m_name.ToUpper() + "!";
 					t.m_resultsText += "\n" + a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " fails.";

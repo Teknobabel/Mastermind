@@ -28,12 +28,6 @@ public class StartNewGameState : IGameState {
 			newGame.AddAgentToGame (newHenchman);
 		}
 
-		foreach (RegionData r in GameManager.instance.m_regionBank) {
-			Region newRegion = Region.CreateInstance<Region> ();
-			newRegion.Initialize (r);
-			newGame.AddRegionToGame (newRegion);
-		}
-
 		// initialize player
 
 		Organization player = Organization.CreateInstance<Organization> ();
@@ -45,6 +39,14 @@ public class StartNewGameState : IGameState {
 		AgentOrganization agentOrg = AgentOrganization.CreateInstance<AgentOrganization> ();
 		newGame.AddAgentOrganizationToGame (agentOrg);
 		agentOrg.Initialize ("Interpol");
+
+		foreach (RegionData r in GameManager.instance.m_regionBank) {
+			Region newRegion = Region.CreateInstance<Region> ();
+			newRegion.Initialize (r);
+			newGame.AddRegionToGame (newRegion);
+		}
+
+
 
 //		GameManager.instance.game.SpawnIntel (); // debug
 

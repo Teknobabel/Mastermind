@@ -6,40 +6,41 @@ using TMPro;
 public class TraitButton : MonoBehaviour {
 
 	public TextMeshProUGUI m_traitName;
-	public Image m_traitButtonImage;
+	public RawImage m_traitButtonImage;
 
-	private Color 
-	m_disabledColor = new Color (0.7f, 0.7f, 0.7f),
-	m_skillColor = Color.yellow,
-	m_resourceColor = Color.blue,
-	m_giftColor = Color.green,
-	m_flawColor = Color.red,
-	m_assetColor = Color.magenta;
+//	private Color 
+//	m_disabledColor = Color.magenta,
+//	m_skillColor = Color.magenta,
+//	m_resourceColor = Color.magenta,
+//	m_giftColor = Color.magenta,
+//	m_flawColor = Color.magenta,
+//	m_assetColor = Color.magenta;
 
 	public void Initialize (TraitData t, bool activeTrait)
 	{
 		m_traitName.text = t.m_name.ToUpper();
 
-		Color c = Color.gray;
-
 		if (activeTrait) {
 			switch (t.m_class) {
 			case TraitData.TraitClass.Skill:
-				c = m_skillColor;
+				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Skill);
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Skill);
 				break;
 			case TraitData.TraitClass.Resource:
-				c = m_resourceColor;
+				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Resource);
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Resource);
 				break;
 			case TraitData.TraitClass.Gift:
-				c = m_giftColor;
+				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Gift);
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Gift);
 				break;
 			case TraitData.TraitClass.Flaw:
-				c = m_flawColor;
+				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Flaw);
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Flaw);
 				break;
 			}
 		}
 
-		m_traitButtonImage.color = c;
 //		m_traitName.color = c;
 	}
 
@@ -47,20 +48,20 @@ public class TraitButton : MonoBehaviour {
 	{
 		m_traitName.text = a.m_name.ToUpper ();
 
-		Color c = Color.gray;
+//		Color c = Color.gray;
 
 		if (activeAsset) {
-			c = m_assetColor;
+			m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Asset);
+			m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Asset);
 		}
-
-		m_traitButtonImage.color = c;
+			
 //		m_traitName.color = c;
 	}
 
 	public void Deactivate ()
 	{
-		m_traitButtonImage.fillCenter = true;
-		m_traitButtonImage.color = m_disabledColor;
+//		m_traitButtonImage.fillCenter = true;
+		m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
 		m_traitName.gameObject.SetActive (false);
 	}
 }

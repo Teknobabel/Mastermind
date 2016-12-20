@@ -12,6 +12,8 @@ public class Agents_EngageHenchmen : MissionBase {
 		t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission underway!";
 		t.m_resultsText += "\n";
 
+		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
+
 		foreach (AgentWrapper agent in a.m_agents) {
 
 			t.m_resultsText += agent.m_agent.henchmenName.ToUpper() + ", ";

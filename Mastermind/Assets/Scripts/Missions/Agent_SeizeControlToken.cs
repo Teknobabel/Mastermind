@@ -9,6 +9,9 @@ public class Agent_SeizeControlToken : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
+
 		if (a.m_success) {
 
 			List<TokenSlot> validTokens = new List<TokenSlot> ();
@@ -30,7 +33,6 @@ public class Agent_SeizeControlToken : MissionBase {
 
 				ts.ChangeOwner (Region.Owner.AI);
 
-				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_iconType = TurnResultsEntry.IconType.Agent;
 				t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper () + " has liberated a " + ts.m_controlToken.m_controlType.ToString().ToUpper() + " Control Point in " + a.m_region.regionName.ToUpper() + "!";
 				t.m_resultsText += "\n" + ts.m_controlToken.m_controlType.ToString().ToUpper() + " is no longer under your control!";

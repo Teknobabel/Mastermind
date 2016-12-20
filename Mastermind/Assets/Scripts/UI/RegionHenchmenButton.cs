@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class RegionHenchmenButton : MonoBehaviour {
 
-	public Image m_buttonImage;
+	public RawImage m_buttonImage;
 	public TextMeshProUGUI m_text;
 
 	public Region_ListViewItem m_parent;
@@ -24,7 +24,7 @@ public class RegionHenchmenButton : MonoBehaviour {
 			m_text.color = Color.white;
 			m_text.text = hSlot.m_henchmen.henchmenName.ToUpper ();
 			m_buttonImage.color = Color.white;
-			m_buttonImage.sprite = hSlot.m_henchmen.portraitShort;
+			m_buttonImage.texture = hSlot.m_henchmen.portraitShort.texture;
 
 		} else if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Agent && (hSlot.m_agent.m_vizState == AgentWrapper.VisibilityState.Visible || 
 			hSlot.m_agent.m_vizState == AgentWrapper.VisibilityState.Tracked )) {
@@ -33,7 +33,7 @@ public class RegionHenchmenButton : MonoBehaviour {
 			m_text.color = Color.red;
 			m_text.text = hSlot.m_agent.m_agent.henchmenName.ToUpper ();
 			m_buttonImage.color = Color.white;
-			m_buttonImage.sprite = hSlot.m_agent.m_agent.portraitShort;
+			m_buttonImage.texture = hSlot.m_agent.m_agent.portraitShort.texture;
 
 		} else if (hSlot.m_state == Region.HenchmenSlot.State.Empty || (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Agent && hSlot.m_agent.m_vizState == AgentWrapper.VisibilityState.Hidden))
 		{

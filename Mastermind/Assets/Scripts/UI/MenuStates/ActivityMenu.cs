@@ -46,7 +46,7 @@ public class ActivityMenu : MenuState, ISubject {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
 		}
 
-		m_sortPane.SetActive (true);
+//		m_sortPane.SetActive (true);
 		m_turnResultsMenu.SetActive (true);
 			
 		if (m_displayTurnResults) {
@@ -64,10 +64,12 @@ public class ActivityMenu : MenuState, ISubject {
 
 	public override void OnHold()
 	{
+		m_turnResultsMenu.SetActive (false);
 	}
 
 	public override void OnReturn()
 	{
+		m_turnResultsMenu.SetActive (true);
 	}
 
 	public override void OnDeactivate()
@@ -92,7 +94,7 @@ public class ActivityMenu : MenuState, ISubject {
 			m_tabInfo = null;
 		}
 
-		m_sortPane.SetActive (false);
+//		m_sortPane.SetActive (false);
 		m_turnResultsMenu.SetActive (false);
 	}
 

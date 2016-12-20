@@ -13,6 +13,8 @@ public class Agent_EscapeJail : MissionBase {
 		AgentWrapper aw = a.m_floorInFocus.m_capturedAgent;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
+		t.m_henchmenIDs.Add (aw.m_agent.id);
+
 		t.m_iconType = TurnResultsEntry.IconType.Agent;
 		t.m_resultsText = aw.m_agent.henchmenName.ToUpper () + " attempts to escape!";
 

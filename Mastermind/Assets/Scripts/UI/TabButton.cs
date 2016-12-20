@@ -12,13 +12,13 @@ public class TabButton : MonoBehaviour {
 	}
 
 	public TextMeshProUGUI m_buttonText;
-	public Image m_buttonImage;
+	public RawImage m_buttonImage;
 	public Button m_button;
 	private State m_state = State.None;
 	private MenuTab m_menuTab;
 
-	private Color m_selectedColor = Color.white;
-	private Color m_unselectedColor = new Color(0.631f, 0.631f, 0.631f);
+//	private Color m_selectedColor = Color.white;
+//	private Color m_unselectedColor = new Color(0.631f, 0.631f, 0.631f);
 
 	public void Initialize (MenuTab t)
 	{
@@ -38,17 +38,21 @@ public class TabButton : MonoBehaviour {
 
 		switch (newState) {
 		case State.Selected:
-			
-			cb.normalColor = m_selectedColor;
-			m_button.colors = cb;
-			m_buttonImage.color = m_selectedColor;
+
+			Color selectedColor = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_BG_Selected);
+
+//			cb.normalColor = selectedColor;
+//			m_button.colors = cb;
+			m_buttonImage.color = selectedColor;
 			break;
 
 		case State.Unselected:
-			
-			cb.normalColor = m_unselectedColor;
-			m_button.colors = cb;
-			m_buttonImage.color = m_unselectedColor;
+
+			Color unselectedColor = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_BG_Unselected);
+
+//			cb.normalColor = unselectedColor;
+//			m_button.colors = cb;
+			m_buttonImage.color = unselectedColor;
 			break;
 		}
 	}

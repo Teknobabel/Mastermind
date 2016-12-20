@@ -9,9 +9,12 @@ public class Agent_InvadeBase : MissionBase {
 	{
 		base.CompleteMission (a);
 		a.m_success = true;
+
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
+
 		if (a.m_success) {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_iconType = TurnResultsEntry.IconType.Agent;
 			t.m_resultsText = GameManager.instance.game.player.orgName.ToUpper () + "'s base is being invaded!\n";
 

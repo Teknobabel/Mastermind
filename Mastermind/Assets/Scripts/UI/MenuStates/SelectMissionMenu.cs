@@ -17,6 +17,7 @@ public class SelectMissionMenu : MenuState {
 	public RegionHenchmenButton[] m_henchmenSlots;
 
 	private List<GameObject> m_listViewItems = new List<GameObject> ();
+	private List<MissionBase> m_missionsInList = new List<MissionBase>();
 
 	void Awake ()
 	{
@@ -128,6 +129,7 @@ public class SelectMissionMenu : MenuState {
 					g.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g);
 					g.GetComponent<Mission_ListViewItem> ().Initialize ();
+					m_missionsInList.Add (m);
 				}
 
 				foreach (TokenSlot t in GameManager.instance.currentMissionWrapper.m_region.allTokens) {
@@ -166,6 +168,7 @@ public class SelectMissionMenu : MenuState {
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Mission_ListViewItem> ().Initialize ();
+						m_missionsInList.Add (m);
 
 					}
 				}
@@ -183,7 +186,7 @@ public class SelectMissionMenu : MenuState {
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+						m_missionsInList.Add (m);
 					}
 				}
 
@@ -200,7 +203,7 @@ public class SelectMissionMenu : MenuState {
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+						m_missionsInList.Add (m);
 					}
 				}
 
@@ -220,7 +223,7 @@ public class SelectMissionMenu : MenuState {
 							g.transform.localScale = Vector3.one;
 							m_listViewItems.Add (g);
 							g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+							m_missionsInList.Add (m);
 						}
 					}
 
@@ -242,7 +245,7 @@ public class SelectMissionMenu : MenuState {
 							g.transform.localScale = Vector3.one;
 							m_listViewItems.Add (g);
 							g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+							m_missionsInList.Add (m);
 						}
 					}
 				}
@@ -259,7 +262,7 @@ public class SelectMissionMenu : MenuState {
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+						m_missionsInList.Add (m);
 					}
 				}
 
@@ -276,7 +279,7 @@ public class SelectMissionMenu : MenuState {
 					g.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g);
 					g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+					m_missionsInList.Add (m);
 				}
 			}
 
@@ -288,7 +291,7 @@ public class SelectMissionMenu : MenuState {
 					g.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g);
 					g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+					m_missionsInList.Add (m);
 				}
 			}
 
@@ -300,7 +303,7 @@ public class SelectMissionMenu : MenuState {
 					g.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g);
 					g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+					m_missionsInList.Add (m);
 				}
 
 				foreach (Henchmen thisH in GameManager.instance.currentMissionWrapper.m_henchmen) {
@@ -313,7 +316,7 @@ public class SelectMissionMenu : MenuState {
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+						m_missionsInList.Add (m);
 					}
 				}
 
@@ -329,7 +332,7 @@ public class SelectMissionMenu : MenuState {
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Mission_ListViewItem> ().Initialize ();
-
+						m_missionsInList.Add (m);
 					}
 				}
 //				}
@@ -347,6 +350,8 @@ public class SelectMissionMenu : MenuState {
 //			m_listViewItems.Add (g);
 //			g.GetComponent<Mission_ListViewItem> ().Initialize ();
 //		}
+
+		m_missionsInList.Clear ();
 	}
 
 	public void SelectMission (MissionBase m)
@@ -360,4 +365,5 @@ public class SelectMissionMenu : MenuState {
 		}
 	}
 
+	public List<MissionBase> missionsInList {get{return m_missionsInList;}}
 }

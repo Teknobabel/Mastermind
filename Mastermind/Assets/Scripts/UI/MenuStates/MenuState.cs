@@ -19,6 +19,7 @@ public abstract class MenuState : MonoBehaviour {
 		SelectHenchmenMenu,
 		SelectMissionMenu,
 		AgentsMenu,
+		DatabaseMenu,
 	}
 
 	public State m_state = State.None;

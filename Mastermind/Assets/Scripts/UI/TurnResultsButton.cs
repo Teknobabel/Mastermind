@@ -13,19 +13,19 @@ public class TurnResultsButton : MonoBehaviour, IObserver {
 	}
 
 	public TextMeshProUGUI m_buttonText;
-	public Image m_buttonImage;
+	public RawImage m_buttonImage;
 
 	private int m_turnNumber = -1;
 
 	private State m_state = State.Inactive;
 
-	private Color m_startingButtonColor;
+//	private Color m_startingButtonColor;
 
 	public void Initialize (int turnNumber)
 	{
 		m_turnNumber = turnNumber;
 		m_buttonText.text = "TURN " + m_turnNumber.ToString ();
-		m_startingButtonColor = m_buttonImage.color;
+//		m_startingButtonColor = m_buttonImage.color;
 
 		ActivityMenu.instance.AddObserver (this);
 	}
@@ -54,12 +54,16 @@ public class TurnResultsButton : MonoBehaviour, IObserver {
 
 		switch (m_state) {
 		case State.Active:
-			m_buttonImage.color = Color.black;
-			m_buttonText.color = Color.white;
+//			m_buttonImage.color = Color.black;
+//			m_buttonText.color = Color.white;
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Unselected);
+			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Unselected);
 			break;
 		case State.Inactive:
-			m_buttonImage.color = m_startingButtonColor;
-			m_buttonText.color = Color.black;
+//			m_buttonImage.color = m_startingButtonColor;
+//			m_buttonText.color = Color.black;
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Selected);
+			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Selected);
 			break;
 		}
 	}

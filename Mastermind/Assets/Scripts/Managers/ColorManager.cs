@@ -1,0 +1,168 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class ColorManager : MonoBehaviour {
+	public static ColorManager instance;
+
+	public enum UIElement // next ID: 137
+	{
+		None = 0,
+		Background_Main = 1,
+		MainNav_Tab_BG_Unselected = 2,
+		MainNav_Tab_BG_Selected = 3,
+		MainNav_Tab_BG_Hovered = 120,
+		MainNav_Tab_Text = 4,
+		MainNav_ExecuteButton_BG = 5,
+		MainNav_ExecuteButton_Text = 6,
+		MainNav_CommandPool_BG = 7,
+		MainNav_CommandPool_CurrentCP = 8,
+		MainNav_CommandPool_MaxCP = 9,
+		MainNav_CommandPool_HenchmenCostPerTurn = 20,
+		MainNav_Icon_TurnNumber = 10,
+		MainNav_Icon_Infamy = 11,
+		MainNav_Icon_WantedLevel = 12,
+		MainNav_Icon_Intel = 13,
+		MainNav_Text_TurnNumber = 14,
+		MainNav_Text_WantedLevel = 15,
+		MainNav_Text_Intel = 16,
+		MainNav_Text_Infamy = 22,
+		MainNav_PauseButton_BG = 17,
+		MainNav_PauseButton_Text = 18,
+		ContentView_BG = 23,
+		ContentView_ActivityButton_BG = 24,
+		ContentView_ActivityButton_Icon = 25,
+		ContentView_SortPanel_BG = 21,
+		ContentView_SortPanel_Header_Text = 104,
+		ContentView_SortPanel_Button_BG_Selected = 105,
+		ContentView_SortPanel_Button_BG_Unselected = 106,
+		ContentView_SortPanel_Button_Text_Selected = 107,
+		ContentView_SortPanel_Button_Text_Unselected = 108,
+		ContentView_SortPanel_SortDirection_Button_Unselected = 109,
+		ContentView_SortPanel_SortDirection_Button_Selected = 110,
+		ContentView_SortPanel_SortDirection_Text_Unselected = 111,
+		ContentView_SortPanel_SortDirection_Text_Selected = 112,
+		SectionHeader_BG = 26,
+		SectionHeader_Text = 27,
+		TurnResultsButton_BG_Unselected = 28,
+		TurnResultsButton_BG_Selected = 29,
+		TurnResultsButton_Text_Unselected = 30,
+		TurnResultsButton_Text_Selected = 31,
+		TurnResultsListItem_BG = 32,
+		TurnResultsListItem_Text = 33,
+		OPGoalButton_BG_Unfinished = 34,
+		OPGoalButton_BG_Finished = 35,
+		OPGoalButton_Text_Unfinished = 36,
+		OPGoalButton_Text_Finished = 37,
+		Token_BG_Normal = 38,
+		Token_BG_Protected = 39,
+		Token_BG_Vulnerable = 40,
+		Token_Text_Normal = 41,
+		Token_Text_Protected = 42,
+		Token_Text_Vulnerable = 43,
+		Token_Text_PlayerOwned = 133,
+		Token_BG_PlayerOwned = 134,
+		Token_BG_StatusEffect = 135,
+		Token_Text_StatusEffect = 136,
+		TraitButton_BG_Skill = 44,
+		TraitButton_BG_Resource = 45,
+		TraitButton_BG_Gift = 46,
+		TraitButton_BG_Flaw = 47,
+		TraitButton_BG_Asset = 48,
+		TraitButton_BG_BaseUpgrade = 49,
+		TraitButton_BG_Status = 50,
+		TraitButton_BG_None = 131,
+		TraitButton_Text_Skill = 51,
+		TraitButton_Text_Resource = 52,
+		TraitButton_Text_Gift = 53,
+		TraitButton_Text_Flaw = 54,
+		TraitButton_Text_Asset = 55,
+		TraitButton_Text_BaseUpgrade = 56,
+		TraitButton_Text_Status = 57,
+		HenchmenListView_Header_BG = 58,
+		HenchmenListView_Header_Text = 59,
+		HenchmenListView_BG = 60,
+		HenchmenListView_Location_Text = 61,
+		HenchmenListView_Mission_Text = 62,
+		HenchmenListView_Button_BG = 63,
+		HenchmenListView_Button_Text = 64,
+		HenchmenListView_Text_Cost = 65,
+		HenchmenListView_Dismiss_BG = 128,
+		HenchmenListView_Dismiss_Icon = 129,
+		RegionListView_HenchmenSlot_BG_Empty = 66,
+		RegionListView_HenchmenSlot_Text_Empty = 67,
+		RegionListView_HenchmenSlot_BG_OccupiedHenchmen = 68,
+		RegionListView_HenchmenSlot_Text_OccupiedHenchmen = 69,
+		RegionListView_HenchmenSlot_BG_OccupiedAgent = 70,
+		RegionListView_HenchmenSlot_Text_OccupiedAgent = 71,
+		RegionListView_BG = 72,
+		RegionListView_Header_BG = 73,
+		RegionListView_Header_Text = 74,
+		MissionListView_BG = 75,
+		MissionListView_Header_BG = 76,
+		MissionListView_Header_Text = 77,
+		MissionListView_Button_BG = 78,
+		MissionListView_Button_Text = 79,
+		MissionListView_TurnsLeft_Text = 80,
+		MissionListView_Cost_Text = 81,
+		MissionListView_SuccessChance_Text = 82,
+		MissionListView_Description_Text = 83,
+		MissionListView_CancelMission_Icon = 132,
+		MainMenu_BG = 19,
+		MainMenu_Title_Text = 84,
+		MainMenu_VersionNumber_Text = 85,
+		MainMenu_LogInButton_BG = 86,
+		MainMenu_LogInButton_Text = 87,
+		MainMenu_OrgName_Header_Text = 88,
+		MainMenu_OrgName_Button_BG = 89,
+		MainMenu_OrgName_Button_Text = 90,
+		MainMenu_Password_Header_Text = 91,
+		MainMenu_Password_Button_BG = 92,
+		MainMenu_Password_Button_Text = 93,
+		OmegaPlanMenu_BG = 121,
+		OmegaPlanMenu_Title_Text = 94,
+		OmegaPlanMenu_StageNumber_Text = 95,
+		OmegaPlanMenu_Goal_BG_Uncomplete = 96,
+		OmegaPlanMenu_Goal_BG_Complete = 97,
+		OmegaPlanMenu_Goal_Text_Uncomplete = 98,
+		OmegaPlanMenu_Goal_Text_Complete = 99,
+		DatabaseMenu_Help_BG = 100,
+		DatabaseMenu_Help_Text = 101,
+		Scrollbar_Track = 102,
+		Scrollbar_Handle = 103,
+		LairMenu_BG = 113,
+		LairMenu_OrgName_Text = 114,
+		LairMenu_Assets_Header_BG = 115,
+		LairMenu_Assets_Header_Text = 116,
+		LairMenu_Base_Header_Text = 117,
+		BackButton_BG = 118,
+		BackButton_Icon = 119,
+		WorldMenu_BG = 122,
+		HenchmenSelectMenu_BG = 123,
+		MissionSelectMenu_BG = 124,
+		AgentsMenu_BG = 125,
+		DatabaseMenu_BG = 126,
+		Activitymenu_BG = 127,
+	}
+
+	public Palette m_currentPalette;
+
+	void Awake ()
+	{
+		if (!instance) {
+			instance = this;
+		} else {
+			Destroy (gameObject);
+		}
+	}
+
+	public Color GetColor (UIElement e)
+	{
+		if (m_currentPalette != null) {
+
+			return m_currentPalette.GetColor (e);
+		}
+
+		return Color.magenta;
+	}
+}

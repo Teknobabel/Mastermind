@@ -8,6 +8,9 @@ public class Agent_CaptureIntel : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
+
 		foreach (TokenSlot ts in a.m_region.assetTokens) {
 
 			if (ts.m_assetToken != null && ts.m_assetToken == GameManager.instance.m_intel) {
@@ -32,7 +35,6 @@ public class Agent_CaptureIntel : MissionBase {
 			}
 		}
 
-		TurnResultsEntry t = new TurnResultsEntry ();
 		t.m_iconType = TurnResultsEntry.IconType.Agent;
 		t.m_resultsText = a.m_agentInFocus.m_agent.henchmenName.ToUpper() + " uncovers the Intel!";
 		t.m_resultType = GameEvent.Henchmen_MissionCompleted;

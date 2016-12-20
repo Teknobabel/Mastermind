@@ -8,6 +8,9 @@ public class Agent_SearchRegion : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
+
 		a.m_agentInFocus.m_agentEvents.Add (AgentWrapper.AgentEvents.RegionSearched);
 
 		if (a.m_success) {
@@ -74,7 +77,6 @@ public class Agent_SearchRegion : MissionBase {
 				}
 			}
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + ": " + a.m_region.regionName.ToUpper() + " mission complete!";
 			if (baseFound) {
 				t.m_resultsText += "\nBase found!";
@@ -98,7 +100,6 @@ public class Agent_SearchRegion : MissionBase {
 
 		} else {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_iconType = TurnResultsEntry.IconType.Agent;
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + ": " + a.m_region.regionName.ToUpper() + " mission complete!";
 			t.m_resultsText += "\n Nothing found.";

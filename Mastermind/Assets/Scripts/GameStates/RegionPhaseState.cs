@@ -159,6 +159,7 @@ public class RegionPhaseState : IGameState {
 					r.AddPolicytoken (GameManager.instance.m_declareWar, ts);
 
 					TurnResultsEntry t = new TurnResultsEntry ();
+					t.m_iconType = TurnResultsEntry.IconType.World;
 					t.m_resultsText = r.regionName.ToUpper() + " declares war on " + GameManager.instance.game.player.orgName.ToUpper() + "!";
 					t.m_resultType = GameEvent.Region_WarDeclared;
 					GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
