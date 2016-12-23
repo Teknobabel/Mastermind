@@ -72,7 +72,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 
 			if (i < traits.Count) {
 				TraitData td = traits [i];
-				tb.Initialize (td, true);
+				tb.Initialize (td, true, i);
 			} else {
 				tb.Deactivate ();
 			}

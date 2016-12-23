@@ -52,7 +52,7 @@ public class OmegaPlanMenu : MenuState {
 
 					if (i < op.goals.Count) {
 						OmegaPlan.Goal g = op.goals [i];
-						b.Initialize (g);
+						b.Initialize (g, i);
 					}
 				}
 

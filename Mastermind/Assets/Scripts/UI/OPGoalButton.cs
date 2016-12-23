@@ -14,28 +14,34 @@ public class OPGoalButton : MonoBehaviour {
 	
 	}
 	
-	public void Initialize (OmegaPlan.Goal goal)
+	public void Initialize (OmegaPlan.Goal goal, int positionInList)
 	{
+		string text = "";
+
 		switch (goal.m_state) {
 		case OmegaPlan.Goal.State.Active:
-			m_buttonText.text = goal.m_goal.GetText ();
+			
+			text = goal.m_goal.GetText ();
 			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.OmegaPlanMenu_Goal_Text_Uncomplete);
 			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.OmegaPlanMenu_Goal_BG_Uncomplete);
 
-//			m_buttonText.color = Color.black;
-//			m_buttonImage.fillCenter = false;
-//			m_buttonImage.color = Color.black;
 			break;
 		case OmegaPlan.Goal.State.Completed:
-			m_buttonText.text = goal.m_goal.GetText ();
+			
+			text = goal.m_goal.GetText ();
+			text += "\nCOMPLETE";
 			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.OmegaPlanMenu_Goal_Text_Complete);
 			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.OmegaPlanMenu_Goal_BG_Complete);
 
-//			m_buttonImage.fillCenter = true;
-//			m_buttonImage.color = Color.green;
-			m_buttonText.text += "\nCOMPLETE";
-//			m_buttonText.color = Color.grey;
 			break;
+		}
+
+
+		TextCrawl tc = (TextCrawl) m_buttonText.transform.GetComponent<TextCrawl>();
+		if (tc != null) {
+
+			float delay = 0.15f * ((float)(positionInList));
+			tc.Initialize(text.ToUpper(), delay);
 		}
 
 	}

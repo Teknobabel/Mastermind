@@ -11,11 +11,19 @@ public class TextCrawl : MonoBehaviour {
 
 	private float
 	m_timer = 0.0f,
-	m_textCrawlSpeed = 0.03f;
+	m_textCrawlSpeed = 0.03f,
+	m_delay = 0.0f;
 
 	private bool m_textCrawlComplete = true;
 
 	private List<string> m_remainingCharacters;
+
+	public void Initialize (string textString, float delay)
+	{
+		m_delay = delay;
+
+		Initialize (textString);
+	}
 
 	public void Initialize (string textString)
 	{
@@ -39,8 +47,13 @@ public class TextCrawl : MonoBehaviour {
 	void Update () {
 	
 		if (!m_textCrawlComplete) {
-			
-			if (m_timer >= m_textCrawlSpeed) {
+
+			if (m_delay > 0.0f) {
+
+				m_delay -= Time.deltaTime;
+				return;
+			}
+			else if (m_timer >= m_textCrawlSpeed) {
 
 				m_timer = 0;
 
@@ -52,6 +65,7 @@ public class TextCrawl : MonoBehaviour {
 				if (m_remainingCharacters.Count == 0) {
 
 					m_textCrawlComplete = true;
+					m_delay = 0.0f;
 				}
 			}
 

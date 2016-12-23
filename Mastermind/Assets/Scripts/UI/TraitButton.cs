@@ -18,6 +18,15 @@ public class TraitButton : MonoBehaviour {
 //	m_flawColor = Color.magenta,
 //	m_assetColor = Color.magenta;
 
+	private int m_positionInList = -1;
+
+	public void Initialize (TraitData t, bool activeTrait, int positionInList)
+	{
+		m_positionInList = positionInList;
+
+		Initialize (t, activeTrait);
+	}
+
 	public void Initialize (TraitData t, bool activeTrait)
 	{
 //		m_traitName.text = t.m_name.ToUpper();
@@ -26,7 +35,14 @@ public class TraitButton : MonoBehaviour {
 		TextCrawl tc = (TextCrawl) m_traitName.transform.GetComponent<TextCrawl>();
 		if (tc != null) {
 
-			tc.Initialize(t.m_name.ToUpper());
+			if (m_positionInList != -1) {
+
+				float delay = 0.2f * ((float)(m_positionInList));
+				tc.Initialize (t.m_name.ToUpper (), delay);
+			} else {
+				
+				tc.Initialize (t.m_name.ToUpper ());
+			}
 		}
 
 
@@ -113,7 +129,14 @@ public class TraitButton : MonoBehaviour {
 
 	public void Initialize (Asset a, bool activeAsset)
 	{
-		m_traitName.text = a.m_name.ToUpper ();
+//		m_traitName.text = a.m_name.ToUpper ();
+
+		// start text crawl for asset name
+		TextCrawl tc = (TextCrawl) m_traitName.transform.GetComponent<TextCrawl>();
+		if (tc != null) {
+
+			tc.Initialize(a.m_name.ToUpper());
+		}
 
 //		Color c = Color.gray;
 		m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Asset);

@@ -135,12 +135,14 @@ public class ActivityMenu : MenuState, ISubject {
 
 			List<TurnResultsEntry> t = player.turnResults [turn];
 
+			int position = 0;
 			foreach (TurnResultsEntry thisT in t) {
 
 				GameObject g = (GameObject)(Instantiate (m_turnResultsListViewItem, m_scrollViewContent.transform));
 				g.transform.localScale = Vector3.one;
 				m_listViewItems.Add (g);
-				g.GetComponent<TurnResults_ListViewItem> ().Initialize (thisT);
+				g.GetComponent<TurnResults_ListViewItem> ().Initialize (thisT, position);
+				position++;
 			}
 		} else if (turn == GameManager.instance.game.turnNumber) {
 			
