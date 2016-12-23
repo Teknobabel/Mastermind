@@ -22,9 +22,16 @@ public class TabButton : MonoBehaviour {
 
 	public void Initialize (MenuTab t)
 	{
-		m_buttonText.text = t.GetTabName ();
+//		m_buttonText.text = t.GetTabName ();
 		t.m_tabButton = this;
 		m_menuTab = t;
+
+		// start text crawl for tab name
+		TextCrawl tc = (TextCrawl) m_buttonText.transform.GetComponent<TextCrawl>();
+		if (tc != null) {
+
+			tc.Initialize(t.GetTabName().ToUpper());
+		}
 	}
 		
 	public void Deactivate ()
@@ -39,20 +46,16 @@ public class TabButton : MonoBehaviour {
 		switch (newState) {
 		case State.Selected:
 
-			Color selectedColor = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_BG_Selected);
+			m_buttonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_BG_Selected);
+			m_buttonText.color = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_Text_Selected);
 
-//			cb.normalColor = selectedColor;
-//			m_button.colors = cb;
-			m_buttonImage.color = selectedColor;
 			break;
 
 		case State.Unselected:
 
-			Color unselectedColor = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_BG_Unselected);
+			m_buttonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_BG_Unselected);
+			m_buttonText.color = ColorManager.instance.GetColor(ColorManager.UIElement.MainNav_Tab_Text_Unselected);
 
-//			cb.normalColor = unselectedColor;
-//			m_button.colors = cb;
-			m_buttonImage.color = unselectedColor;
 			break;
 		}
 	}

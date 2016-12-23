@@ -17,7 +17,7 @@ public class TurnResultsButton : MonoBehaviour, IObserver {
 
 	private int m_turnNumber = -1;
 
-	private State m_state = State.Inactive;
+	private State m_state = State.None;
 
 //	private Color m_startingButtonColor;
 
@@ -41,7 +41,7 @@ public class TurnResultsButton : MonoBehaviour, IObserver {
 		case GameEvent.ActivityMenu_TurnResultsChanged:
 			if (ActivityMenu.instance.currentlyDisplayedTurnNumber == m_turnNumber && m_state != State.Active) {
 				ChangeState (State.Active);
-			} else if (ActivityMenu.instance.currentlyDisplayedTurnNumber != m_turnNumber && m_state == State.Active) {
+			} else if (ActivityMenu.instance.currentlyDisplayedTurnNumber != m_turnNumber && m_state != State.Inactive) {
 				ChangeState (State.Inactive);
 			}
 			break;
@@ -54,16 +54,16 @@ public class TurnResultsButton : MonoBehaviour, IObserver {
 
 		switch (m_state) {
 		case State.Active:
-//			m_buttonImage.color = Color.black;
-//			m_buttonText.color = Color.white;
-			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Unselected);
-			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Unselected);
+
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Selected);
+			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_Text_Selected);
+
 			break;
 		case State.Inactive:
-//			m_buttonImage.color = m_startingButtonColor;
-//			m_buttonText.color = Color.black;
-			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Selected);
-			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Selected);
+
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_BG_Unselected);
+			m_buttonText.color = ColorManager.instance.GetColor (ColorManager.UIElement.TurnResultsButton_Text_Unselected);
+
 			break;
 		}
 	}

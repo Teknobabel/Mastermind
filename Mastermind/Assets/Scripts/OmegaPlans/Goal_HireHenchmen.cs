@@ -25,7 +25,7 @@ public class Goal_HireHenchmen : OPGoalBase, IObserver {
 	public override string GetText ()
 	{
 		string s = "HIRE:\n";
-		Debug.Log (m_trait);
+//		Debug.Log (m_trait);
 		if (m_trait != null) {
 			s += m_trait.m_name.ToUpper ();
 		}

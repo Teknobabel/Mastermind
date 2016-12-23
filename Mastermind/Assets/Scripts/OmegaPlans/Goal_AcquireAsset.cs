@@ -24,7 +24,7 @@ public class Goal_AcquireAsset : OPGoalBase, IObserver {
 	public override string GetText ()
 	{
 		string s = "ACQUIRE ASSET:\n";
-		Debug.Log (m_asset);
+//		Debug.Log (m_asset);
 		if (m_asset != null) {
 			s += m_asset.m_name.ToUpper ();
 		}

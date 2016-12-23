@@ -34,7 +34,7 @@ public class TokenButton : MonoBehaviour {
 		switch (newState) {
 		case TokenSlot.State.Hidden:
 			
-//			m_tokenImage.fillCenter = true;
+			m_tokenText.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_Text_Normal_Hidden);
 
 			switch (m_tokenSlot.m_type) {
 			case TokenSlot.TokenType.Policy:
@@ -69,42 +69,36 @@ public class TokenButton : MonoBehaviour {
 			if (m_tokenSlot.owner == Region.Owner.Player) {
 
 				if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
-//					m_tokenImage.color = Color.blue;
-					m_tokenImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_BG_Protected);
+					m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_Protected);
 				} else if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable)) {
-//					m_tokenImage.color = Color.red;
-					m_tokenImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_BG_Vulnerable);
+					m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_Vulnerable);
 				} else {
-//					m_tokenImage.color = Color.green;
-					m_tokenImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_BG_PlayerOwned);
+					m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_PlayerOwned);
 				}
 
-				m_tokenText.color = Color.green;
+				m_tokenText.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_Text_PlayerOwned);
 			} else if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
-				
-//				m_tokenImage.color = Color.blue;
-//				m_tokenText.color = Color.blue;
-				m_tokenImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_BG_Protected);
-				m_tokenText.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_Text_Protected);
+
+				m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_Protected);
+				m_tokenText.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_Text_Protected);
 
 				if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable)) {
-//					m_tokenText.color = Color.red;
-					m_tokenText.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_Text_Vulnerable);
+					m_tokenText.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_Text_Vulnerable);
 				}
 
 			} else if (m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
-//				m_tokenImage.color = Color.red;
-//				m_tokenText.color = Color.red;
 
-				m_tokenImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_BG_Vulnerable);
-				m_tokenText.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_Text_Vulnerable);
+				m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_Vulnerable);
+				m_tokenText.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_Text_Vulnerable);
 
 			} else if (m_tokenSlot.m_effects.Count > 0 && !m_tokenSlot.m_effects.Contains (TokenSlot.Status.Vulnerable) && !m_tokenSlot.m_effects.Contains (TokenSlot.Status.Protected)) {
-//				m_tokenImage.color = Color.magenta;
-//				m_tokenText.color = Color.magenta;
 
-				m_tokenImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_BG_StatusEffect);
-				m_tokenText.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_Text_StatusEffect);
+				m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_StatusEffect);
+				m_tokenText.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_Text_StatusEffect);
+			} else {
+
+				m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_Normal);
+				m_tokenText.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_Text_Normal_Revealed);
 			}
 			break;
 

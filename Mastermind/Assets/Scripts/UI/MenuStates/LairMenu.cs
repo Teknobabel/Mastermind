@@ -7,7 +7,7 @@ public class LairMenu : MenuState {
 	public static LairMenu instance;
 
 	public GameObject m_lairMenu;
-	public GameObject m_sortPanelParent;
+//	public GameObject m_sortPanelParent;
 
 	public BaseFloorButton[] m_floors;
 
@@ -34,7 +34,7 @@ public class LairMenu : MenuState {
 		}
 
 		m_lairMenu.gameObject.SetActive (true);
-		m_sortPanelParent.gameObject.SetActive (false);
+//		m_sortPanelParent.gameObject.SetActive (false);
 
 		UpdateText ();
 		UpdateBase ();
@@ -61,7 +61,7 @@ public class LairMenu : MenuState {
 		}
 
 		m_lairMenu.gameObject.SetActive (true);
-		m_sortPanelParent.gameObject.SetActive (false);
+//		m_sortPanelParent.gameObject.SetActive (false);
 
 		UpdateText ();
 		UpdateBase ();

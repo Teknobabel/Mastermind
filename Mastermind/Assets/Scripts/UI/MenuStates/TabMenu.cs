@@ -32,7 +32,13 @@ public class TabMenu : MenuState, IObserver {
 	public GameObject
 		m_activityPane,
 		m_activityPaneScrollViewContent,
-		m_activityCell_Small;
+		m_activityCell_Small,
+		m_infamyMeterPip;
+
+	public Transform
+		m_infamyMeterScrollViewContent;
+
+	public List<RawImage> m_infamyMeter = new List<RawImage> ();
 
 	private List<TabButton> m_tabButtonList = new List<TabButton> ();
 
@@ -100,8 +106,18 @@ public class TabMenu : MenuState, IObserver {
 				m_tabButtonList.Add (tb);
 
 				tb.Initialize (m);
+				tb.ChangeState (TabButton.State.Unselected);
 			}
 
+		}
+
+		// set up infamy meter
+
+		for (int i = 0; i < 50; i++) {
+
+			GameObject g = (GameObject)(Instantiate (m_infamyMeterPip, m_infamyMeterScrollViewContent));
+			g.transform.localScale = Vector3.one;
+			m_infamyMeter.Add ((RawImage)g.GetComponent<RawImage> ());
 		}
 
 		GameManager.instance.game.AddObserver (this);
@@ -140,6 +156,23 @@ public class TabMenu : MenuState, IObserver {
 	{
 	}
 
+	private void UpdateInfamyMeter ()
+	{
+		Organization player = GameManager.instance.game.player;
+
+		for (int i = 0; i < m_infamyMeter.Count; i++) {
+
+			RawImage image = m_infamyMeter [i];
+
+			if (i <= player.currentInfamy/2) {
+
+				image.color = ColorManager.instance.GetColor (ColorManager.UIElement.InfamyMeterPip_Full);
+			} else {
+				image.color = ColorManager.instance.GetColor (ColorManager.UIElement.InfamyMeterPip_Empty);
+			}
+		}
+	}
+
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
 		switch (thisGameEvent) {
@@ -148,10 +181,19 @@ public class TabMenu : MenuState, IObserver {
 		case GameEvent.Organization_HenchmenFired:
 		case GameEvent.Organization_Initialized:
 			Organization player = (Organization)subject;
-			m_currentCommandPoints.text = player.currentCommandPool.ToString ();
+
+			// update command points
+//			m_currentCommandPoints.text = player.currentCommandPool.ToString ();
+			NumberCrawl nc = (NumberCrawl)m_currentCommandPoints.transform.GetComponent<NumberCrawl> ();
+			if (nc != null) {
+
+				nc.Initialize (player.currentCommandPool);
+			}
+
 			m_commandPoolHeader.text = "COMMAND POOL: " + player.commandPool.ToString ();
 			m_costPerTurn.text = "-" + player.costPerTurn.ToString () + " / TURN";
-			m_infamy.text = player.currentInfamy.ToString () + "<size=24>/" + player.maxInfamy.ToString() + "</size>";
+			UpdateInfamyMeter ();
+//			m_infamy.text = player.currentInfamy.ToString () + "<size=24>/" + player.maxInfamy.ToString() + "</size>";
 			m_intel.text = player.currentIntel.ToString () + "<size=24>/" + player.maxIntel.ToString () + "</size>";
 			m_wantedLevel.text = player.currentWantedLevel.ToString () + "<size=24>/" + player.maxWantedLevel.ToString () + "</size>";
 			break;
@@ -159,11 +201,11 @@ public class TabMenu : MenuState, IObserver {
 			m_turn.text = GameManager.instance.game.turnNumber.ToString();
 			break;
 		case GameEvent.Organization_InfamyChanged:
-			m_infamy.text = ((Organization)subject).currentInfamy.ToString () + "<size=24>/" + ((Organization)subject).maxInfamy.ToString() + "</size>";
+			UpdateInfamyMeter ();
+//			m_infamy.text = ((Organization)subject).currentInfamy.ToString () + "<size=24>/" + ((Organization)subject).maxInfamy.ToString() + "</size>";
 			break;
 		case GameEvent.Organization_IntelSpawned:
 		case GameEvent.Organization_IntelCaptured:
-			Debug.Log("A;SLKDFJSLKFDJSLKJF;SKDF'");
 
 			m_intel.text = GameManager.instance.game.player.currentIntel.ToString () + "<size=24>/" + GameManager.instance.game.player.maxIntel.ToString () + "</size>";
 

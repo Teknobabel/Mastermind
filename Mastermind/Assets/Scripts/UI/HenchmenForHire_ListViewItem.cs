@@ -9,7 +9,7 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_henchmenName;
 	public TextMeshProUGUI m_hireCost;
 	public TextMeshProUGUI m_costPerTurn;
-	public Image m_henchmenPortrait;
+	public RawImage m_henchmenPortrait;
 
 	public TraitButton[] m_traits;
 	public TraitButton m_statusTrait;
@@ -21,10 +21,16 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 	{
 		m_henchmenID = h.id;
 		m_cost = h.hireCost;
-		m_henchmenName.text = h.henchmenName.ToUpper();
 		m_hireCost.text = h.hireCost.ToString() + "<size=36>CP</size>";
 		m_costPerTurn.text = h.costPerTurn.ToString() + " CP / TURN";
-		m_henchmenPortrait.sprite = h.portrait;
+		m_henchmenPortrait.texture = h.portrait.texture;
+
+		// start text crawl for henchmen name
+		TextCrawl tc = (TextCrawl) m_henchmenName.transform.GetComponent<TextCrawl>();
+		if (tc != null) {
+
+			tc.Initialize(h.henchmenName.ToUpper());
+		}
 
 		List<TraitData> traits = h.GetAllTraits ();
 

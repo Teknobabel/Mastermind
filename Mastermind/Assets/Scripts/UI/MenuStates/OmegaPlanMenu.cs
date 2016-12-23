@@ -7,7 +7,7 @@ public class OmegaPlanMenu : MenuState {
 	public static OmegaPlanMenu instance;
 
 	public GameObject m_opPanelParent;
-	public GameObject m_sortPanelParent;
+//	public GameObject m_sortPanelParent;
 
 	public TextMeshProUGUI 
 		m_opName,
@@ -35,7 +35,7 @@ public class OmegaPlanMenu : MenuState {
 		}
 
 		m_opPanelParent.gameObject.SetActive (true);
-		m_sortPanelParent.gameObject.SetActive (false);
+//		m_sortPanelParent.gameObject.SetActive (false);
 
 		if (m_tabInfo != null && m_tabInfo.objectID > -1) {
 			

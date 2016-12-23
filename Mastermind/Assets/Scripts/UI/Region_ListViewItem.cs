@@ -8,7 +8,7 @@ public class Region_ListViewItem : MonoBehaviour {
 
 	public TextMeshProUGUI m_regionName;
 	public TextMeshProUGUI m_regionRank;
-	public Image m_regionPortrait;
+	public RawImage m_regionPortrait;
 
 	public TokenButton[] m_policyTokens;
 	public TokenButton[] m_assetTokens;
@@ -27,14 +27,24 @@ public class Region_ListViewItem : MonoBehaviour {
 
 	public void Initialize (Region r)
 	{
-		m_regionName.text = r.regionName;
+//		m_regionName.text = r.regionName;
 		m_regionID = r.id;
-		m_regionPortrait.sprite = r.portrait;
+
+		// start text crawl for region name
+		TextCrawl tc = (TextCrawl) m_regionName.transform.GetComponent<TextCrawl>();
+		if (tc != null) {
+
+			tc.Initialize(r.regionName.ToUpper());
+		}
+
+		if (r.portrait != null) {
+			m_regionPortrait.texture = r.portrait.texture;
+		}
 
 		List<TokenSlot> p = r.policyTokens;
 		List<TokenSlot> a = r.assetTokens;
 		List<TokenSlot> c = r.controlTokens;
-
+		Debug.Log (r.regionName + ": " + p.Count);
 		for (int i = 0; i < m_policyTokens.Length; i++) {
 			TokenButton tB = m_policyTokens [i];
 			if (i < p.Count) {

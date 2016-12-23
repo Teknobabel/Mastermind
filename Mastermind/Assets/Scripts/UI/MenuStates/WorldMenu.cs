@@ -446,9 +446,9 @@ public class WorldMenu : MenuState, IObserver {
 
 		foreach (SortModeButton b in m_sortModeButtons) {
 
-			if (b.m_sortType == m_sortType && b.state != SortModeButton.State.Selected) {
+			if (b.m_sortType == m_sortType) {
 				b.ChangeState (SortModeButton.State.Selected);
-			} else if (b.m_sortType != m_sortType && b.state != SortModeButton.State.Unselected) {
+			} else if (b.m_sortType != m_sortType) {
 				b.ChangeState (SortModeButton.State.Unselected);
 			}
 		}

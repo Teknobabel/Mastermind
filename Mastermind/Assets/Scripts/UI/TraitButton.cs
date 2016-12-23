@@ -6,7 +6,9 @@ using TMPro;
 public class TraitButton : MonoBehaviour {
 
 	public TextMeshProUGUI m_traitName;
-	public RawImage m_traitButtonImage;
+	public RawImage 
+	m_traitButtonBGImage,
+	m_traitTypeIndicator;
 
 //	private Color 
 //	m_disabledColor = Color.magenta,
@@ -18,30 +20,95 @@ public class TraitButton : MonoBehaviour {
 
 	public void Initialize (TraitData t, bool activeTrait)
 	{
-		m_traitName.text = t.m_name.ToUpper();
+//		m_traitName.text = t.m_name.ToUpper();
 
-		if (activeTrait) {
-			switch (t.m_class) {
-			case TraitData.TraitClass.Skill:
-				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Skill);
-				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Skill);
-				break;
-			case TraitData.TraitClass.Resource:
-				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Resource);
-				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Resource);
-				break;
-			case TraitData.TraitClass.Gift:
-				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Gift);
-				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Gift);
-				break;
-			case TraitData.TraitClass.Flaw:
-				m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Flaw);
-				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Flaw);
-				break;
-			}
+		// start text crawl for trait name
+		TextCrawl tc = (TextCrawl) m_traitName.transform.GetComponent<TextCrawl>();
+		if (tc != null) {
+
+			tc.Initialize(t.m_name.ToUpper());
 		}
 
-//		m_traitName.color = c;
+
+
+//		if (activeTrait) {
+			switch (t.m_class) {
+
+		case TraitData.TraitClass.Skill:
+			
+			m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Skill);
+
+			if (activeTrait) {
+				m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Skill);
+				m_traitButtonBGImage.color =  ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG);
+			} else {
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+				m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+			}
+				break;
+
+		case TraitData.TraitClass.Resource:
+			
+			m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Resource);
+
+			if (activeTrait) {
+				m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Resource);
+				m_traitButtonBGImage.color =  ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG);
+			} else {
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+				m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+			}
+
+				break;
+
+		case TraitData.TraitClass.Gift:
+			
+			m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Gift);
+
+			if (activeTrait) {
+				m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Gift);
+				m_traitButtonBGImage.color =  ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG);
+			} else {
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+				m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+			}
+
+				break;
+
+		case TraitData.TraitClass.Flaw:
+			
+			m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Flaw);
+
+			if (activeTrait) {
+				m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Flaw);
+				m_traitButtonBGImage.color =  ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG);
+			} else {
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+				m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+			}
+
+				break;
+
+
+		case TraitData.TraitClass.Status:
+			
+			m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Status);
+
+			if (activeTrait) {
+				m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Status);
+				m_traitButtonBGImage.color =  ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG);
+			} else {
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+				m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+			}
+
+				break;
+			} 
+
+//		} else {
+//
+//			m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+//		}
 	}
 
 	public void Initialize (Asset a, bool activeAsset)
@@ -49,19 +116,26 @@ public class TraitButton : MonoBehaviour {
 		m_traitName.text = a.m_name.ToUpper ();
 
 //		Color c = Color.gray;
+		m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Asset);
+
 
 		if (activeAsset) {
-			m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Asset);
-			m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Asset);
-		}
 			
-//		m_traitName.color = c;
+			m_traitButtonBGImage.color =  ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG);
+			m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Asset);
+
+		} else {
+
+			m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+			m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+		}
 	}
 
 	public void Deactivate ()
 	{
 //		m_traitButtonImage.fillCenter = true;
-		m_traitButtonImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+		m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+		m_traitTypeIndicator.gameObject.SetActive (false);
 		m_traitName.gameObject.SetActive (false);
 	}
 }

@@ -21,18 +21,18 @@ public class RegionHenchmenButton : MonoBehaviour {
 		if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
 
 			m_henchmenID = hSlot.m_henchmen.id;
-			m_text.color = Color.white;
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_Text_OccupiedHenchmen);
 			m_text.text = hSlot.m_henchmen.henchmenName.ToUpper ();
-			m_buttonImage.color = Color.white;
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_BG_OccupiedHenchmen);
 			m_buttonImage.texture = hSlot.m_henchmen.portraitShort.texture;
 
 		} else if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Agent && (hSlot.m_agent.m_vizState == AgentWrapper.VisibilityState.Visible || 
 			hSlot.m_agent.m_vizState == AgentWrapper.VisibilityState.Tracked )) {
 
 			m_henchmenID = hSlot.m_agent.m_agent.id;
-			m_text.color = Color.red;
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_Text_OccupiedAgent);
 			m_text.text = hSlot.m_agent.m_agent.henchmenName.ToUpper ();
-			m_buttonImage.color = Color.white;
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_BG_OccupiedAgent);
 			m_buttonImage.texture = hSlot.m_agent.m_agent.portraitShort.texture;
 
 		} else if (hSlot.m_state == Region.HenchmenSlot.State.Empty || (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Agent && hSlot.m_agent.m_vizState == AgentWrapper.VisibilityState.Hidden))
@@ -58,38 +58,14 @@ public class RegionHenchmenButton : MonoBehaviour {
 				}
 
 				m_text.text += " )";
+			} else {
+
+				m_text.text = "EMPTY";
 			}
 
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_BG_Empty);
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_Text_Empty);
 		}
-
-//		if (hSlot.m_state == Region.HenchmenSlot.State.Reserved && hSlot.m_henchmen != null) {
-//			m_henchmenID = hSlot.m_henchmen.id;
-//			m_text.color = Color.grey;
-//			m_text.text = "( " + hSlot.m_henchmen.henchmenName.ToUpper () + " )";
-//		} else if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Player && hSlot.m_henchmen != null) {
-//			
-//			m_henchmenID = hSlot.m_henchmen.id;
-//
-//			m_text.color = Color.white;
-//			m_text.text = hSlot.m_henchmen.henchmenName.ToUpper ();
-//			m_buttonImage.color = Color.white;
-//			m_buttonImage.sprite = hSlot.m_henchmen.portraitShort;
-//
-//
-//		} else if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Agent && hSlot.m_agent != null) {
-//
-//			m_henchmenID = hSlot.m_agent.m_agent.id;
-//
-//			m_text.color = Color.red;
-//			m_text.text = hSlot.m_agent.m_agent.henchmenName.ToUpper ();
-//
-//			if (hSlot.m_agent.m_vizState == AgentWrapper.VisibilityState.Hidden) {
-//				m_buttonImage.color = Color.red;
-//			} else {
-//				m_buttonImage.color = Color.white;
-//			}
-//			m_buttonImage.sprite = hSlot.m_agent.m_agent.portraitShort;
-//		}
 	}
 
 	public void Deactivate ()

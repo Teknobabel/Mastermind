@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class SortModeButton : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class SortModeButton : MonoBehaviour {
 	}
 
 	public RawImage m_image;
+	public TextMeshProUGUI m_text;
 
 	public WorldMenu.SortType m_sortType = WorldMenu.SortType.None;
 
@@ -23,12 +25,12 @@ public class SortModeButton : MonoBehaviour {
 		switch (newState) {
 
 		case State.Selected:
-//			m_image.color = Color.grey;
 			m_image.color = ColorManager.instance.GetColor (ColorManager.UIElement.ContentView_SortPanel_Button_BG_Selected);
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.ContentView_SortPanel_Button_Text_Selected);
 			break;
 		case State.Unselected:
-//			m_image.color = Color.white;
 			m_image.color = ColorManager.instance.GetColor (ColorManager.UIElement.ContentView_SortPanel_Button_BG_Unselected);
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.ContentView_SortPanel_Button_Text_Unselected);
 			break;
 		}
 	}

@@ -19,6 +19,11 @@ public class DatabaseMenu : MenuState {
 	public override void OnActivate(MenuTab tabInfo)
 	{
 		m_databaseMenuParent.gameObject.SetActive (true);
+
+		m_tabInfo = tabInfo;
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
+		}
 	}
 	public override void OnHold()
 	{
@@ -33,6 +38,11 @@ public class DatabaseMenu : MenuState {
 	public override void OnDeactivate()
 	{
 		m_databaseMenuParent.gameObject.SetActive (false);
+
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
+			m_tabInfo = null;
+		}
 	}
 	public override void OnUpdate()
 	{

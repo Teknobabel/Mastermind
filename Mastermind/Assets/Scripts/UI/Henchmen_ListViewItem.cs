@@ -10,7 +10,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_currentMission;
 	public TextMeshProUGUI m_currentLocation;
 //	public TextMeshProUGUI m_turnCost;
-	public Image m_henchmenPortrait;
+	public RawImage m_henchmenPortrait;
 
 	public TraitButton[] m_traits;
 	public TraitButton m_statusTrait;
@@ -53,10 +53,16 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	private void DisplayMenu ( Henchmen h)
 	{
 		m_henchmenID = h.id;
-		m_henchmenName.text = h.henchmenName.ToUpper();
+
+		// start text crawl for henchmen name
+		TextCrawl tc = (TextCrawl) m_henchmenName.transform.GetComponent<TextCrawl>();
+		if (tc != null) {
+
+			tc.Initialize(h.henchmenName.ToUpper());
+		}
 
 		//		m_turnCost.text = h.costPerTurn.ToString() + "CP / TURN";
-		m_henchmenPortrait.sprite = h.portrait;
+		m_henchmenPortrait.texture = h.portrait.texture;
 
 		List<TraitData> traits = h.GetAllTraits ();
 
