@@ -183,7 +183,34 @@ public class AgentAIState_Idle : IAgentAIState {
 
 					Debug.Log ("Agent moving to new region");
 
-					Region r = GameManager.instance.game.GetRandomRegion (false);
+//					Region r = GameManager.instance.game.GetRandomRegion (false);
+
+					Region r = null;
+
+					List<Region> validRegions = new List<Region> ();
+					List<Region> nearbyRegions = new List<Region> ();
+
+					foreach (Region region in GameManager.instance.game.regions) {
+
+						if (region.currentHenchmen.Count < region.henchmenSlots.Count && region.id != aw.m_agent.currentRegion.id) {
+
+							validRegions.Add (region);
+
+							if (region.regionGroup == aw.m_agent.currentRegion.regionGroup) {
+
+								nearbyRegions.Add (region);
+							}
+						}
+					}
+
+					if (nearbyRegions.Count > 0 && Random.Range(0.0f, 1.0f) < GameManager.instance.game.director.m_agentStayInRegionChance) {
+
+						r = nearbyRegions[Random.Range(0, nearbyRegions.Count)];
+					}
+					else if (validRegions.Count > 0) {
+
+						r = validRegions[Random.Range(0, validRegions.Count)];
+					}
 
 					if (r != null) {
 

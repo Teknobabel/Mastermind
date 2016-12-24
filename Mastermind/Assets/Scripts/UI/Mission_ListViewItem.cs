@@ -29,8 +29,16 @@ public class Mission_ListViewItem : MonoBehaviour {
 		m_mission = mw.m_mission;
 		m_missionName.text = mw.m_mission.GetNameText().ToUpper();
 		m_missionDescription.text = mw.m_mission.m_description;
-		m_missionCost.text = mw.m_mission.m_cost.ToString ();
 		m_missionSuccessChance.text = m_mission.CalculateCompletionPercentage(mw).ToString() + "% SUCCESS";
+
+		NumberCrawl nc = (NumberCrawl)m_missionCost.GetComponent<NumberCrawl> ();
+		if (nc != null) {
+
+			nc.Initialize (mw.m_mission.m_cost);
+		} else {
+
+			m_missionCost.text = mw.m_mission.m_cost.ToString ();
+		}
 
 		int turnsLeft = mw.m_mission.m_numTurns;
 		string duration = turnsLeft.ToString ();

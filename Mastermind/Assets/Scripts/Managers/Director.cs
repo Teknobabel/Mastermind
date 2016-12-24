@@ -24,6 +24,9 @@ public class Director : ScriptableObject {
 	m_injuredStatusPenalty = 10,
 	m_criticalStatusPenalty = 20;
 
+	public float
+	m_agentStayInRegionChance = 0.65f;
+
 	private int
 		m_maxTokenSlotsInRegion = 6;
 

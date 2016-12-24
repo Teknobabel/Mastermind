@@ -17,7 +17,7 @@ public class TurnResults_ListViewItem : MonoBehaviour {
 		TextCrawl tc = (TextCrawl) m_description.transform.GetComponent<TextCrawl>();
 		if (tc != null) {
 
-			float delay = 0.3f * ((float)(positionInList));
+			float delay = 0.2f * ((float)(positionInList));
 			tc.Initialize(t.m_resultsText.ToUpper(), delay);
 		}
 
