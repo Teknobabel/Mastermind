@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ColorManager : MonoBehaviour {
 	public static ColorManager instance;
 
-	public enum UIElement // next ID: 147
+	public enum UIElement // next ID: 163
 	{
 		None = 0,
 		Background_Main = 1,
@@ -142,6 +142,22 @@ public class ColorManager : MonoBehaviour {
 		LairMenu_Assets_Header_Text = 116,
 		LairMenu_Base_Header_Text = 117,
 		LairMenu_Base_Header_BG = 145,
+		LairMenu_Base_Floor_Empty_BG = 147,
+		LairMenu_Base_Floor_Empty_Text = 148,
+		LairMenu_Base_Floor_Occupied_BG = 149,
+		LairMenu_Base_Floor_Occupied_Text = 150,
+		LairMenu_Base_Floor_Lair_BG = 151,
+		LairMenu_Base_Floor_Lair_Text = 152,
+		LairMenu_Research_InfluenceIndicator = 153,
+		LairMenu_Research_ForceIndicator = 154,
+		LairMenu_Research_TechIndicator = 155,
+		LairMenu_Research_LairIndicator = 156,
+		LairMenu_Research_BG_Owned = 157,
+		LairMenu_Research_BG_Available = 158,
+		LairMenu_Research_BG_Unavailable = 159,
+		LairMenu_Research_Text_Owned = 160,
+		LairMenu_Research_Text_Available = 161,
+		LairMenu_Research_Text_Unavailable = 162,
 		BackButton_BG = 118,
 		BackButton_Icon = 119,
 		WorldMenu_BG = 122,

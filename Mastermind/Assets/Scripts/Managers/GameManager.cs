@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
 	public MenuState[] m_menuStates;
 
 	public RegionData m_lairRegion;
+	public Asset m_lairAsset;
 	public RegionData m_limboRegion;
 	public TravelToRegion m_travelMission;
 	public AssetToken m_intel;

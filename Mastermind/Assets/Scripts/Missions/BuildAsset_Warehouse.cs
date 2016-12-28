@@ -5,6 +5,7 @@ using System.Collections;
 public class BuildAsset_Warehouse : MissionBase {
 
 	public Asset m_asset;
+	public Asset m_requiredResearch;
 
 	public int m_numAssetSlots = 6;
 
@@ -53,7 +54,26 @@ public class BuildAsset_Warehouse : MissionBase {
 	{
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null &&
-			GameManager.instance.currentMissionWrapper.m_scope == m_targetType) {
+			GameManager.instance.currentMissionWrapper.m_scope == m_targetType && (m_requiredResearch == null || GameManager.instance.game.player.currentResearch.Contains(m_requiredResearch))) {
+
+			// player can have up to 2 warehouses built
+
+			int numWarehouses = 0;
+
+			foreach (Asset a in GameManager.instance.game.player.orgBase.m_currentAssets) {
+
+				if (a.m_assetType == Asset.AssetType.LairUpgrade_Warehouse) {
+
+					numWarehouses++;
+
+					if (numWarehouses > 1) {
+
+						return false;
+					}
+				}
+			}
+
+
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 			if (r == GameManager.instance.game.player.homeRegion && !GameManager.instance.game.player.currentAssets.Contains(m_asset)) {

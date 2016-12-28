@@ -46,6 +46,13 @@ public class StartNewGameState : IGameState {
 			newGame.AddRegionToGame (newRegion);
 		}
 
+		if (newDirector.m_startingAgents > 0) {
+
+			for (int i = 0; i < newDirector.m_startingAgents; i++) {
+
+				agentOrg.SpawnAgentInWorld (null);
+			}
+		}
 
 
 //		GameManager.instance.game.SpawnIntel (); // debug

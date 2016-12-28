@@ -338,6 +338,19 @@ public class SelectMissionMenu : MenuState {
 //				}
 			}
 
+			if (GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.Research) {
+
+				if (m.m_targetType == GameManager.instance.currentMissionWrapper.m_scope && m.IsValid ()) {
+
+					GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+					g.transform.localScale = Vector3.one;
+					m_listViewItems.Add (g);
+					g.GetComponent<Mission_ListViewItem> ().Initialize ();
+					m_missionsInList.Add (m);
+				}
+
+			}
+
 
 		}
 

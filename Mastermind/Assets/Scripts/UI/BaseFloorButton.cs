@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
 public class BaseFloorButton : MonoBehaviour {
 
 	public TextMeshProUGUI m_text;
+
+	public RawImage m_floorButtonBG;
 
 	private Base.Floor m_floor;
 
@@ -17,13 +20,29 @@ public class BaseFloorButton : MonoBehaviour {
 		if (floor.m_floorState == Base.FloorState.Empty) {
 			
 			s += "EMPTY";
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Empty_Text);
+			m_floorButtonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Empty_BG);
 
 		} else if (floor.m_floorState == Base.FloorState.Occupied) {
 			
 			s += floor.m_installedUpgrade.m_name.ToUpper ();
 
+			if (floor.m_installedUpgrade.m_assetType == Asset.AssetType.Lair) {
+
+				m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Lair_Text);
+				m_floorButtonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Lair_BG);
+
+			} else {
+
+				m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Occupied_Text);
+				m_floorButtonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Occupied_BG);
+			}
+
 		} else if (floor.m_floorState == Base.FloorState.UpgradeInProgress) {
 			
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Empty_Text);
+			m_floorButtonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Base_Floor_Empty_BG);
+
 			s += "CONSTRUCTION IN PROGRESS\n (";
 
 			foreach (MissionWrapper mw in GameManager.instance.game.player.activeMissions) {

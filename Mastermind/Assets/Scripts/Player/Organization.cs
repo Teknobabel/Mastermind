@@ -21,6 +21,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	private List<Henchmen> m_availableHenchmen;
 	private List<OmegaPlan> m_omegaPlans;
 	private List<Asset> m_currentAssets;
+	private List<Asset> m_currentResearch;
 	private List<Asset> m_assetsInOrbit;
 
 	private Dictionary<int, OmegaPlan> m_omegaPlansByID = new Dictionary<int, OmegaPlan> ();
@@ -325,6 +326,11 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 	}
 
+	public void AddResearch (Asset r)
+	{
+		m_currentResearch.Add (r);
+	}
+
 	public void AddAsset (Asset a)
 	{
 		m_currentAssets.Add (a);
@@ -453,6 +459,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		// add any starting assets
 
 		m_currentAssets = new List<Asset> ();
+		m_currentResearch = new List<Asset> ();
 		m_assetsInOrbit = new List<Asset> ();
 
 		foreach (Asset a in d.m_startingAssets) {
@@ -469,7 +476,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		// initialize base
 
 		m_base = new Base ();
-		m_base.Initialize (6);
+		m_base.Initialize (d.m_startingBaseFloors);
 
 		// add any starting base upgrades
 
@@ -805,6 +812,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	public int maxIntel {get{return m_maxIntel; }}
 	public string orgName {get{return m_name;}}
 	public List<Asset> currentAssets {get{return m_currentAssets;}}
+	public List<Asset> currentResearch {get{return m_currentResearch;}}
 	public List<Asset> assetsInOrbit {get{return m_assetsInOrbit;}}
 	public List<MissionWrapper> activeMissions {get{return m_activeMissions;}}
 	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}

@@ -5,6 +5,7 @@ using System.Collections;
 public class BuildAsset_SecurityCenter: MissionBase {
 
 	public Asset m_asset;
+	public Asset m_requiredResearch;
 
 	public float 
 	m_chanceToNegateAmbushBonus = 0,
@@ -57,7 +58,7 @@ public class BuildAsset_SecurityCenter: MissionBase {
 	{
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null &&
-			GameManager.instance.currentMissionWrapper.m_scope == m_targetType) {
+			GameManager.instance.currentMissionWrapper.m_scope == m_targetType && (m_requiredResearch == null || GameManager.instance.game.player.currentResearch.Contains(m_requiredResearch))) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 			if (r == GameManager.instance.game.player.homeRegion && !GameManager.instance.game.player.currentAssets.Contains(m_asset)) {

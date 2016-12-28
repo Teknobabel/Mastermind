@@ -26,6 +26,9 @@ public class Base {
 	public List<Floor> m_floors = new List<Floor>();
 	public List<Asset> m_currentAssets = new List<Asset> ();
 
+	private int 
+	m_maxFloors = 7;
+
 	private float 
 	m_chanceToNegateAmbushBonus = 0,
 	m_chanceToRevealHiddenAgents = 0;
@@ -34,11 +37,20 @@ public class Base {
 	{
 		for (int i = 0; i < numFloors; i++) {
 
-			Floor f = new Floor ();
-			f.m_floorState = FloorState.Empty;
-			f.m_floorNumber = i+1;
-			m_floors.Add (f);
+			AddNewFloor (i + 1);
 		}
+
+		// install layer at top of base
+
+		InstallAsset (numFloors, GameManager.instance.m_lairAsset);
+	}
+
+	public void AddNewFloor (int floorNum)
+	{
+		Floor f = new Floor ();
+		f.m_floorState = FloorState.Empty;
+		f.m_floorNumber = floorNum;
+		m_floors.Add (f);
 	}
 
 	public void InstallAsset (Asset asset)
@@ -136,4 +148,5 @@ public class Base {
 
 	public float chanceToNegateAmbushBonus {get { return m_chanceToNegateAmbushBonus; }set{ m_chanceToNegateAmbushBonus = value; }}
 	public float chanceToRevealHiddenAgents {get{ return m_chanceToRevealHiddenAgents; }set{ m_chanceToRevealHiddenAgents = value; }}
+	public int maxFloors {get{ return m_maxFloors; }}
 }

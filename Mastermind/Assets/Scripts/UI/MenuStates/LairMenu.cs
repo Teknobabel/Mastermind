@@ -15,6 +15,8 @@ public class LairMenu : MenuState {
 
 	public TokenButton[] m_assets;
 
+	public ResearchButton[] m_researchButtons;
+
 	void Awake ()
 	{
 		if (!instance) {
@@ -39,6 +41,7 @@ public class LairMenu : MenuState {
 		UpdateText ();
 		UpdateBase ();
 		UpdateAssets ();
+		UpdateResearch ();
 	}
 
 	public override void OnHold()
@@ -66,6 +69,7 @@ public class LairMenu : MenuState {
 		UpdateText ();
 		UpdateBase ();
 		UpdateAssets ();
+		UpdateResearch ();
 	}
 
 	public override void OnDeactivate()
@@ -83,16 +87,34 @@ public class LairMenu : MenuState {
 
 	}
 
+	private void UpdateResearch ()
+	{
+
+		foreach (ResearchButton rb in m_researchButtons) {
+
+			rb.Initialize ();
+		}
+	}
+
 	private void UpdateBase ()
 	{
 		Base b = GameManager.instance.game.player.orgBase;
 
-		for (int i=0; i < b.m_floors.Count; i++)
-		{
-			Base.Floor f = b.m_floors [i];
+		for (int i = 0; i < m_floors.Length; i++) {
 
-			if (i < m_floors.Length) {
+			BaseFloorButton fb = m_floors [i];
+
+			fb.gameObject.SetActive (true);
+
+			if (i < b.m_floors.Count) {
+
+				Base.Floor f = b.m_floors [i];
 				m_floors [i].Initialize (f);
+
+			} else {
+
+				fb.gameObject.SetActive (false);
+
 			}
 		}
 	} 
@@ -168,5 +190,24 @@ public class LairMenu : MenuState {
 
 		GameManager.instance.currentMissionWrapper = mr;
 		GameManager.instance.PushMenuState (State.SelectMissionMenu);
+	}
+
+	public void SelectMissionForResearchButton (ResearchButton r)
+	{
+		if (r.researchState == ResearchButton.ResearchState.Available) {
+
+			MissionWrapper mr = new MissionWrapper ();
+			mr.m_scope = MissionBase.TargetType.Research;
+			mr.m_researchButtonInFocus = r;
+			mr.m_region = GameManager.instance.game.player.homeRegion;
+
+			foreach (Henchmen h in mr.m_region.currentHenchmen) {
+				mr.m_henchmen.Add (h);
+			}
+
+			GameManager.instance.currentMissionWrapper = mr;
+			GameManager.instance.PushMenuState (State.SelectMissionMenu);
+
+		}
 	}
 }

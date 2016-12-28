@@ -14,6 +14,7 @@ public class MissionWrapper {
 	public TokenSlot m_tokenInFocus;
 	public Asset m_assetInFocus;
 	public Base.Floor m_floorInFocus;
+	public ResearchButton m_researchButtonInFocus;
 	public Region.HenchmenSlot m_henchmenSlotInFocus;
 	public int m_turnsPassed = 0;
 	public MissionBase.TargetType m_scope = MissionBase.TargetType.Region;

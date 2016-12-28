@@ -4,6 +4,8 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Unlock Omega Plan")]
 public class UnlockOmegaPlan : MissionBase {
 
+	public Asset m_requiredBaseUpgrade;
+
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
@@ -41,6 +43,13 @@ public class UnlockOmegaPlan : MissionBase {
 
 	public override bool IsValid ()
 	{
+		// check if required base upgrade is present
+
+		if (m_requiredBaseUpgrade != null && !GameManager.instance.game.player.orgBase.m_currentAssets.Contains (m_requiredBaseUpgrade)) {
+
+			return false;
+		}
+
 		// valid if there is a locked Omega Plan and the current region is the Lair
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {

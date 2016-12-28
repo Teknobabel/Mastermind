@@ -6,6 +6,8 @@ public class PassPolicy : MissionBase {
 
 	public PolicyToken m_policy;
 
+	public Asset m_requiredBaseUpgrade;
+
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
@@ -45,6 +47,13 @@ public class PassPolicy : MissionBase {
 
 	public override bool IsValid ()
 	{
+		// check if any required assets are needed
+
+		if (m_requiredBaseUpgrade != null && !GameManager.instance.game.player.orgBase.m_currentAssets.Contains (m_requiredBaseUpgrade)) {
+
+			return false;
+		}
+
 		// valid if the token in focus is an empty policy token
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null && 

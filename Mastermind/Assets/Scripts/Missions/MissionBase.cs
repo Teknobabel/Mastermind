@@ -28,6 +28,7 @@ public class MissionBase : ScriptableObject, IMission {
 		Agent,
 		OwnedAsset,
 		RemoteRegion,
+		Research,
 	}
 	
 	public string m_name = "Null";

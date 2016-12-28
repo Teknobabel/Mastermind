@@ -75,6 +75,13 @@ public class Asset : ScriptableObject, ISubject {
 		LairUpgrade_Cloak,
 		LairUpgrade_SecurityStation,
 		LairUpgrade_Warehouse,
+		Lair,
+		Research_Influence,
+		Research_Tech,
+		Research_Force,
+		Research_Lair,
+		LairUpgrade_CampaignCenter,
+		LairUpgrade_AdvancedResearch,
 	}
 
 	private List<IObserver>
