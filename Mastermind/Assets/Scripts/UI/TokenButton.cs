@@ -35,6 +35,7 @@ public class TokenButton : MonoBehaviour {
 		case TokenSlot.State.Hidden:
 			
 			m_tokenText.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_Text_Normal_Hidden);
+			m_tokenImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.Token_BG_Normal_Hidden);
 
 			switch (m_tokenSlot.m_type) {
 			case TokenSlot.TokenType.Policy:

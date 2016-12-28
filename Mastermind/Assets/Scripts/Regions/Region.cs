@@ -163,7 +163,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			if (ts.m_state == TokenSlot.State.None) {
 
 				ts.m_assetToken = a;
-				ts.m_state = TokenSlot.State.Revealed;
+				ts.m_state = TokenSlot.State.Hidden;
 				tokenAdded = true;
 				break;
 			}
@@ -173,7 +173,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 			TokenSlot t = new TokenSlot ();
 			t.m_type = TokenSlot.TokenType.Asset;
 			t.m_assetToken = a;
-			t.m_state = TokenSlot.State.Revealed;
+			t.m_state = TokenSlot.State.Hidden;
 			t.m_region = this;
 
 			m_assetTokens.Add (t);
@@ -194,7 +194,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 		t.m_type = TokenSlot.TokenType.Control;
 		t.m_controlToken = c;
-		t.m_state = TokenSlot.State.Revealed;
+		t.m_state = TokenSlot.State.Hidden;
 		t.m_region = this;
 		t.AddObserver (this);
 //		t.ChangeOwner(Owner.Player); // debug
@@ -204,6 +204,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 	public void AddPolicytoken (PolicyToken p, TokenSlot t)
 	{
+//		Debug.Log ("Adding Policy Token For: " + m_regionName + " : " + p.m_name);
 		if (t.m_state == TokenSlot.State.Revealed && t.m_policyToken == null) {
 
 			t.m_policyToken = p;
@@ -214,18 +215,19 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 	private void AddPolicyToken (PolicyToken p)
 	{
+//		Debug.Log ("Adding Policy Token For: " + m_regionName + " : " + p);
 		bool tokenAdded = false;
 
 		foreach (TokenSlot ts in m_policyTokens) {
-
-			if (ts.m_state == TokenSlot.State.None && p != null) {
+			Debug.Log (ts.m_state);
+			if (ts.m_policyToken == null && p != null) {
 
 				ts.m_policyToken = p;
 
 //				ts.m_status = TokenSlot.Status.Normal;
 
 				p.StartPolicy (ts);
-				ts.m_state = TokenSlot.State.Revealed;
+//				ts.m_state = TokenSlot.State.Revealed;
 
 				tokenAdded = true;
 				break;
@@ -243,7 +245,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 				p.StartPolicy (t);
 			} 
 
-			t.m_state = TokenSlot.State.Revealed;
+			t.m_state = TokenSlot.State.Hidden;
 
 			m_policyTokens.Add (t);
 			m_allTokens.Add (t);

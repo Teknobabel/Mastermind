@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ColorManager : MonoBehaviour {
 	public static ColorManager instance;
 
-	public enum UIElement // next ID: 163
+	public enum UIElement // next ID: 164
 	{
 		None = 0,
 		Background_Main = 1,
@@ -56,6 +56,7 @@ public class ColorManager : MonoBehaviour {
 //		OPGoalButton_Text_Unfinished = 36,
 //		OPGoalButton_Text_Finished = 37,
 		Token_BG_Normal = 38,
+		Token_BG_Normal_Hidden = 163,
 		Token_BG_Protected = 39,
 		Token_BG_Vulnerable = 40,
 		Token_Text_Normal_Hidden = 41,

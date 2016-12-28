@@ -37,8 +37,9 @@ public class BuildFloor : MissionBase {
 	public override bool IsValid ()
 	{
 		Organization player = GameManager.instance.game.player;
+		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
 
-		if (GameManager.instance.currentMissionWrapper.m_region == player.homeRegion && player.orgBase.m_floors.Count < player.orgBase.maxFloors) 
+		if (mw.m_scope == TargetType.Floor && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_Workshop  && player.orgBase.m_floors.Count < player.orgBase.maxFloors)
 		{
 			return true;
 		}

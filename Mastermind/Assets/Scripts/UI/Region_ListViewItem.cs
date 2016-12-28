@@ -44,7 +44,7 @@ public class Region_ListViewItem : MonoBehaviour {
 		List<TokenSlot> p = r.policyTokens;
 		List<TokenSlot> a = r.assetTokens;
 		List<TokenSlot> c = r.controlTokens;
-		Debug.Log (r.regionName + ": " + p.Count);
+//		Debug.Log (r.regionName + ": " + a.Count);
 		for (int i = 0; i < m_policyTokens.Length; i++) {
 			TokenButton tB = m_policyTokens [i];
 			if (i < p.Count) {
