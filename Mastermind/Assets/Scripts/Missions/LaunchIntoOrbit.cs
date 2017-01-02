@@ -35,7 +35,7 @@ public class LaunchIntoOrbit : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if the player is at their base, has all necessary assets, and asset in focus is launchable
+		if (!base.IsValid ()) { return false;}		// valid if the player is at their base, has all necessary assets, and asset in focus is launchable
 
 		if (GameManager.instance.currentMissionWrapper.m_region.id == GameManager.instance.game.player.homeRegion.id && m_launchableAssets.Contains(GameManager.instance.currentMissionWrapper.m_assetInFocus)) {
 			

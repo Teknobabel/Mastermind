@@ -43,7 +43,7 @@ public class Agent_CaptureIntel : MissionBase {
 
 	public override bool IsValid ()
 	{
-
+		if (!base.IsValid ()) { return false;}
 		return false;
 	}
 }

@@ -7,7 +7,7 @@ public class BuildFloor : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
+
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
 
@@ -36,10 +36,12 @@ public class BuildFloor : MissionBase {
 
 	public override bool IsValid ()
 	{
+		if (!base.IsValid ()) { return false;}		
+
 		Organization player = GameManager.instance.game.player;
 		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
 
-		if (mw.m_scope == TargetType.Floor && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_Workshop  && player.orgBase.m_floors.Count < player.orgBase.maxFloors)
+		if (mw.m_scope == m_targetType && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_Workshop  && player.orgBase.m_floors.Count < player.orgBase.maxFloors)
 		{
 			return true;
 		}

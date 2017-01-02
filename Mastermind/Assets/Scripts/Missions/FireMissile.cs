@@ -11,7 +11,6 @@ public class FireMissile : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-//				a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -165,7 +164,7 @@ public class FireMissile : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if player has Control Room, Missile Silo, and Nuclear Missile asset
+		if (!base.IsValid ()) { return false;}		// valid if player has Control Room, Missile Silo, and Nuclear Missile asset
 
 		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
 		Debug.Log (mw.m_floorInFocus.m_installedUpgrade.m_assetType);

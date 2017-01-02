@@ -55,15 +55,27 @@ public class RevealPolicy : MissionBase {
 
 	public override bool IsValid ()
 	{
+		bool hasTrait = false;
+		bool hasResearch = base.IsValid ();	
+
 		// valid if there are any hidden tokens in the region
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
+			foreach (Henchmen h in r.currentHenchmen) {
+
+				if (h.HasTrait (TraitData.TraitType.Spy)) {
+
+					hasTrait = true;
+					break;
+				}
+			}
+
 			foreach (TokenSlot p in r.policyTokens) {
 
-				if (p.m_state == TokenSlot.State.Hidden) {
+				if (p.m_state == TokenSlot.State.Hidden && (hasTrait || hasResearch)) {
 					return true;
 				}
 			}

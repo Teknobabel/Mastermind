@@ -10,7 +10,7 @@ public class RevealRemoteTokens : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-//		a.m_success = true;
+
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -93,7 +93,7 @@ public class RevealRemoteTokens : MissionBase {
 
 	public override bool IsValid ()
 	{
-		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
+		if (!base.IsValid ()) { return false;}		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
 
 		if (mw.m_scope == TargetType.Floor && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_ControlRoom &&
 			mw.m_regionInFocus.id != GameManager.instance.game.player.homeRegion.id) {

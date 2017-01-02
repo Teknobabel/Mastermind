@@ -40,7 +40,7 @@ public class AddHenchmenTrait : MissionBase {
 	{
 		string s = m_name + " - ";
 
-		if (GameManager.instance.currentMissionWrapper.m_henchmenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_henchmenInFocus != null) {
 			s += GameManager.instance.currentMissionWrapper.m_henchmenInFocus.henchmenName;
 		}
 
@@ -49,7 +49,7 @@ public class AddHenchmenTrait : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// Valid if henchmen in focus doesn't currently have newTrait
+		if (!base.IsValid ()) { return false;}		// Valid if henchmen in focus doesn't currently have newTrait
 
 		if (m_requiredUpgrade == null || (m_requiredUpgrade != null && GameManager.instance.game.player.currentAssets.Contains(m_requiredUpgrade)) && 
 			GameManager.instance.currentMissionWrapper.m_region == GameManager.instance.game.player.homeRegion)

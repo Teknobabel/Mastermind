@@ -100,7 +100,7 @@ public class Agent_EscapeJail : MissionBase {
 
 	public override bool IsValid ()
 	{
-		return false;
+		if (!base.IsValid ()) { return false;}		return false;
 	}
 
 	private void IncurInjury (Henchmen h)

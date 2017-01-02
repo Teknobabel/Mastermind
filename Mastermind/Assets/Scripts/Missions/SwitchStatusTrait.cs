@@ -40,7 +40,7 @@ public class SwitchStatusTrait : MissionBase {
 
 	public override bool IsValid ()
 	{
-
+		if (!base.IsValid ()) { return false;}
 		if (m_requiredAsset == null || (m_requiredAsset != null && GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_requiredAsset)) && 
 			GameManager.instance.currentMissionWrapper.m_region == GameManager.instance.game.player.homeRegion)
 		{

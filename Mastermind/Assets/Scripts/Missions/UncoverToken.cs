@@ -78,7 +78,7 @@ public class UncoverToken : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if there are any hidden tokens in the region
+		if (!base.IsValid ()) { return false;}		// valid if there are any hidden tokens in the region
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 

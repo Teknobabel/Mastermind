@@ -39,6 +39,7 @@ public class Goal_BuildAsset : OPGoalBase, IObserver {
 		if (m_omegaPlan.state == OmegaPlan.State.Revealed) {
 			
 			switch (thisGameEvent) {
+			case GameEvent.Organization_Base_AssetInstalled:
 			case GameEvent.Organization_AssetGained:
 			
 				Asset a = (Asset)subject;

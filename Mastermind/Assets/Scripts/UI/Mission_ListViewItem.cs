@@ -12,6 +12,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_missionDuration;
 	public TextMeshProUGUI m_missionSuccessChance;
 	public Image m_missionPortrait;
+	public Button m_button;
 
 	public TraitButton[] m_traits;
 
@@ -21,6 +22,55 @@ public class Mission_ListViewItem : MonoBehaviour {
 	private TokenSlot m_token = null;
 	private Asset m_asset = null;
 	private Region m_region = null;
+
+	public void Initialize (MissionBase m, int rank)
+	{
+		m_mission = m;
+		m_missionName.text = m.GetNameText().ToUpper();
+		m_missionDescription.text = m.m_description;
+
+		int turnsLeft = m.m_numTurns;
+		string duration = turnsLeft.ToString ();
+		if (turnsLeft > 1) {
+			duration += " TURNS";
+		} else {
+			duration += " TURN";
+		}
+
+		NumberCrawl nc = (NumberCrawl)m_missionCost.GetComponent<NumberCrawl> ();
+		if (nc != null) {
+
+			nc.Initialize (m.m_cost);
+		} else {
+
+			m_missionCost.text = m.m_cost.ToString ();
+		}
+
+		m_missionDuration.text = duration;
+
+		MissionBase.MissionTrait[] traits = m.GetTraitList(rank);
+
+		for (int i = 0; i < m_traits.Length; i++) {
+
+			TraitButton t = m_traits [i];
+
+			if (i < traits.Length) {
+
+				MissionBase.MissionTrait mT = traits [i];
+
+				if (mT.m_trait != null) {
+					t.Initialize (mT.m_trait, true);
+				}
+
+				if (mT.m_trait == null && mT.m_asset != null) {
+					t.Initialize (mT.m_asset, true);
+				}
+
+			} else {
+				t.Deactivate ();
+			}
+		}
+	}
 
 	public void Initialize ()
 	{
@@ -50,7 +100,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 		m_missionDuration.text = duration;
 
-		DrawTraits (mw);
+		DrawTraits (mw, mw.m_mission.GetMissionRank(mw));
 
 		if (mw.m_mission.m_targetType == MissionBase.TargetType.Henchmen && mw.m_henchmenInFocus != null) {
 
@@ -69,9 +119,9 @@ public class Mission_ListViewItem : MonoBehaviour {
 		}
 	}
 
-	private void DrawTraits (MissionWrapper mw)
+	private void DrawTraits (MissionWrapper mw, int rank)
 	{
-		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (mw.m_mission.GetMissionRank(mw));
+		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList(rank);
 		List<TraitData> combinedTraitList = mw.m_mission.GetCombinedTraitList (mw);
 
 		for (int i = 0; i < m_traits.Length; i++) {
@@ -121,8 +171,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 					GameManager.instance.currentMissionWrapper.m_regionInFocus = m_region;
 				}
 
-				SelectMissionMenu.instance.SelectMission (m_mission);
+//				SelectMissionMenu.instance.SelectMission (m_mission);
+
 			}
+
+			GameManager.instance.currentMenu.SelectMission(m_mission);
 		}
 	}
 

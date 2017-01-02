@@ -51,15 +51,28 @@ public class RevealAsset : MissionBase {
 
 	public override bool IsValid ()
 	{
+		bool hasTrait = false;
+		bool hasResearch = base.IsValid ();
+			
+
 		// valid if there are any hidden tokens in the region
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
+			foreach (Henchmen h in r.currentHenchmen) {
+
+				if (h.HasTrait (TraitData.TraitType.Hacker)) {
+
+					hasTrait = true;
+					break;
+				}
+			}
+
 			foreach (TokenSlot t in r.assetTokens) {
 
-				if (t.m_state == TokenSlot.State.Hidden) {
+				if (t.m_state == TokenSlot.State.Hidden && (hasTrait || hasResearch)) {
 					return true;
 				}
 			}

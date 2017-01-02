@@ -328,6 +328,6 @@ public class Agents_EngageHenchmen : MissionBase {
 
 	public override bool IsValid ()
 	{
-		return false;
+		if (!base.IsValid ()) { return false;}		return false;
 	}
 }

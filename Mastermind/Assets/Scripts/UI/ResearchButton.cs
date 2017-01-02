@@ -17,6 +17,9 @@ public class ResearchButton : MonoBehaviour {
 	m_researchGranted,
 	m_prerequisiteResearch;
 
+	public MissionBase
+	m_researchMission;
+
 	public RawImage m_buttonBG;
 	public RawImage m_typeIndicator;
 	public TextMeshProUGUI m_text;

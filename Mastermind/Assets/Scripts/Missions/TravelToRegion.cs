@@ -110,7 +110,7 @@ public class TravelToRegion : MissionBase {
 
 	public override bool IsValid ()
 	{
-		return true;
+		if (!base.IsValid ()) { return false;}		return true;
 	}
 
 	public override void CancelMission (MissionWrapper a)

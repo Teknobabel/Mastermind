@@ -33,4 +33,5 @@ public enum GameEvent {
 	Henchmen_MissionDisrupted,
 	UI_SectionHeader_MinimizeButtonClicked,
 	Region_WarDeclared,
+	Organization_Base_AssetInstalled,
 }

@@ -9,7 +9,6 @@ public class UncoverRemoteIntel : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-//		a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -47,7 +46,7 @@ public class UncoverRemoteIntel : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if player has control room, intel is hidden in world, region scope is player base
+		if (!base.IsValid ()) { return false;}		// valid if player has control room, intel is hidden in world, region scope is player base
 
 		if (GameManager.instance.game.intelInPlay.Count > 0 && GameManager.instance.currentMissionWrapper.m_region.id == GameManager.instance.game.player.homeRegion.id && 
 			GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_requiredAsset)) {

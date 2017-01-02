@@ -117,6 +117,14 @@ public class LairMenu : MenuState {
 
 			}
 		}
+
+		if (b.m_lair != null && b.m_lair.m_floorNumber < m_floors.Length) {
+
+			BaseFloorButton fb = m_floors [b.m_lair.m_floorNumber-1];
+			fb.gameObject.SetActive (true);
+			fb.Initialize (b.m_lair);
+
+		}
 	} 
 
 	private void UpdateAssets ()
@@ -206,7 +214,7 @@ public class LairMenu : MenuState {
 			}
 
 			GameManager.instance.currentMissionWrapper = mr;
-			GameManager.instance.PushMenuState (State.SelectMissionMenu);
+			GameManager.instance.PushMenuState (State.SelectResearchMenu);
 
 		}
 	}

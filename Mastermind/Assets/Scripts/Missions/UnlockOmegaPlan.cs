@@ -43,7 +43,7 @@ public class UnlockOmegaPlan : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// check if required base upgrade is present
+		if (!base.IsValid ()) { return false;}		// check if required base upgrade is present
 
 		if (m_requiredBaseUpgrade != null && !GameManager.instance.game.player.orgBase.m_currentAssets.Contains (m_requiredBaseUpgrade)) {
 
@@ -55,7 +55,9 @@ public class UnlockOmegaPlan : MissionBase {
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
-			if (r == GameManager.instance.game.player.homeRegion) {
+			MissionWrapper mw = GameManager.instance.currentMissionWrapper;
+
+			if (mw.m_scope == TargetType.Floor && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_AdvancedResearch && r == GameManager.instance.game.player.homeRegion) {
 
 				foreach (OmegaPlan op in GameManager.instance.game.player.omegaPlans) {
 

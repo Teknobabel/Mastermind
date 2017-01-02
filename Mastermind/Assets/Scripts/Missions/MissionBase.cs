@@ -39,6 +39,7 @@ public class MissionBase : ScriptableObject, IMission {
 	public int m_maxRank = 5;
 	public int m_infamyGain = 0;
 	public int m_missionFailInfamyGain = 0;
+	public Asset m_requiredResearch;
 	public MissionTrait[] m_rank1Traits;
 	public MissionTrait[] m_rank2Traits;
 	public MissionTrait[] m_rank3Traits;
@@ -85,11 +86,20 @@ public class MissionBase : ScriptableObject, IMission {
 
 	public virtual bool IsValid ()
 	{
+		if (m_requiredResearch == null || GameManager.instance.game.player.currentResearch.Contains (m_requiredResearch)) {
+
+			return true;
+		}
 		return false;
 	}
 
 	public bool WasMissionSuccessful (int successChance)
 	{
+		if (GameManager.instance.m_forceMissionSuccess) {
+
+			return true;
+		}
+
 		bool missionSuccess = false;
 
 		if (Random.Range (0, 101) <= successChance) {
@@ -118,7 +128,7 @@ public class MissionBase : ScriptableObject, IMission {
 			missionRank = mw.m_regionInFocus.rank + 2;
 		}
 
-		if (mw.m_mission.m_targetType == TargetType.AssetToken && mw.m_tokenInFocus.m_assetToken != null) {
+		if (mw.m_mission.m_targetType == TargetType.AssetToken && mw.m_tokenInFocus != null && mw.m_tokenInFocus.m_assetToken != null) {
 
 			AssetToken a = (AssetToken)mw.m_tokenInFocus.m_assetToken;
 

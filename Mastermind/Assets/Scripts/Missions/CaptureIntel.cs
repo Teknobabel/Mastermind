@@ -42,7 +42,7 @@ public class CaptureIntel : MissionBase {
 
 	public override bool IsValid ()
 	{
-
+		if (!base.IsValid ()) { return false;}
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;

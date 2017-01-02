@@ -23,8 +23,10 @@ public class Base {
 		public AgentWrapper m_capturedAgent = null;
 	}
 
+	public Floor m_lair;
 	public List<Floor> m_floors = new List<Floor>();
 	public List<Asset> m_currentAssets = new List<Asset> ();
+
 
 	private int 
 	m_maxFloors = 7;
@@ -42,7 +44,12 @@ public class Base {
 
 		// install layer at top of base
 
-		InstallAsset (numFloors, GameManager.instance.m_lairAsset);
+//		InstallAsset (numFloors, GameManager.instance.m_lairAsset);
+		m_lair = new Floor();
+		m_lair.m_floorState = FloorState.Occupied;
+		m_lair.m_installedUpgrade = GameManager.instance.m_lairAsset;
+		m_lair.m_floorNumber = m_floors.Count+1;
+		m_lair.m_baseDefense = m_lair.m_installedUpgrade.m_defenseValue;
 	}
 
 	public void AddNewFloor (int floorNum)
@@ -51,6 +58,10 @@ public class Base {
 		f.m_floorState = FloorState.Empty;
 		f.m_floorNumber = floorNum;
 		m_floors.Add (f);
+
+		if (m_lair != null) {
+			m_lair.m_floorNumber = m_floors.Count+1;
+		}
 	}
 
 	public void InstallAsset (Asset asset)
@@ -63,6 +74,10 @@ public class Base {
 				f.m_installedUpgrade = asset;
 				f.m_baseDefense = asset.m_defenseValue;
 				m_currentAssets.Add (asset);
+
+				if (GameManager.instance.game != null) {
+					GameManager.instance.game.player.Notify (asset, GameEvent.Organization_AssetGained);
+				}
 
 				return;
 			}
@@ -79,6 +94,10 @@ public class Base {
 				f.m_installedUpgrade = asset;
 				f.m_baseDefense = asset.m_defenseValue;
 				m_currentAssets.Add (asset);
+
+				if (GameManager.instance.game != null) {
+					GameManager.instance.game.player.Notify (asset, GameEvent.Organization_AssetGained);
+				}
 				return;
 			}
 		}

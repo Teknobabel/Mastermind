@@ -28,6 +28,6 @@ public class Agent_Hide : MissionBase {
 
 	public override bool IsValid ()
 	{
-		return false;
+		if (!base.IsValid ()) { return false;}		return false;
 	}
 }

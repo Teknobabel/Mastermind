@@ -19,7 +19,7 @@ public class ThreatenTheWorld : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if all other omega plan goals are complete
+		if (!base.IsValid ()) { return false;}		// valid if all other omega plan goals are complete
 
 		if (GameManager.instance.currentMissionWrapper.m_region.id == GameManager.instance.game.player.homeRegion.id) {
 			

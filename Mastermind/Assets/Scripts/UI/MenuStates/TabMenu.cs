@@ -40,7 +40,9 @@ public class TabMenu : MenuState, IObserver {
 
 	public List<RawImage> m_infamyMeter = new List<RawImage> ();
 
+	private Dictionary<int, MenuTab> m_menuTabs;
 	private List<TabButton> m_tabButtonList = new List<TabButton> ();
+	private List<GameObject> m_tabGOList = new List<GameObject>();
 
 	void Awake ()
 	{
@@ -51,13 +53,24 @@ public class TabMenu : MenuState, IObserver {
 		}
 	}
 
-	public override void OnActivate(MenuTab tabInfo)
+	public void UpdateTabs ()
 	{
-		
-		// set up tabs
 
-		Dictionary<int, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
+		if (m_tabButtonList.Count > 0) {
+
+			m_tabButtonList.Clear ();
+		}
+
+		while (m_tabGOList.Count > 0) {
+
+			GameObject go = m_tabGOList [0];
+			m_tabGOList.RemoveAt (0);
+			Destroy (go);
+		}
+
+		Dictionary<int, MenuTab> tabDict = TabMenu.instance.menuTabs;
 		List<MenuTab> tabList = new List<MenuTab> ();
+
 		foreach (KeyValuePair<int, MenuTab> pair in tabDict) {
 			tabList.Add (pair.Value);
 		}
@@ -67,41 +80,12 @@ public class TabMenu : MenuState, IObserver {
 
 			MenuTab m = tabList [i];
 
-			bool drawTab = true;
+			if (m.drawTab) {
 
-			if (m.m_menuState == MenuState.State.OmegaPlanMenu && m.objectID != -1) { // don't draw tabs for hidden omega plans
-
-				OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [m.objectID];
-
-				if (op.state == OmegaPlan.State.Hidden) {
-
-					drawTab = false;
-				}
-			} else if (m.m_menuState == MenuState.State.AgentsMenu) { // don't draw agent tab if no visible agents in world
-
-				drawTab = false;
-
-				foreach (AgentWrapper aw in GameManager.instance.game.agentOrganization.currentAgents) {
-
-					if (aw.m_vizState == AgentWrapper.VisibilityState.Visible) {
-
-						drawTab = true;
-						break;
-					}
-				}
-
-				// if no visible henchmen, need to listen to agent organization for first appearence of henchmen to show tab
-
-				if (!drawTab) {
-
-					GameManager.instance.game.agentOrganization.AddObserver (this);
-				}
-			}
-
-			if (drawTab) {
-				
 				GameObject g = (GameObject)(Instantiate (m_tabButton, m_tabButtonScrollViewContent.transform));
 				g.transform.localScale = Vector3.one;
+				m_tabGOList.Add (g);
+
 				TabButton tb = g.GetComponent<TabButton> ();
 				m_tabButtonList.Add (tb);
 
@@ -110,6 +94,69 @@ public class TabMenu : MenuState, IObserver {
 			}
 
 		}
+	}
+
+	public override void OnActivate(MenuTab tabInfo)
+	{
+
+		UpdateTabs ();
+
+//		// set up tabs
+//
+//		Dictionary<int, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
+//		List<MenuTab> tabList = new List<MenuTab> ();
+//		foreach (KeyValuePair<int, MenuTab> pair in tabDict) {
+//			tabList.Add (pair.Value);
+//		}
+//
+//		for (int i=0; i < tabList.Count; i++)
+//		{
+//
+//			MenuTab m = tabList [i];
+//
+//			bool drawTab = true;
+//
+//			if (m.m_menuState == MenuState.State.OmegaPlanMenu && m.objectID != -1) { // don't draw tabs for hidden omega plans
+//
+//				OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [m.objectID];
+//
+//				if (op.state == OmegaPlan.State.Hidden) {
+//
+//					drawTab = false;
+//				}
+//			} else if (m.m_menuState == MenuState.State.AgentsMenu) { // don't draw agent tab if no visible agents in world
+//
+//				drawTab = false;
+//
+//				foreach (AgentWrapper aw in GameManager.instance.game.agentOrganization.currentAgents) {
+//
+//					if (aw.m_vizState == AgentWrapper.VisibilityState.Visible) {
+//
+//						drawTab = true;
+//						break;
+//					}
+//				}
+//
+//				// if no visible henchmen, need to listen to agent organization for first appearence of henchmen to show tab
+//
+//				if (!drawTab) {
+//
+//					GameManager.instance.game.agentOrganization.AddObserver (this);
+//				}
+//			}
+//
+//			if (drawTab) {
+//				
+//				GameObject g = (GameObject)(Instantiate (m_tabButton, m_tabButtonScrollViewContent.transform));
+//				g.transform.localScale = Vector3.one;
+//				TabButton tb = g.GetComponent<TabButton> ();
+//				m_tabButtonList.Add (tb);
+//
+//				tb.Initialize (m);
+//				tb.ChangeState (TabButton.State.Unselected);
+//			}
+//
+//		}
 
 		// set up infamy meter
 
@@ -225,7 +272,7 @@ public class TabMenu : MenuState, IObserver {
 
 			// enable the Agents menu when the first agent becomes visible
 
-			Dictionary<int, MenuTab> tabDict = GameManager.instance.game.player.menuTabs;
+			Dictionary<int, MenuTab> tabDict = TabMenu.instance.menuTabs;
 			List<MenuTab> tabList = new List<MenuTab> ();
 			foreach (KeyValuePair<int, MenuTab> pair in tabDict) {
 				tabList.Add (pair.Value);
@@ -305,4 +352,6 @@ public class TabMenu : MenuState, IObserver {
 			GameManager.instance.currentMenu.HideActionPane ();
 		}
 	}
+
+	public Dictionary<int, MenuTab> menuTabs {get{return m_menuTabs; } set { m_menuTabs = value; }}
 }

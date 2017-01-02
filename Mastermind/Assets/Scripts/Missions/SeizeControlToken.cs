@@ -5,12 +5,11 @@ using System.Collections;
 public class SeizeControlToken : MissionBase {
 
 	public ControlToken.ControlType m_type = ControlToken.ControlType.None;
+	public TraitData.TraitType m_trait = TraitData.TraitType.None;
 
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-
-		a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -52,14 +51,39 @@ public class SeizeControlToken : MissionBase {
 
 	public override bool IsValid ()
 	{
+		bool hasTrait = false;
+		bool hasResearch = base.IsValid ();	
+
+		if (m_trait == TraitData.TraitType.None) {
+
+			hasTrait = true;
+		}
+
 		// valid if there is a control token of m_type not under player control
 
 		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null)
 		{
 			TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 
+			if (GameManager.instance.currentMissionWrapper.m_region != null && m_trait != TraitData.TraitType.None) {
+
+				Region r = GameManager.instance.currentMissionWrapper.m_region;
+
+				foreach (Henchmen h in r.currentHenchmen) {
+
+					if (h.HasTrait (m_trait)) {
+
+						hasTrait = true;
+						break;
+					}
+				}
+			}
+
 			if (t.m_state == TokenSlot.State.Revealed && t.m_type == TokenSlot.TokenType.Control && t.m_controlToken.m_controlType == m_type && t.owner != Region.Owner.Player) {
-				return true;
+
+				if (hasTrait || hasResearch) {
+					return true;
+				}
 			}
 		}
 		return false;

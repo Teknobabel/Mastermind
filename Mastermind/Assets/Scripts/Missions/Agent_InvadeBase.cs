@@ -8,7 +8,6 @@ public class Agent_InvadeBase : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
@@ -78,7 +77,10 @@ public class Agent_InvadeBase : MissionBase {
 
 			// go through each floor while there are agents left
 
-			foreach (Base.Floor f in b.m_floors) {
+			List<Base.Floor> floors = new List<Base.Floor> (b.m_floors);
+			floors.Add (b.m_lair);
+
+			foreach (Base.Floor f in floors) {
 
 				t.m_resultsText += "\n\nThe Agents reach Floor " + f.m_floorNumber.ToString() + ": ";
 				if (f.m_floorState == Base.FloorState.Empty) {
@@ -374,6 +376,6 @@ public class Agent_InvadeBase : MissionBase {
 
 	public override bool IsValid ()
 	{
-		return false;
+		if (!base.IsValid ()) { return false;}		return false;
 	}
 }

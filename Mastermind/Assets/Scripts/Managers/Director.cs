@@ -34,6 +34,7 @@ public class Director : ScriptableObject {
 
 	public Asset[] m_startingAssets;
 	public Asset[] m_startingBaseUpgrades;
+	public Asset[] m_startingResearch;
 	public OmegaPlanData[] m_startingOmegaPlanData;
 	public HenchmenData[] m_startingHenchmenData;
 	public HenchmenData[] m_startingAgentData;

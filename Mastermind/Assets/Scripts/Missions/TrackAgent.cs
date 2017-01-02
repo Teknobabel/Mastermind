@@ -7,7 +7,7 @@ public class TrackAgent : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
+
 		if (a.m_success) {
 
 			if (a.m_agentInFocus != null && a.m_agentInFocus.m_vizState == AgentWrapper.VisibilityState.Visible) {
@@ -43,7 +43,7 @@ public class TrackAgent : MissionBase {
 
 	public override bool IsValid ()
 	{
-//		foreach (Region.HenchmenSlot hs in GameManager.instance.currentMissionWrapper.m_region.henchmenSlots) {
+		if (!base.IsValid ()) { return false;}//		foreach (Region.HenchmenSlot hs in GameManager.instance.currentMissionWrapper.m_region.henchmenSlots) {
 		Debug.Log(GameManager.instance.currentMissionWrapper.m_agentInFocus);
 		if (GameManager.instance.currentMissionWrapper.m_agentInFocus.m_vizState == AgentWrapper.VisibilityState.Visible) {
 

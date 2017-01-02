@@ -7,7 +7,7 @@ public class Agent_DisruptMission : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
+
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_agentInFocus != null) {t.m_henchmenIDs.Add (a.m_agentInFocus.m_agent.id);}
@@ -58,6 +58,6 @@ public class Agent_DisruptMission : MissionBase {
 
 	public override bool IsValid ()
 	{
-		return false;
+		if (!base.IsValid ()) { return false;}		return false;
 	}
 }

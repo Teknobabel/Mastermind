@@ -55,7 +55,7 @@ public class CombineAssets : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// Valid if region is lair and player has requiredUpgrade and all sourceAssets
+		if (!base.IsValid ()) { return false;}		// Valid if region is lair and player has requiredUpgrade and all sourceAssets
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 

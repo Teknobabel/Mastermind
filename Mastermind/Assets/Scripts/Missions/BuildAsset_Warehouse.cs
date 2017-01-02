@@ -5,7 +5,6 @@ using System.Collections;
 public class BuildAsset_Warehouse : MissionBase {
 
 	public Asset m_asset;
-	public Asset m_requiredResearch;
 
 	public int m_numAssetSlots = 6;
 
@@ -19,7 +18,6 @@ public class BuildAsset_Warehouse : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-				a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -52,9 +50,8 @@ public class BuildAsset_Warehouse : MissionBase {
 
 	public override bool IsValid ()
 	{
-
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null &&
-			GameManager.instance.currentMissionWrapper.m_scope == m_targetType && (m_requiredResearch == null || GameManager.instance.game.player.currentResearch.Contains(m_requiredResearch))) {
+		if (!base.IsValid ()) { return false;}
+		if (GameManager.instance.currentMissionWrapper.m_scope == m_targetType) {
 
 			// player can have up to 2 warehouses built
 

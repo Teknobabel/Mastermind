@@ -47,7 +47,7 @@ public class PassPolicy : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// check if any required assets are needed
+		if (!base.IsValid ()) { return false;}		// check if any required assets are needed
 
 		if (m_requiredBaseUpgrade != null && !GameManager.instance.game.player.orgBase.m_currentAssets.Contains (m_requiredBaseUpgrade)) {
 

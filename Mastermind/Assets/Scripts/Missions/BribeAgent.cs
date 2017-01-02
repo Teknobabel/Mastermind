@@ -7,7 +7,6 @@ public class BribeAgent : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-//		a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -33,7 +32,7 @@ public class BribeAgent : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if agent in focus isn't hidden
+		if (!base.IsValid ()) { return false;}		// valid if agent in focus isn't hidden
 
 		AgentWrapper aw = GameManager.instance.currentMissionWrapper.m_agentInFocus;
 

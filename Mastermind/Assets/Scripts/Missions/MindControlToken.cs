@@ -53,7 +53,7 @@ public class MindControlToken : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasOmegaPlan = false;
+		if (!base.IsValid ()) { return false;}		bool hasOmegaPlan = false;
 
 		foreach (OmegaPlan op in GameManager.instance.game.player.omegaPlans) {
 			if (op.opName == m_omegaPlanData.m_name && op.state == OmegaPlan.State.Revealed) {

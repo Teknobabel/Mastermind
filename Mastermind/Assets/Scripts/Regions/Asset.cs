@@ -82,6 +82,7 @@ public class Asset : ScriptableObject, ISubject {
 		Research_Lair,
 		LairUpgrade_CampaignCenter,
 		LairUpgrade_AdvancedResearch,
+		Research_Default,
 	}
 
 	private List<IObserver>

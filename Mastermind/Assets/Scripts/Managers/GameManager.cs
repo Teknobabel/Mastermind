@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 	public static GameManager instance;
 
+	public bool m_forceMissionSuccess = false;
+
 	public HenchmenData[] m_henchmenBank;
 	public HenchmenData[] m_agentBank;
 	public RegionData[] m_regionBank;

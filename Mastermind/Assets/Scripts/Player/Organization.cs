@@ -25,7 +25,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	private List<Asset> m_assetsInOrbit;
 
 	private Dictionary<int, OmegaPlan> m_omegaPlansByID = new Dictionary<int, OmegaPlan> ();
-	private Dictionary<int, MenuTab> m_menuTabs;
+//	private Dictionary<int, MenuTab> m_menuTabs;
 
 	private Dictionary<int, List<TurnResultsEntry>> m_turnResults = new Dictionary<int, List<TurnResultsEntry>> (); // by turn number
 	private Dictionary<GameEvent, List<TurnResultsEntry>> m_turnResultsByType = new Dictionary<GameEvent, List<TurnResultsEntry>> ();
@@ -469,7 +469,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			TurnResultsEntry t = new TurnResultsEntry ();
 			t.m_iconType = TurnResultsEntry.IconType.Organization;
 			t.m_resultsText = m_name.ToUpper() + " gains Asset: " + a.m_name.ToUpper();
-			t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+//			t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
 			AddTurnResults (0, t);
 		}
 
@@ -490,7 +490,24 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				TurnResultsEntry t = new TurnResultsEntry ();
 				t.m_iconType = TurnResultsEntry.IconType.Organization;
 				t.m_resultsText = m_name.ToUpper() + " gains Base Upgrade: " + a.m_name.ToUpper();
-				t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+//				t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+				AddTurnResults (0, t);
+			}
+		}
+
+		// add any starting research
+
+		if (d.m_startingResearch.Length > 0) {
+
+			for (int i = 0; i < d.m_startingResearch.Length; i++) {
+
+				Asset a = d.m_startingResearch [i];
+				m_currentResearch.Add (a);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Organization;
+				t.m_resultsText = m_name.ToUpper() + " gains Research: " + a.m_name.ToUpper();
+//				t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
 				AddTurnResults (0, t);
 			}
 		}
@@ -675,56 +692,6 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			}
 		}
 
-		// set up menu tabs
-
-		m_menuTabs = new Dictionary<int, MenuTab> ();
-
-		MenuTab henchTab = new MenuTab ();
-		henchTab.m_name = "HENCHMEN";
-		henchTab.m_menuState = MenuState.State.HenchmenMenu;
-		henchTab.Initialize ();
-		m_menuTabs.Add (henchTab.id, henchTab);
-
-		MenuTab lairTab = new MenuTab ();
-		lairTab.m_name = "LAIR";
-		lairTab.m_menuState = MenuState.State.LairMenu;
-		lairTab.Initialize ();
-		m_menuTabs.Add (lairTab.id, lairTab);
-
-		MenuTab worldTab = new MenuTab ();
-		worldTab.m_name = "WORLD";
-		worldTab.m_menuState = MenuState.State.WorldMenu;
-		worldTab.Initialize ();
-		m_menuTabs.Add (worldTab.id, worldTab);
-
-		MenuTab activityTab = new MenuTab ();
-		activityTab.m_name = "ACTIVITY";
-		activityTab.m_menuState = MenuState.State.ActivityMenu;
-		activityTab.Initialize ();
-		m_menuTabs.Add (activityTab.id, activityTab);
-
-		foreach (OmegaPlan op in m_omegaPlans) {
-
-			MenuTab opTab = new MenuTab ();
-			opTab.m_name = "OMEGA PLAN";
-			opTab.objectID = op.id;
-			opTab.m_menuState = MenuState.State.OmegaPlanMenu;
-			opTab.Initialize ();
-			m_menuTabs.Add (opTab.id, opTab);
-		}
-
-		MenuTab agentTab = new MenuTab ();
-		agentTab.m_name = "AGENTS";
-		agentTab.m_menuState = MenuState.State.AgentsMenu;
-		agentTab.Initialize ();
-		m_menuTabs.Add (agentTab.id, agentTab);
-
-		MenuTab databaseTab = new MenuTab ();
-		databaseTab.m_name = "DATABASE";
-		databaseTab.m_menuState = MenuState.State.DatabaseMenu;
-		databaseTab.Initialize ();
-		m_menuTabs.Add (databaseTab.id, databaseTab);
-
 		AddObserver (TabMenu.instance);
 
 		Notify (this, GameEvent.Organization_Initialized);
@@ -794,8 +761,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 		return totalCP;
 	}
-
-	public Dictionary<int, MenuTab> menuTabs {get{return m_menuTabs; }}
+		
 	public List<OmegaPlan> omegaPlans {get{return m_omegaPlans; }}
 	public Dictionary<int, OmegaPlan> omegaPlansByID {get{return m_omegaPlansByID; }}
 	public List<Henchmen> availableHenchmen {get{return m_availableHenchmen; }}

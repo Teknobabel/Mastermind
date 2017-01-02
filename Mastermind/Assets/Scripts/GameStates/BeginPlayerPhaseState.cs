@@ -23,7 +23,7 @@ public class BeginPlayerPhaseState : IGameState {
 			GameManager.instance.PopMenuState ();
 		}
 
-		foreach (KeyValuePair<int, MenuTab> pair in player.menuTabs)
+		foreach (KeyValuePair<int, MenuTab> pair in TabMenu.instance.menuTabs)
 		{
 			if (pair.Value.m_menuState == MenuState.State.ActivityMenu) {
 				ActivityMenu.instance.displayTurnResults = true;

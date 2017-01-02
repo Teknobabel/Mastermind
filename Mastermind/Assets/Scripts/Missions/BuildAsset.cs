@@ -5,7 +5,7 @@ using System.Collections;
 public class BuildAsset : MissionBase {
 
 	public Asset m_asset;
-	public Asset m_requiredResearch;
+
 
 	public override void InitializeMission (MissionWrapper a)
 	{
@@ -17,7 +17,6 @@ public class BuildAsset : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -26,7 +25,7 @@ public class BuildAsset : MissionBase {
 			
 			// add asset to player's inventory
 
-			GameManager.instance.game.player.AddAsset (m_asset);
+//			GameManager.instance.game.player.AddAsset (m_asset);
 
 			GameManager.instance.game.player.orgBase.InstallAsset (a.m_floorInFocus.m_floorNumber, m_asset);
 
@@ -49,12 +48,11 @@ public class BuildAsset : MissionBase {
 
 	public override bool IsValid ()
 	{
-		
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null &&
-			GameManager.instance.currentMissionWrapper.m_scope == m_targetType && (m_requiredResearch == null || GameManager.instance.game.player.currentResearch.Contains(m_requiredResearch))) {
+		if (!base.IsValid ()) { return false;}		
+		if (GameManager.instance.currentMissionWrapper.m_scope == m_targetType) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
-			if (r == GameManager.instance.game.player.homeRegion && !GameManager.instance.game.player.currentAssets.Contains(m_asset)) {
+			if (r == GameManager.instance.game.player.homeRegion && !GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_asset)) {
 				return true;
 			}
 		}

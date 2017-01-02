@@ -367,7 +367,7 @@ public class SelectMissionMenu : MenuState {
 		m_missionsInList.Clear ();
 	}
 
-	public void SelectMission (MissionBase m)
+	public override void SelectMission (MissionBase m)
 	{
 		
 		if (GameManager.instance.game.player.currentCommandPool >= m.m_cost) {

@@ -7,7 +7,6 @@ public class StealAsset : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-		a.m_success = true;
 
 		TurnResultsEntry t = new TurnResultsEntry ();
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
@@ -54,7 +53,7 @@ public class StealAsset : MissionBase {
 	{
 		string s = m_name + "\n";
 
-		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
 			s += "<size=18>" + GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken.m_name + "</size>";
 		}
 
@@ -63,14 +62,33 @@ public class StealAsset : MissionBase {
 
 	public override bool IsValid ()
 	{
+		bool hasTrait = false;
+		bool hasResearch = base.IsValid ();	
+
 		// valid if there is a revealed, non empty asset token in the region
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null && GameManager.instance.game.player.currentAssets.Count < GameManager.instance.game.player.maxAssets) {
 
+			if (GameManager.instance.currentMissionWrapper.m_region != null) {
+				
+				Region r = GameManager.instance.currentMissionWrapper.m_region;
+
+				foreach (Henchmen h in r.currentHenchmen) {
+
+					if (h.HasTrait (TraitData.TraitType.Thief)) {
+
+						hasTrait = true;
+						break;
+					}
+				}
+			}
+
 			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == TokenSlot.TokenType.Asset &&
 				GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
-
-				return true;
+					
+				if (hasTrait || hasResearch) {
+					return true;
+				}
 			}
 
 		}

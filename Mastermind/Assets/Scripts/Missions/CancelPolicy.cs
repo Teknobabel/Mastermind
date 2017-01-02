@@ -41,7 +41,7 @@ public class CancelPolicy : MissionBase {
 	{
 		string s = m_name + "\n";
 
-		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
 			s += "<size=18>" + GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_policyToken.m_name + "</size>";
 		}
 
@@ -50,7 +50,7 @@ public class CancelPolicy : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if there is a control token of m_type not under player control
+		if (!base.IsValid ()) { return false;}		// valid if there is a control token of m_type not under player control
 
 		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null)
 		{

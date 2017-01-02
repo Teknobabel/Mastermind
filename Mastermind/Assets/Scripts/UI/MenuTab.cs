@@ -9,6 +9,7 @@ public class MenuTab: IObserver {
 
 	private int m_tabID = -1;
 	private int m_objectID = -1;
+	private bool m_drawTab = true;
 
 	public void Initialize ()
 	{
@@ -25,7 +26,7 @@ public class MenuTab: IObserver {
 
 			if (op.state == OmegaPlan.State.Hidden) {
 				s += "\nUNKNOWN";
-				op.AddObserver (this);
+//				op.AddObserver (this);
 			} else {
 				s += "\n" + op.opNameShort.ToUpper ();
 			}
@@ -38,12 +39,25 @@ public class MenuTab: IObserver {
 	{
 		switch (thisGameEvent) {
 		case GameEvent.Organization_OmegaPlanRevealed:
+			
+			Debug.Log ("OMEGA PLAN REVEALED");
+
+			if (!m_drawTab) {
+
+				OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [objectID];
+				op.RemoveObserver (this);
+
+				m_drawTab = true;
+				TabMenu.instance.UpdateTabs ();
+			}
+
 //			OmegaPlan op = (OmegaPlan)subject;
-			m_tabButton.Initialize(this);
+//			m_tabButton.Initialize(this);
 			break;
 		}
 	}
 
 	public int id {get{return m_tabID; }}
 	public int objectID {get{return m_objectID; }set{m_objectID = value; }}
+	public bool drawTab {get{ return m_drawTab; } set{ m_drawTab = value; }}
 }

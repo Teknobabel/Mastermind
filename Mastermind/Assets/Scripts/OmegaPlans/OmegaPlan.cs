@@ -65,6 +65,7 @@ public class OmegaPlan : ScriptableObject, ISubject {
 
 		switch (newState) {
 		case State.Revealed:
+			
 			Notify (this, GameEvent.Organization_OmegaPlanRevealed);
 			break;
 		}

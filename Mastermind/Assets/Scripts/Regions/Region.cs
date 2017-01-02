@@ -219,7 +219,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 		bool tokenAdded = false;
 
 		foreach (TokenSlot ts in m_policyTokens) {
-			Debug.Log (ts.m_state);
+			
 			if (ts.m_policyToken == null && p != null) {
 
 				ts.m_policyToken = p;

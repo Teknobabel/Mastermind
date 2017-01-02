@@ -10,7 +10,7 @@ public class CaptureAgent : MissionBase {
 	public override void CompleteMission (MissionWrapper a)
 	{
 		base.CompleteMission (a);
-//		a.m_success = true;
+
 		if (a.m_success) {
 
 			TurnResultsEntry t = new TurnResultsEntry ();
@@ -227,7 +227,7 @@ public class CaptureAgent : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// valid if there is a non-incapacitated Agent in the region
+		if (!base.IsValid ()) { return false;}		// valid if there is a non-incapacitated Agent in the region
 
 		AgentWrapper aw = GameManager.instance.currentMissionWrapper.m_agentInFocus;
 

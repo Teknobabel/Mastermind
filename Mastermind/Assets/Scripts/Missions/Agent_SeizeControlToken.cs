@@ -54,6 +54,6 @@ public class Agent_SeizeControlToken : MissionBase {
 
 	public override bool IsValid ()
 	{
-		return false;
+		if (!base.IsValid ()) { return false;}		return false;
 	}
 }

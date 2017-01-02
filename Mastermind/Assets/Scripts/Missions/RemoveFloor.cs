@@ -41,7 +41,7 @@ public class RemoveFloor : MissionBase {
 
 	public override bool IsValid ()
 	{
-		// Valid if we are currently looking at a base floor with an upgrade installed
+		if (!base.IsValid ()) { return false;}		// Valid if we are currently looking at a base floor with an upgrade installed
 
 		if (GameManager.instance.currentMissionWrapper.m_region == GameManager.instance.game.player.homeRegion && GameManager.instance.currentMissionWrapper.m_floorInFocus != null &&
 			GameManager.instance.currentMissionWrapper.m_floorInFocus.m_floorState == Base.FloorState.Occupied) 
