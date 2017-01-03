@@ -96,7 +96,7 @@ public class Agent_SearchRegion : MissionBase {
 			}
 
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+//			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
 		} else {
 

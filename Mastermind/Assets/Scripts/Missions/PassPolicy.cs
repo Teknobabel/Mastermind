@@ -38,7 +38,7 @@ public class PassPolicy : MissionBase {
 	{
 		string s = m_name + "\n";
 
-		if (GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null) {
 			s += "<size=18>" + m_policy.m_name + "</size>";
 		}
 
