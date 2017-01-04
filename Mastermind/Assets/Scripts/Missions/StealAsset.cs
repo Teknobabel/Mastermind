@@ -62,31 +62,16 @@ public class StealAsset : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasTrait = false;
-		bool hasResearch = base.IsValid ();	
+		bool hasPreRequisites = base.IsValid ();	
 
 		// valid if there is a revealed, non empty asset token in the region
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null && GameManager.instance.game.player.currentAssets.Count < GameManager.instance.game.player.maxAssets) {
 
-			if (GameManager.instance.currentMissionWrapper.m_region != null) {
-				
-				Region r = GameManager.instance.currentMissionWrapper.m_region;
-
-				foreach (Henchmen h in r.currentHenchmen) {
-
-					if (h.HasTrait (TraitData.TraitType.Thief)) {
-
-						hasTrait = true;
-						break;
-					}
-				}
-			}
-
 			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == TokenSlot.TokenType.Asset &&
 				GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
 					
-				if (hasTrait || hasResearch) {
+				if (hasPreRequisites) {
 					return true;
 				}
 			}

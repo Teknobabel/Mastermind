@@ -232,30 +232,15 @@ public class KillAgent : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasTrait = false;
-		bool hasResearch = base.IsValid ();	
+		bool hasPreRequisites = base.IsValid ();	
 
 		// valid if there is a non-incapacitated Agent in the region
-
-		if (GameManager.instance.currentMissionWrapper.m_region != null) {
-
-			Region r = GameManager.instance.currentMissionWrapper.m_region;
-
-			foreach (Henchmen h in r.currentHenchmen) {
-
-				if (h.HasTrait (TraitData.TraitType.Assassin)) {
-
-					hasTrait = true;
-					break;
-				}
-			}
-		}
 
 		AgentWrapper aw = GameManager.instance.currentMissionWrapper.m_agentInFocus;
 
 		if (aw.m_vizState != AgentWrapper.VisibilityState.Hidden && aw.m_agent.statusTrait.m_type != TraitData.TraitType.Incapacitated) {
 
-			if (hasTrait || hasResearch) {
+			if (hasPreRequisites) {
 				return true;
 			}
 		}
@@ -267,7 +252,7 @@ public class KillAgent : MissionBase {
 	{
 		string s = m_name + "\n";
 
-		if (GameManager.instance.currentMissionWrapper.m_agentInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_agentInFocus != null) {
 			s += "<size=18>" + GameManager.instance.currentMissionWrapper.m_agentInFocus.m_agent.henchmenName + "</size>";
 		}
 

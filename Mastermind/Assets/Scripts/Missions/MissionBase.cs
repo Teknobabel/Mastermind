@@ -40,6 +40,7 @@ public class MissionBase : ScriptableObject, IMission {
 	public int m_infamyGain = 0;
 	public int m_missionFailInfamyGain = 0;
 	public Asset m_requiredResearch;
+	public TraitData.TraitType m_linkedTrait;
 	public MissionTrait[] m_rank1Traits;
 	public MissionTrait[] m_rank2Traits;
 	public MissionTrait[] m_rank3Traits;
@@ -89,6 +90,19 @@ public class MissionBase : ScriptableObject, IMission {
 		if (m_requiredResearch == null || GameManager.instance.game.player.currentResearch.Contains (m_requiredResearch)) {
 
 			return true;
+		}
+
+		if (m_linkedTrait != TraitData.TraitType.None && GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
+
+			Region r = GameManager.instance.currentMissionWrapper.m_region;
+
+			foreach (Henchmen h in r.currentHenchmen) {
+
+				if (h.HasTrait (m_linkedTrait)) {
+
+					return true;
+				}
+			}
 		}
 		return false;
 	}

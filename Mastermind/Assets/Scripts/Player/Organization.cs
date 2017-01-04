@@ -63,6 +63,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				t.m_iconType = TurnResultsEntry.IconType.Henchmen;
 				t.m_resultsText = h.henchmenName + " joins " + m_name;
 				t.m_resultType = GameEvent.Organization_HenchmenHired;
+				t.m_henchmenIDs.Add (h.id);
 				AddTurnResults (GameManager.instance.game.turnNumber, t);
 
 				Notify (this, GameEvent.Organization_HenchmenHired);
@@ -137,32 +138,13 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 				RemoveHenchmenFromMissions (h);
 
-//				List<MissionWrapper> cancelledMissions = new List<MissionWrapper>();
-//
-//				foreach (MissionWrapper mission in m_activeMissions) {
-//
-//					if (mission.m_henchmenInFocus != null && mission.m_henchmenInFocus == h) {
-//
-//						cancelledMissions.Add (mission);
-//					}
-//					else if (mission.m_henchmen.Count > 0 && mission.m_henchmen.Contains (h)) {
-//
-//						mission.m_henchmen.Remove (h);
-//
-//						if (mission.m_henchmen.Count == 0) {
-//							cancelledMissions.Add (mission);
-//						}
-//					}
-//				}
-//
-//				while (cancelledMissions.Count > 0) {
-//
-//					MissionWrapper mission = cancelledMissions [0];
-//					cancelledMissions.RemoveAt (0);
-//
-//					CancelMission (mission);
-////					activeMissions.Remove (mission);
-//				}
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Henchmen;
+				t.m_resultsText = h.henchmenName + " is dismissed from " + m_name;
+				t.m_resultType = GameEvent.Organization_HenchmenFired;
+				t.m_henchmenIDs.Add (h.id);
+				AddTurnResults (GameManager.instance.game.turnNumber, t);
+
 
 				Notify (this, GameEvent.Organization_HenchmenFired);
 				break;

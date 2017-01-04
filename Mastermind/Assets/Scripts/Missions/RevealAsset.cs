@@ -10,7 +10,13 @@ public class RevealAsset : MissionBase {
 		base.CompleteMission (a);
 
 		TurnResultsEntry t = new TurnResultsEntry ();
+
 		if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
+
+		foreach (Henchmen h in a.m_henchmen) {
+
+			t.m_henchmenIDs.Add (h.id);
+		}
 
 		if (a.m_success) {
 
@@ -51,28 +57,17 @@ public class RevealAsset : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasTrait = false;
-		bool hasResearch = base.IsValid ();
+		bool hasPreRequisites = base.IsValid ();
 			
-
 		// valid if there are any hidden tokens in the region
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
-			foreach (Henchmen h in r.currentHenchmen) {
-
-				if (h.HasTrait (TraitData.TraitType.Hacker)) {
-
-					hasTrait = true;
-					break;
-				}
-			}
-
 			foreach (TokenSlot t in r.assetTokens) {
 
-				if (t.m_state == TokenSlot.State.Hidden && (hasTrait || hasResearch)) {
+				if (t.m_state == TokenSlot.State.Hidden && hasPreRequisites) {
 					return true;
 				}
 			}

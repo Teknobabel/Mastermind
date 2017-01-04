@@ -34,6 +34,7 @@ public class EndTurnState : IGameState {
 		}
 
 		// check if Intel should be spawned
+
 		if (GameManager.instance.game.turnNumber == GameManager.instance.game.turnToSpawnNextIntel) {
 			GameManager.instance.game.SpawnIntel ();
 		}

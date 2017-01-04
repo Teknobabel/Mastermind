@@ -5,7 +5,7 @@ using System.Collections;
 public class SeizeControlToken : MissionBase {
 
 	public ControlToken.ControlType m_type = ControlToken.ControlType.None;
-	public TraitData.TraitType m_trait = TraitData.TraitType.None;
+//	public TraitData.TraitType m_trait = TraitData.TraitType.None;
 
 	public override void CompleteMission (MissionWrapper a)
 	{
@@ -51,13 +51,7 @@ public class SeizeControlToken : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasTrait = false;
-		bool hasResearch = base.IsValid ();	
-
-		if (m_trait == TraitData.TraitType.None) {
-
-			hasTrait = true;
-		}
+		bool hasPreRequisites = base.IsValid ();	
 
 		// valid if there is a control token of m_type not under player control
 
@@ -65,23 +59,10 @@ public class SeizeControlToken : MissionBase {
 		{
 			TokenSlot t = GameManager.instance.currentMissionWrapper.m_tokenInFocus;
 
-			if (GameManager.instance.currentMissionWrapper.m_region != null && m_trait != TraitData.TraitType.None) {
-
-				Region r = GameManager.instance.currentMissionWrapper.m_region;
-
-				foreach (Henchmen h in r.currentHenchmen) {
-
-					if (h.HasTrait (m_trait)) {
-
-						hasTrait = true;
-						break;
-					}
-				}
-			}
 
 			if (t.m_state == TokenSlot.State.Revealed && t.m_type == TokenSlot.TokenType.Control && t.m_controlToken.m_controlType == m_type && t.owner != Region.Owner.Player) {
 
-				if (hasTrait || hasResearch) {
+				if (hasPreRequisites) {
 					return true;
 				}
 			}

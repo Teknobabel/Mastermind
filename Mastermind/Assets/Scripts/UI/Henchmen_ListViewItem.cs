@@ -9,6 +9,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_henchmenName;
 	public TextMeshProUGUI m_currentMission;
 	public TextMeshProUGUI m_currentLocation;
+	public TextMeshProUGUI m_buttonText;
 //	public TextMeshProUGUI m_turnCost;
 	public RawImage m_henchmenPortrait;
 
@@ -48,6 +49,16 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		string location = "REGION:\n";
 		location += h.currentRegion.regionName.ToUpper ();
 		m_currentLocation.text = location;
+
+		// update button text
+		if (GameManager.instance.currentMenuState == MenuState.State.HenchmenMenu) {
+
+			m_buttonText.text = "INSPECT";
+		}
+		else if (GameManager.instance.currentMenuState == MenuState.State.HenchmenDetailMenu) {
+
+			m_buttonText.text = "DISMISS";
+		}
 	}
 
 	private void DisplayMenu ( Henchmen h)
@@ -85,9 +96,15 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	{
 		if (GameManager.instance.currentMenuState == MenuState.State.SelectHenchmenMenu && m_henchmenID != -1) {
 			SelectHenchmenMenu.instance.SelectHenchmen (m_henchmenID);
+		
+		} else if (GameManager.instance.currentMenuState == MenuState.State.HenchmenDetailMenu) {
+
+			GameManager.instance.game.player.FireHenchmen (m_henchmenID);
+			GameManager.instance.PopMenuState ();
+			
 		} else {
-			CallHenchmenMenu.instance.henchmenID = m_henchmenID;
-			GameManager.instance.PushMenuState (MenuState.State.CallHenchmenMenu);
+			HenchmenDetailMenu.instance.henchmenID = m_henchmenID;
+			GameManager.instance.PushMenuState (MenuState.State.HenchmenDetailMenu);
 		}
 	}
 

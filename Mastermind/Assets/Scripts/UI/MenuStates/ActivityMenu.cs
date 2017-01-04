@@ -8,8 +8,8 @@ public class ActivityMenu : MenuState, ISubject {
 
 	public GameObject m_turnResultsMenu;
 	public GameObject m_turnResultsListViewItem;
-	public GameObject m_missionListViewItem;
-	public GameObject m_activeMissionListViewItem;
+//	public GameObject m_missionListViewItem;
+//	public GameObject m_activeMissionListViewItem;
 	public GameObject m_turnResultsButton;
 	public GameObject m_sectionHeader;
 	public GameObject m_scrollViewContent;
@@ -39,25 +39,27 @@ public class ActivityMenu : MenuState, ISubject {
 	public override void OnActivate(MenuTab tabInfo)
 	{
 		Debug.Log ("Starting Activity Menu");
-		//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-		//		t.m_tabButton.ChangeState (TabButton.State.Selected);
+
 		m_tabInfo = tabInfo;
 		if (m_tabInfo != null) {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
 		}
-
-//		m_sortPane.SetActive (true);
+			
 		m_turnResultsMenu.SetActive (true);
 			
-		if (m_displayTurnResults) {
-			m_displayTurnResults = false;
-			int lastTurn = GameManager.instance.game.turnNumber - 1;
-//			if (lastTurn > 0) {
-				TurnResultsButtonPressed (lastTurn);
-//			}
-		} else {
-			TurnResultsButtonPressed (GameManager.instance.game.turnNumber);
-		}
+//		if (m_displayTurnResults) {
+//			
+//			m_displayTurnResults = false;
+//			int lastTurn = GameManager.instance.game.turnNumber - 1;
+//			TurnResultsButtonPressed (lastTurn);
+//
+//		} 
+//		else {
+//			TurnResultsButtonPressed (GameManager.instance.game.turnNumber);
+//		}
+
+		int lastTurn = GameManager.instance.game.turnNumber - 1;
+		TurnResultsButtonPressed (lastTurn);
 
 
 	}
@@ -87,14 +89,11 @@ public class ActivityMenu : MenuState, ISubject {
 			Destroy (g.gameObject);
 		}
 
-		//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-		//		t.m_tabButton.ChangeState (TabButton.State.Unselected);
 		if (m_tabInfo != null) {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
 			m_tabInfo = null;
 		}
 
-//		m_sortPane.SetActive (false);
 		m_turnResultsMenu.SetActive (false);
 	}
 
@@ -124,11 +123,7 @@ public class ActivityMenu : MenuState, ISubject {
 
 		GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h.transform.localScale = Vector3.one;
-		if (turn != GameManager.instance.game.turnNumber) {
-			h.GetComponent<SectionHeader> ().Initialize ("TURN " + turn.ToString () + " RESULTS");
-		} else {
-			h.GetComponent<SectionHeader> ().Initialize ("ACTIVE MISSIONS");
-		}
+		h.GetComponent<SectionHeader> ().Initialize ("TURN " + turn.ToString () + " RESULTS");
 		m_listViewItems.Add (h);
 
 		if (turn != GameManager.instance.game.turnNumber && player.turnResults.ContainsKey (turn)) {
@@ -144,15 +139,16 @@ public class ActivityMenu : MenuState, ISubject {
 				g.GetComponent<TurnResults_ListViewItem> ().Initialize (thisT, position);
 				position++;
 			}
-		} else if (turn == GameManager.instance.game.turnNumber) {
-			
-			foreach (MissionWrapper a in player.activeMissions) {
-				GameObject g = (GameObject)(Instantiate (m_activeMissionListViewItem, m_scrollViewContent.transform));
-				g.transform.localScale = Vector3.one;
-				m_listViewItems.Add (g);
-				g.GetComponent<Mission_Active_ListViewItem> ().Initialize (a);
-			}
-		}
+		} 
+//		else if (turn == GameManager.instance.game.turnNumber) {
+//			
+//			foreach (MissionWrapper a in player.activeMissions) {
+//				GameObject g = (GameObject)(Instantiate (m_activeMissionListViewItem, m_scrollViewContent.transform));
+//				g.transform.localScale = Vector3.one;
+//				m_listViewItems.Add (g);
+//				g.GetComponent<Mission_Active_ListViewItem> ().Initialize (a);
+//			}
+//		}
 
 		// create turn buttons
 
@@ -166,11 +162,11 @@ public class ActivityMenu : MenuState, ISubject {
 			}
 		}
 
-		GameObject g2 = (GameObject)(Instantiate (m_turnResultsButton, m_sortPaneScrollViewContent.transform));
-		g2.transform.localScale = Vector3.one;
-		TurnResultsButton b2 = (TurnResultsButton)g2.GetComponent<TurnResultsButton> ();
-		b2.Initialize (GameManager.instance.game.turnNumber);
-		m_sortPaneListViewItems.Add (b2);
+//		GameObject g2 = (GameObject)(Instantiate (m_turnResultsButton, m_sortPaneScrollViewContent.transform));
+//		g2.transform.localScale = Vector3.one;
+//		TurnResultsButton b2 = (TurnResultsButton)g2.GetComponent<TurnResultsButton> ();
+//		b2.Initialize (GameManager.instance.game.turnNumber);
+//		m_sortPaneListViewItems.Add (b2);
 	}
 
 	public void TurnResultsButtonPressed (int turnNumber)

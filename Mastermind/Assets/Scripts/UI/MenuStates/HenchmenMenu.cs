@@ -47,10 +47,21 @@ public class HenchmenMenu : MenuState, IObserver {
 
 	public override void OnHold()
 	{
+		while (m_listViewItems.Count > 0) {
+			GameObject g = m_listViewItems [0];
+			m_listViewItems.RemoveAt (0);
+			Destroy (g);
+		}
+
+		m_scrollView.gameObject.SetActive (false);
+		m_sortPanelParent.gameObject.SetActive (false);
 	}
 
 	public override void OnReturn()
 	{
+		m_scrollView.gameObject.SetActive (true);
+		m_sortPanelParent.gameObject.SetActive (true);
+
 		UpdateHenchmenList ();
 	}
 

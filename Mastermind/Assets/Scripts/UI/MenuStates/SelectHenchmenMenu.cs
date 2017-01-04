@@ -52,10 +52,29 @@ public class SelectHenchmenMenu : MenuState {
 
 	public override void OnHold()
 	{
+		while (m_listViewItems.Count > 0) {
+			GameObject g = m_listViewItems [0];
+			m_listViewItems.RemoveAt (0);
+			Destroy (g);
+		}
+
+		m_selectHenchmenMenu.gameObject.SetActive (false);
 	}
 
 	public override void OnReturn()
 	{
+		// continue going back up the stack if this is not the target menu
+
+		if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState != m_state)
+		{
+			GameManager.instance.PopMenuState();
+			return;
+		} else if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState == m_state)
+		{
+			GameManager.instance.targetMenuState = MenuState.State.None;
+		}
+
+		m_selectHenchmenMenu.gameObject.SetActive (true);
 	}
 
 	public override void OnDeactivate()

@@ -22,11 +22,13 @@ public class EndPlayerPhaseState : IGameState {
 			foreach (Henchmen thisH in GameManager.instance.game.henchmen) {
 
 				if (thisH.rank <= maxRank && !player.currentHenchmen.Contains (thisH) && !player.availableHenchmen.Contains (thisH)) {
+					Debug.Log ("Adding Henchmen To Available Pool: " + thisH.henchmenName + " Rank: " + thisH.rank);
 					h.Add (thisH);
 				}
 			}
 
-			int numToHire = player.maxAvailableHenchmen - player.availableHenchmen.Count;
+//			int numToHire = player.maxAvailableHenchmen - player.availableHenchmen.Count;
+			int numToHire = 1;
 
 			for (int i = 0; i < numToHire; i++) {
 				if (h.Count > 0) {

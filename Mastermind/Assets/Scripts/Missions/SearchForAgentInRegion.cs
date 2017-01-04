@@ -47,23 +47,12 @@ public class SearchForAgentInRegion : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasTrait = false;
-		bool hasResearch = base.IsValid ();	
-
+		bool hasPreRequisites = base.IsValid ();	
 
 		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null &&
 			GameManager.instance.currentMissionWrapper.m_scope == TargetType.Region) {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
-
-			foreach (Henchmen h in r.currentHenchmen) {
-
-				if (h.HasTrait (TraitData.TraitType.Bodyguard)) {
-
-					hasTrait = true;
-					break;
-				}
-			}
 
 			bool emptySlots = false;
 
@@ -76,7 +65,7 @@ public class SearchForAgentInRegion : MissionBase {
 				}
 			}
 
-			if (emptySlots && (hasTrait || hasResearch)) {
+			if (emptySlots && hasPreRequisites) {
 				return true;
 			}
 		}

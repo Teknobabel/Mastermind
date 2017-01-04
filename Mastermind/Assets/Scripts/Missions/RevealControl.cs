@@ -51,8 +51,7 @@ public class RevealControl : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasTrait = false;
-		bool hasResearch = base.IsValid ();	
+		bool hasPreRequisites = base.IsValid ();	
 
 		// valid if there are any hidden tokens in the region
 
@@ -60,18 +59,9 @@ public class RevealControl : MissionBase {
 
 			Region r = GameManager.instance.currentMissionWrapper.m_region;
 
-			foreach (Henchmen h in r.currentHenchmen) {
-
-				if (h.HasTrait (TraitData.TraitType.Engineer)) {
-
-					hasTrait = true;
-					break;
-				}
-			}
-
 			foreach (TokenSlot c in r.controlTokens) {
 
-				if (c.m_state == TokenSlot.State.Hidden && (hasTrait || hasResearch)) {
+				if (c.m_state == TokenSlot.State.Hidden && hasPreRequisites) {
 					return true;
 				}
 			}
