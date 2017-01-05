@@ -89,6 +89,14 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 	public void CancelMission ()
 	{
 		GameManager.instance.game.player.CancelMission (m_missionWrapper);
-		ActivityMenu.instance.UpdateActiveTurnView (GameManager.instance.game.turnNumber);
+
+		if (GameManager.instance.currentMenuState == MenuState.State.MissionMenu) {
+
+			MissionMenu.instance.UpdateMissionMenu ();
+		} else if (GameManager.instance.currentMenuState == MenuState.State.HenchmenDetailMenu) {
+
+			HenchmenDetailMenu.instance.UpdateListView ();
+		}
+//		ActivityMenu.instance.UpdateActiveTurnView (GameManager.instance.game.turnNumber);
 	}
 }

@@ -10,6 +10,7 @@ public class HenchmenDetailMenu : MenuState {
 
 	public GameObject m_henchmenListViewItem;
 	public GameObject m_missionListViewItem;
+	public GameObject m_activeMissionListViewItem;
 	public GameObject m_turnResultsListViewItem;
 
 	public GameObject m_sectionHeader;
@@ -40,7 +41,7 @@ public class HenchmenDetailMenu : MenuState {
 
 	}
 
-	private void UpdateListView ()
+	public void UpdateListView ()
 	{
 		while (m_listViewItems.Count > 0) {
 			GameObject g = m_listViewItems [0];
@@ -63,6 +64,42 @@ public class HenchmenDetailMenu : MenuState {
 			g.transform.localScale = Vector3.one;
 			m_listViewItems.Add (g);
 			g.GetComponent<Henchmen_ListViewItem> ().Initialize (thisHenchmen);
+
+
+
+
+
+			// show any currently active missions
+
+			List<MissionWrapper> currentMissions = new List<MissionWrapper> ();
+
+			Organization player = GameManager.instance.game.player;
+
+			foreach (MissionWrapper a in player.activeMissions) {
+
+				if ((a.m_henchmenInFocus != null && a.m_henchmenInFocus == thisHenchmen) || a.m_henchmen.Contains (thisHenchmen)) {
+
+					currentMissions.Add (a);
+				}
+			}
+
+			if (currentMissions.Count > 0) {
+
+				GameObject h3 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+				h3.transform.localScale = Vector3.one;
+				h3.GetComponent<SectionHeader> ().Initialize ("CURRENTLY ACTIVE MISSIONS");
+				m_listViewItems.Add (h3);
+
+				foreach (MissionWrapper a in currentMissions) {
+
+					GameObject g4 = (GameObject)(Instantiate (m_activeMissionListViewItem, m_scrollViewContent.transform));
+					g4.transform.localScale = Vector3.one;
+					m_listViewItems.Add (g4);
+					g4.GetComponent<Mission_Active_ListViewItem> ().Initialize (a);
+
+				}
+			}
+
 
 
 			// show linked missions
@@ -95,10 +132,10 @@ public class HenchmenDetailMenu : MenuState {
 
 			// show turn results history
 
-			GameObject h3 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
-			h3.transform.localScale = Vector3.one;
-			h3.GetComponent<SectionHeader> ().Initialize ("HISTORY");
-			m_listViewItems.Add (h3);
+			GameObject h4 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+			h4.transform.localScale = Vector3.one;
+			h4.GetComponent<SectionHeader> ().Initialize ("HISTORY");
+			m_listViewItems.Add (h4);
 
 			List<TurnResultsEntry> validEntries = new List<TurnResultsEntry> ();
 

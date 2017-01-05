@@ -51,7 +51,7 @@ public class MissionMenu : MenuState {
 	{
 	}
 
-	private void UpdateMissionMenu ()
+	public void UpdateMissionMenu ()
 	{
 		while (m_listViewItems.Count > 0) {
 			GameObject g = m_listViewItems [0];
@@ -108,7 +108,6 @@ public class MissionMenu : MenuState {
 			mlv.Initialize (m, m.m_maxRank);
 			mlv.m_missionSuccessChance.gameObject.SetActive (false);
 			mlv.m_button.gameObject.SetActive (false);
-			//			m_missionsInList.Add (m);
 		}
 
 
