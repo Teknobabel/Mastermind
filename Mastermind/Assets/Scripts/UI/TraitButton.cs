@@ -29,7 +29,6 @@ public class TraitButton : MonoBehaviour {
 
 	public void Initialize (TraitData t, bool activeTrait)
 	{
-//		m_traitName.text = t.m_name.ToUpper();
 
 		// start text crawl for trait name
 		TextCrawl tc = (TextCrawl) m_traitName.transform.GetComponent<TextCrawl>();

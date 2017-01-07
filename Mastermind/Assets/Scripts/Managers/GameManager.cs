@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour {
 
 	public TraitData[] m_statusTraits;
 
+	public TechTree m_techTree;
+
 	private StartNewGameState m_startNewGame;
 	private BeginTurnState m_beginTurn;
 	private BeginPlayerPhaseState m_beginPlayerPhase;

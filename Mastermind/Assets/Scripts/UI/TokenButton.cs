@@ -6,7 +6,9 @@ using TMPro;
 public class TokenButton : MonoBehaviour {
 
 	public TextMeshProUGUI m_tokenText;
-	public RawImage m_tokenImage;
+	public RawImage 
+	m_tokenImage,
+	m_tokenTypeIndicator;
 
 	private TokenSlot.State m_state = TokenSlot.State.None;
 
@@ -31,6 +33,18 @@ public class TokenButton : MonoBehaviour {
 
 	public void ChangeState (TokenSlot.State newState)
 	{
+		switch (m_tokenSlot.m_type) {
+		case TokenSlot.TokenType.Policy:
+			m_tokenTypeIndicator.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Skill);
+			break;
+		case TokenSlot.TokenType.Asset:
+			m_tokenTypeIndicator.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Asset);
+			break;
+		case TokenSlot.TokenType.Control:
+			m_tokenTypeIndicator.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_Resource);
+			break;
+		}
+
 		switch (newState) {
 		case TokenSlot.State.Hidden:
 			

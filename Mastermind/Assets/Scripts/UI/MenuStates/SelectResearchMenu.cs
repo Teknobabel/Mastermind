@@ -62,7 +62,7 @@ public class SelectResearchMenu : MenuState {
 		m_listViewItems.Add (h);
 
 
-		GameManager.instance.currentMissionWrapper.m_mission = rb.m_researchMission;
+		GameManager.instance.currentMissionWrapper.m_mission = rb.researchObject.m_researchMission;
 		GameObject g2 = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
 		g2.transform.localScale = Vector3.one;
 		m_listViewItems.Add (g2);
@@ -76,7 +76,7 @@ public class SelectResearchMenu : MenuState {
 
 		foreach (MissionBase m in GameManager.instance.m_missionBank) {
 
-			if (rb.m_researchGranted == m.m_requiredResearch) {
+			if (rb.researchObject.m_researchGained.Contains(m.m_requiredResearch)) {
 
 				unlockedMissions.Add (m);
 			}

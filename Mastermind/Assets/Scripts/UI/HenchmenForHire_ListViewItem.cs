@@ -11,8 +11,11 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_costPerTurn;
 	public RawImage m_henchmenPortrait;
 
-	public TraitButton[] m_traits;
-	public TraitButton m_statusTrait;
+	public Transform m_traitPanel;
+	public GameObject m_traitButton;
+
+	private List<TraitButton> m_traitButtons = new List<TraitButton>();
+	private TraitButton m_statusTrait;
 
 	private int m_henchmenID = -1;
 	private int m_cost = 99;
@@ -34,19 +37,29 @@ public class HenchmenForHire_ListViewItem : MonoBehaviour {
 
 		List<TraitData> traits = h.GetAllTraits ();
 
-		for (int i = 0; i < m_traits.Length; i++) {
+		for (int i = 0; i < 9; i++) {
 
-			TraitButton tb = m_traits [i];
+			GameObject thisT = (GameObject)(Instantiate (m_traitButton, m_traitPanel));
+			thisT.transform.localScale = Vector3.one;
+			TraitButton tb = (TraitButton)thisT.GetComponent<TraitButton> ();
 
-			if (i < traits.Count) {
-				TraitData td = traits [i];
-				tb.Initialize (td, true, i);
+			if (i < 8) {
+				
+				m_traitButtons.Add (tb);
+
+				if (i < traits.Count) {
+					TraitData td = traits [i];
+					tb.Initialize (td, true, i);
+				} else {
+					tb.Deactivate ();
+				}
+
 			} else {
-				tb.Deactivate ();
+				
+				m_statusTrait = tb;
+				m_statusTrait.Initialize (h.statusTrait, true);
 			}
 		}
-
-		m_statusTrait.Initialize (h.statusTrait, true);
 	}
 
 	public void HireButtonClicked ()

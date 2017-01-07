@@ -14,7 +14,11 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public Image m_missionPortrait;
 	public Button m_button;
 
-	public TraitButton[] m_traits;
+	public Transform m_traitPanel;
+
+	public GameObject m_traitButton;
+
+	private List<TraitButton> m_traitButtons = new List<TraitButton>();
 
 	private MissionBase m_mission = null;
 	private Henchmen m_henchmen = null;
@@ -50,24 +54,19 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 		MissionBase.MissionTrait[] traits = m.GetTraitList(rank);
 
-		for (int i = 0; i < m_traits.Length; i++) {
+		for (int i = 0; i < 6; i++) {
 
-			TraitButton t = m_traits [i];
+			GameObject thisT = (GameObject)(Instantiate (m_traitButton, m_traitPanel));
+			thisT.transform.localScale = Vector3.one;
+			TraitButton tb = (TraitButton)thisT.GetComponent<TraitButton> ();
+
+			m_traitButtons.Add (tb);
 
 			if (i < traits.Length) {
-
 				MissionBase.MissionTrait mT = traits [i];
-
-				if (mT.m_trait != null) {
-					t.Initialize (mT.m_trait, true);
-				}
-
-				if (mT.m_trait == null && mT.m_asset != null) {
-					t.Initialize (mT.m_asset, true);
-				}
-
+				tb.Initialize (mT.m_trait, true);
 			} else {
-				t.Deactivate ();
+				tb.Deactivate ();
 			}
 		}
 	}
@@ -124,9 +123,19 @@ public class Mission_ListViewItem : MonoBehaviour {
 		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList(rank);
 		List<TraitData> combinedTraitList = mw.m_mission.GetCombinedTraitList (mw);
 
-		for (int i = 0; i < m_traits.Length; i++) {
+		for (int i = 0; i < 6; i++) {
+
+			GameObject thisT = (GameObject)(Instantiate (m_traitButton, m_traitPanel));
+			thisT.transform.localScale = Vector3.one;
+			TraitButton tb = (TraitButton)thisT.GetComponent<TraitButton> ();
+
+			m_traitButtons.Add (tb);
+
+		}
+
+		for (int i = 0; i < m_traitButtons.Count; i++) {
 			
-			TraitButton t = m_traits [i];
+			TraitButton t = m_traitButtons [i];
 
 			if (i < traits.Length) {
 				
@@ -170,9 +179,6 @@ public class Mission_ListViewItem : MonoBehaviour {
 				if (m_region != null) {
 					GameManager.instance.currentMissionWrapper.m_regionInFocus = m_region;
 				}
-
-//				SelectMissionMenu.instance.SelectMission (m_mission);
-
 			}
 
 			GameManager.instance.currentMenu.SelectMission(m_mission);

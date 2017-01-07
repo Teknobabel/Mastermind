@@ -13,12 +13,7 @@ public class ResearchButton : MonoBehaviour {
 		Unavailable,
 	}
 
-	public Asset 
-	m_researchGranted,
-	m_prerequisiteResearch;
-
-	public MissionBase
-	m_researchMission;
+	private ResearchObject m_researchObject;
 
 	public RawImage m_buttonBG;
 	public RawImage m_typeIndicator;
@@ -26,52 +21,127 @@ public class ResearchButton : MonoBehaviour {
 
 	private ResearchState m_researchState = ResearchState.None;
 
-	public void Initialize ()
+	public void Initialize (ResearchObject r, TechTree.ResearchBranch rb)
 	{
+		m_researchObject = r;
+
 		Organization p = GameManager.instance.game.player;
 
-		switch (m_researchGranted.m_assetType) {
+		m_text.text = r.m_name;
 
-		case Asset.AssetType.Research_Force:
+		switch (rb.m_branchType) {
+
+		case TechTree.BranchType.Force:
 			m_typeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_ForceIndicator);
 			break;
-		case Asset.AssetType.Research_Tech:
+		case TechTree.BranchType.Tech:
 			m_typeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_TechIndicator);
 			break;
-		case Asset.AssetType.Research_Influence:
+		case TechTree.BranchType.Influence:
 			m_typeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_InfluenceIndicator);
 			break;
-		case Asset.AssetType.Research_Lair:
+		case TechTree.BranchType.Lair:
 			m_typeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_LairIndicator);
 			break;
 		}
 
-		if (p.currentResearch.Contains (m_researchGranted)) {
+		bool hasPrereqs = true;
+		bool hasResearch = true;
 
-			// set to owned state
+		foreach (Asset a in r.m_prerequisiteResearch) {
 
-			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Owned);
-			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Owned);
+			if (!p.currentResearch.Contains (a)) {
 
-			m_researchState = ResearchState.Owned;
+				hasPrereqs = false;
+				break;
+			}
+		}
 
-		} else if (!p.currentResearch.Contains (m_researchGranted) && (m_prerequisiteResearch == null || p.currentResearch.Contains (m_prerequisiteResearch))) {
+		foreach (Asset a in r.m_researchGained) {
+
+			if (!p.currentResearch.Contains (a)) {
+
+				hasResearch = false;
+				break;
+			}
+		}
+
+
+		// if player already has all research granted, set to owned state
+
+		if (hasResearch) {
+
+			ChangeState (ResearchState.Owned);
+
+		} else if (hasPrereqs && !hasResearch) { // if player contains all prerequisites but not research granted, set to available
+
+			ChangeState (ResearchState.Available);
+
+		} else if (!hasPrereqs && !hasResearch) { // if player doesn't have all prerequisites, set to unavailable
+
+			ChangeState (ResearchState.Unavailable);
+		}
+
+
+
+
+//		Debug.Log (m_researchState);
+
+
+
+
+//		if (p.currentResearch.Contains (m_researchGranted)) {
+//
+//			// set to owned state
+//
+//			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Owned);
+//			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Owned);
+//
+//			m_researchState = ResearchState.Owned;
+//
+//		} else if (!p.currentResearch.Contains (m_researchGranted) && (m_prerequisiteResearch == null || p.currentResearch.Contains (m_prerequisiteResearch))) {
+//			
+//			// set to available state
+//
+//			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Available);
+//			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Available);
+//
+//			m_researchState = ResearchState.Available;
+//
+//		} else if (m_researchGranted != null && !p.currentResearch.Contains (m_prerequisiteResearch)) {
+//
+//			// set to unavailable state
+//
+//			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Unavailable);
+//			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Unavailable);
+//
+//			m_researchState = ResearchState.Unavailable;
+//		}
+	}
+
+	private void ChangeState (ResearchState newState)
+	{
+		m_researchState = newState;
+
+		switch (newState) {
+
+		case ResearchState.Unavailable:
 			
-			// set to available state
-
-			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Available);
-			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Available);
-
-			m_researchState = ResearchState.Available;
-
-		} else if (m_researchGranted != null && !p.currentResearch.Contains (m_prerequisiteResearch)) {
-
-			// set to unavailable state
-
 			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Unavailable);
 			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Unavailable);
 
-			m_researchState = ResearchState.Unavailable;
+			break;
+		case ResearchState.Owned:
+			
+			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Owned);
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Owned);
+
+			break;
+		case ResearchState.Available:
+			
+			m_buttonBG.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_BG_Available);
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.LairMenu_Research_Text_Available);
+			break;
 		}
 	}
 
@@ -85,4 +155,5 @@ public class ResearchButton : MonoBehaviour {
 	}
 
 	public ResearchState researchState {get{ return m_researchState; }}
+	public ResearchObject researchObject {get{ return m_researchObject; }}
 }

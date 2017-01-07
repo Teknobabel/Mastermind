@@ -1,21 +1,32 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 
 public class LairMenu : MenuState {
 	public static LairMenu instance;
 
 	public GameObject m_lairMenu;
-//	public GameObject m_sortPanelParent;
-
-	public BaseFloorButton[] m_floors;
 
 	public TextMeshProUGUI m_lairText;
 
-	public TokenButton[] m_assets;
+	public Transform 
+	m_assetsPanel,
+	m_basePanel,
+	m_researchPanel_Influence,
+	m_researchPanel_Force,
+	m_researchPanel_Tech,
+	m_researchPanel_Lair;
 
-	public ResearchButton[] m_researchButtons;
+	public GameObject 
+		m_tokenButton,
+		m_researchButton,
+		m_baseFloor;
+
+	private List<GameObject> m_assetGO = new List<GameObject>();
+	private List<GameObject> m_baseFloorGO = new List<GameObject>();
+	private List<GameObject> m_researchGO = new List<GameObject>();
 
 	void Awake ()
 	{
@@ -89,68 +100,118 @@ public class LairMenu : MenuState {
 
 	private void UpdateResearch ()
 	{
+		while (m_researchGO.Count > 0) {
 
-		foreach (ResearchButton rb in m_researchButtons) {
-
-			rb.Initialize ();
+			GameObject go = m_researchGO [0];
+			m_researchGO.RemoveAt (0);
+			Destroy (go);
 		}
+
+		TechTree techTree = GameManager.instance.m_techTree;
+
+		foreach (TechTree.ResearchBranch b in techTree.m_branches) {
+
+			foreach (ResearchObject r in b.m_researchObjects)
+			{
+				Transform t = null;
+
+				switch (b.m_branchType) {
+
+				case TechTree.BranchType.Influence:
+					t = m_researchPanel_Influence;
+					break;
+				case TechTree.BranchType.Force:
+					t = m_researchPanel_Force;
+					break;
+				case TechTree.BranchType.Tech:
+					t = m_researchPanel_Tech;
+					break;
+				case TechTree.BranchType.Lair:
+					t = m_researchPanel_Lair;
+					break;
+
+				}
+
+				if (t != null) {
+
+					GameObject thisR = (GameObject)(Instantiate (m_researchButton, t));
+					thisR.transform.localScale = Vector3.one;
+					m_researchGO.Add (thisR);
+					ResearchButton rb = (ResearchButton)thisR.GetComponent<ResearchButton> ();
+
+					rb.Initialize (r, b);
+				}
+			}
+
+		}
+
+//		foreach (ResearchButton rb in m_researchButtons) {
+//
+//			rb.Initialize ();
+//		}
 	}
 
 	private void UpdateBase ()
 	{
-		Base b = GameManager.instance.game.player.orgBase;
 
-		for (int i = 0; i < m_floors.Length; i++) {
+		while (m_baseFloorGO.Count > 0) {
 
-			BaseFloorButton fb = m_floors [i];
-
-			fb.gameObject.SetActive (true);
-
-			if (i < b.m_floors.Count) {
-
-				Base.Floor f = b.m_floors [i];
-				m_floors [i].Initialize (f);
-
-			} else {
-
-				fb.gameObject.SetActive (false);
-
-			}
+			GameObject go = m_baseFloorGO [0];
+			m_baseFloorGO.RemoveAt (0);
+			Destroy (go);
 		}
 
-		if (b.m_lair != null && b.m_lair.m_floorNumber < m_floors.Length) {
+		Base b = GameManager.instance.game.player.orgBase;
 
-			BaseFloorButton fb = m_floors [b.m_lair.m_floorNumber-1];
-			fb.gameObject.SetActive (true);
-			fb.Initialize (b.m_lair);
+		for (int i = 0; i < b.m_floors.Count; i++) {
 
+			GameObject thisF = (GameObject)(Instantiate (m_baseFloor, m_basePanel));
+			thisF.transform.localScale = Vector3.one;
+			m_baseFloorGO.Add (thisF);
+			BaseFloorButton bfb = (BaseFloorButton)thisF.GetComponent<BaseFloorButton> ();
+
+			bfb.Initialize (b.m_floors [i]);
+		}
+
+		if (b.m_lair != null) {
+
+			GameObject thisF = (GameObject)(Instantiate (m_baseFloor, m_basePanel));
+			thisF.transform.localScale = Vector3.one;
+			m_baseFloorGO.Add (thisF);
+			BaseFloorButton bfb = (BaseFloorButton)thisF.GetComponent<BaseFloorButton> ();
+			bfb.Initialize (b.m_lair);
 		}
 	} 
 
 	private void UpdateAssets ()
 	{
+		while (m_assetGO.Count > 0) {
+
+			GameObject go = m_assetGO [0];
+			m_assetGO.RemoveAt (0);
+			Destroy (go);
+		}
+
 		Organization player = GameManager.instance.game.player;
 
-		for (int i = 0; i < LairMenu.instance.m_assets.Length; i++) {
+		for (int i = 0; i < player.maxAssets; i++) {
 
-			TokenButton tb = LairMenu.instance.m_assets [i];
+			GameObject thisA = (GameObject)(Instantiate (m_tokenButton, m_assetsPanel));
+			thisA.transform.localScale = Vector3.one;
+			m_assetGO.Add (thisA);
+			TokenButton tb = (TokenButton)thisA.GetComponent<TokenButton> ();
+			tb.m_tokenImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.Token_BG_Normal);
+			tb.m_tokenTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Asset);
 
-			if (i < player.maxAssets) {
 
-				if (i < player.currentAssets.Count) {
-					Asset a = player.currentAssets [i];
-					tb.gameObject.SetActive (true);
-					tb.m_tokenText.gameObject.SetActive (true);
-					tb.m_tokenText.text = a.m_name.ToUpper();
-				} else {
+			if (i < player.currentAssets.Count) {
 
-					tb.gameObject.SetActive (true);
-					tb.m_tokenText.gameObject.SetActive (false);
-				}
+				Asset a = player.currentAssets [i];
 
+				tb.m_tokenText.text = a.m_name.ToUpper ();
 			} else {
 
-				tb.Deactivate ();
+				tb.m_tokenText.gameObject.SetActive (false);
 			}
 		}
 	}

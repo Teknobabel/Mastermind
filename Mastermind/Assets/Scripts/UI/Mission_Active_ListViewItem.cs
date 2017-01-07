@@ -12,8 +12,13 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_missionSuccessChance;
 	public Image m_missionPortrait;
 
-	public TraitButton[] m_traits;
-	public RegionHenchmenButton[] m_henchmenTokens;
+	public Transform m_traitPanel;
+	public Transform m_henchmenSlotPanel;
+
+	public GameObject m_traitButton;
+	public GameObject m_henchmenSlotButton;
+
+	private List<TraitButton> m_traitButtons = new List<TraitButton>();
 
 	private MissionWrapper m_missionWrapper = null;
 
@@ -39,18 +44,15 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 
 		Region r = a.m_region;
 
-		for (int i = 0; i < m_henchmenTokens.Length; i++) {
-			RegionHenchmenButton tB = m_henchmenTokens [i];
-			if (i < r.henchmenSlots.Count) {
-				Region.HenchmenSlot hSlot = r.henchmenSlots[i];
+		for (int i = 0; i < r.henchmenSlots.Count; i++) {
 
-				if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
-					tB.Initialize (hSlot);
-				} else {
-					tB.Deactivate ();
-				}
-			} else if (i >= r.henchmenSlots.Count) {
-				tB.Deactivate ();
+			Region.HenchmenSlot hSlot = r.henchmenSlots[i];
+
+			if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+				GameObject h = (GameObject)(Instantiate (m_henchmenSlotButton, m_henchmenSlotPanel));
+				h.transform.localScale = Vector3.one;
+				RegionHenchmenButton rhb = (RegionHenchmenButton)h.GetComponent<RegionHenchmenButton> ();
+				rhb.Initialize (hSlot);
 			}
 		}
 	}
@@ -60,9 +62,22 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 		MissionBase.MissionTrait[] traits = mw.m_mission.GetTraitList (mw.m_mission.GetMissionRank(mw));
 		List<TraitData> combinedTraitList = mw.m_mission.GetCombinedTraitList (mw);
 
-		for (int i = 0; i < m_traits.Length; i++) {
 
-			TraitButton t = m_traits [i];
+
+
+		for (int i = 0; i < 6; i++) {
+
+			GameObject thisT = (GameObject)(Instantiate (m_traitButton, m_traitPanel));
+			thisT.transform.localScale = Vector3.one;
+			TraitButton tb = (TraitButton)thisT.GetComponent<TraitButton> ();
+
+			m_traitButtons.Add (tb);
+
+		}
+
+		for (int i = 0; i < m_traitButtons.Count; i++) {
+
+			TraitButton t = m_traitButtons [i];
 
 			if (i < traits.Length) {
 
@@ -84,6 +99,40 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 				t.Deactivate ();
 			}
 		}
+
+
+
+
+
+
+
+
+
+//		for (int i = 0; i < m_traits.Length; i++) {
+//
+//			TraitButton t = m_traits [i];
+//
+//			if (i < traits.Length) {
+//
+//				MissionBase.MissionTrait mT = traits [i];
+//				bool hasTrait = false;
+//				bool hasAsset = false;
+//
+//				if (mT.m_trait != null) {
+//					hasTrait = combinedTraitList.Contains (mT.m_trait);
+//					t.Initialize (mT.m_trait, hasTrait);
+//				}
+//
+//				if (!hasTrait && mT.m_asset != null) {
+//					hasAsset = GameManager.instance.game.player.currentAssets.Contains (mT.m_asset);
+//					t.Initialize (mT.m_asset, hasAsset);
+//				}
+//
+//			} else {
+//				
+//				t.Deactivate ();
+//			}
+//		}
 	}
 
 	public void CancelMission ()
@@ -97,6 +146,5 @@ public class Mission_Active_ListViewItem : MonoBehaviour {
 
 			HenchmenDetailMenu.instance.UpdateListView ();
 		}
-//		ActivityMenu.instance.UpdateActiveTurnView (GameManager.instance.game.turnNumber);
 	}
 }

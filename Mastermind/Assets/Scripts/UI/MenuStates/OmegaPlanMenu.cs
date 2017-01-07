@@ -1,19 +1,23 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 
 public class OmegaPlanMenu : MenuState {
 	public static OmegaPlanMenu instance;
 
 	public GameObject m_opPanelParent;
-//	public GameObject m_sortPanelParent;
 
 	public TextMeshProUGUI 
 		m_opName,
 		m_lockedOPHelpText;
 
-	public OPGoalButton[] m_goalButtons;
+	public Transform m_omegaPlanGoalPanel;
+
+	public GameObject m_omegaPlanGoal;
+
+	private List<GameObject> m_listViewItems = new List<GameObject> ();
 
 	void Awake ()
 	{
@@ -27,52 +31,44 @@ public class OmegaPlanMenu : MenuState {
 	public override void OnActivate(MenuTab tabInfo)
 	{
 		Debug.Log ("Starting Omega Plan Menu");
-//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-//		t.m_tabButton.ChangeState (TabButton.State.Selected);
+
 		m_tabInfo = tabInfo;
 		if (m_tabInfo != null) {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
 		}
 
 		m_opPanelParent.gameObject.SetActive (true);
-//		m_sortPanelParent.gameObject.SetActive (false);
 
 		if (m_tabInfo != null && m_tabInfo.objectID > -1) {
 			
 			OmegaPlan op = GameManager.instance.game.player.omegaPlansByID [m_tabInfo.objectID];
 
-			if (op.state == OmegaPlan.State.Revealed) {
-				
-				m_opName.text = op.opName.ToUpper ();
-				m_lockedOPHelpText.gameObject.SetActive (false);
+			m_opName.text = op.opName.ToUpper ();
+//				m_lockedOPHelpText.gameObject.SetActive (false);
 
-				for (int i = 0; i < m_goalButtons.Length; i++) {
-				
-					OPGoalButton b = m_goalButtons [i];
 
-					if (i < op.goals.Count) {
-						OmegaPlan.Goal g = op.goals [i];
-						b.Initialize (g, i);
-					}
-				}
 
-			} else if (op.state == OmegaPlan.State.Hidden) {
+			for (int i = 0; i < op.goals.Count; i++) {
 
-				m_opName.text = "UNKNOWN OMEGA PLAN";
-				m_lockedOPHelpText.gameObject.SetActive (true);
+				OmegaPlan.Goal g = op.goals [i];
 
-				for (int i = 0; i < m_goalButtons.Length; i++) {
-
-					OPGoalButton b = m_goalButtons [i];
-
-					b.Deactivate ();
-				}
+				GameObject thisG = (GameObject)(Instantiate (m_omegaPlanGoal, m_omegaPlanGoalPanel));
+				thisG.transform.localScale = Vector3.one;
+				m_listViewItems.Add (thisG);
+				OPGoalButton opg = (OPGoalButton)thisG.GetComponent<OPGoalButton> ();
+				opg.Initialize (g, i);
 			}
 		}
 	}
 
 	public override void OnHold()
 	{
+		while (m_listViewItems.Count > 0) {
+
+			GameObject go = m_listViewItems [0];
+			m_listViewItems.RemoveAt (0);
+			Destroy (go);
+		}
 	}
 
 	public override void OnReturn()
@@ -81,11 +77,15 @@ public class OmegaPlanMenu : MenuState {
 
 	public override void OnDeactivate()
 	{
+		while (m_listViewItems.Count > 0) {
+
+			GameObject go = m_listViewItems [0];
+			m_listViewItems.RemoveAt (0);
+			Destroy (go);
+		}
+
 		m_opPanelParent.gameObject.SetActive (false);
 
-
-//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-//		t.m_tabButton.ChangeState (TabButton.State.Unselected);
 		if (m_tabInfo != null) {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
 			m_tabInfo = null;

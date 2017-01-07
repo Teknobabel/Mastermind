@@ -40,9 +40,11 @@ public class Research : MissionBase {
 
 	public override bool IsValid ()
 	{
-		if (!base.IsValid ()) { return false;}		ResearchButton rb = GameManager.instance.currentMissionWrapper.m_researchButtonInFocus;
+		if (!base.IsValid ()) { return false;}		
 
-		if ( rb != null && rb.m_researchGranted == m_research && rb.researchState == ResearchButton.ResearchState.Available)
+		ResearchButton rb = GameManager.instance.currentMissionWrapper.m_researchButtonInFocus;
+
+		if ( rb != null && rb.researchObject.m_researchGained.Contains(m_research) && rb.researchState == ResearchButton.ResearchState.Available)
 		{
 			return true;
 		}

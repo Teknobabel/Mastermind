@@ -10,13 +10,21 @@ public class Region_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_regionRank;
 	public RawImage m_regionPortrait;
 
-	public TokenButton[] m_policyTokens;
-	public TokenButton[] m_assetTokens;
-	public TokenButton[] m_controlTokens;
+	private List<TokenButton> m_policies = new List<TokenButton> ();
+	private List<TokenButton> m_assets = new List<TokenButton> ();
+	private List<TokenButton> m_controlPoints = new List<TokenButton> ();
 
 	public RegionMissionButton m_missionButton;
 
 	public RegionHenchmenButton[] m_henchmenTokens;
+
+	public Transform m_policyTokenPanel;
+	public Transform m_assetTokenPanel;
+	public Transform m_controlTokenPanel;
+	public Transform m_henchmenSlotPanel;
+
+	public GameObject m_tokenButton;
+	public GameObject m_henchmenSlot;
 
 	public int m_regionID = -1;
 
@@ -27,7 +35,6 @@ public class Region_ListViewItem : MonoBehaviour {
 
 	public void Initialize (Region r)
 	{
-//		m_regionName.text = r.regionName;
 		m_regionID = r.id;
 
 		// start text crawl for region name
@@ -41,47 +48,65 @@ public class Region_ListViewItem : MonoBehaviour {
 			m_regionPortrait.texture = r.portrait.texture;
 		}
 
+
 		List<TokenSlot> p = r.policyTokens;
 		List<TokenSlot> a = r.assetTokens;
 		List<TokenSlot> c = r.controlTokens;
-//		Debug.Log (r.regionName + ": " + a.Count);
-		for (int i = 0; i < m_policyTokens.Length; i++) {
-			TokenButton tB = m_policyTokens [i];
-			if (i < p.Count) {
-				tB.Initialize(p[i]);
-			} else {
-				tB.Deactivate ();
-			}
+
+		foreach (TokenSlot ts in p) {
+
+			GameObject thisP = (GameObject)(Instantiate (m_tokenButton, m_policyTokenPanel));
+			thisP.transform.localScale = Vector3.one;
+			TokenButton tb = (TokenButton)thisP.GetComponent<TokenButton> ();
+			tb.Initialize (ts);
+
+			// set up onclick event
+
+			Button b = tb.GetComponent<Button> ();
+			b.onClick.AddListener (() => {
+				TokenButtonClicked (tb);
+			});
 		}
 
-		for (int i = 0; i < m_assetTokens.Length; i++) {
-			TokenButton tB = m_assetTokens [i];
-			if (i < a.Count) {
-				tB.Initialize(a[i]);
-			} else {
-				tB.Deactivate ();
-			}
+		foreach (TokenSlot ts in a) {
+
+			GameObject thisA = (GameObject)(Instantiate (m_tokenButton, m_assetTokenPanel));
+			thisA.transform.localScale = Vector3.one;
+			TokenButton tb = (TokenButton)thisA.GetComponent<TokenButton> ();
+			tb.Initialize (ts);
+
+			// set up onclick event
+
+			Button b = tb.GetComponent<Button> ();
+			b.onClick.AddListener (() => {
+				TokenButtonClicked (tb);
+			});
 		}
 
-		for (int i = 0; i < m_controlTokens.Length; i++) {
-			TokenButton tB = m_controlTokens [i];
-			if (i < c.Count) {
-				tB.Initialize(c[i]);
-			} else {
-				tB.Deactivate ();
-			}
+		foreach (TokenSlot ts in c) {
+
+			GameObject thisC = (GameObject)(Instantiate (m_tokenButton, m_controlTokenPanel));
+			thisC.transform.localScale = Vector3.one;
+			TokenButton tb = (TokenButton)thisC.GetComponent<TokenButton> ();
+			tb.Initialize (ts);
+
+			// set up onclick event
+
+			Button b = tb.GetComponent<Button> ();
+			b.onClick.AddListener (() => {
+				TokenButtonClicked (tb);
+			});
 		}
 
-		for (int i = 0; i < m_henchmenTokens.Length; i++) {
-			RegionHenchmenButton tB = m_henchmenTokens [i];
-			if (i < r.henchmenSlots.Count) {
-//				Henchmen h = r.currentHenchmen [i];
-//				tB.Initialize (h);
-				Region.HenchmenSlot hSlot = r.henchmenSlots[i];
-				tB.Initialize (hSlot);
-			} else if (i >= r.henchmenSlots.Count) {
-				tB.Deactivate ();
-			}
+		for (int i = 0; i < r.henchmenSlots.Count; i++) {
+
+			GameObject h = (GameObject)(Instantiate (m_henchmenSlot, m_henchmenSlotPanel));
+			h.transform.localScale = Vector3.one;
+			RegionHenchmenButton rhb = (RegionHenchmenButton)h.GetComponent<RegionHenchmenButton> ();
+
+			Region.HenchmenSlot hSlot = r.henchmenSlots[i];
+			rhb.Initialize (hSlot);
+			rhb.m_parent = this;
 		}
 
 		m_regionRank.text = "R" + r.rank.ToString();

@@ -41,7 +41,10 @@ public class OPGoalButton : MonoBehaviour {
 		if (tc != null) {
 
 			float delay = 0.15f * ((float)(positionInList));
-			tc.Initialize(text.ToUpper(), delay);
+			tc.Initialize (text.ToUpper (), delay);
+		} else {
+
+			m_buttonText.text = text;
 		}
 
 	}
