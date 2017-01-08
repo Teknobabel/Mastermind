@@ -78,7 +78,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_henchmenPortrait.texture = h.portrait.texture;
 
 		List<TraitData> traits = h.GetAllTraits ();
-
+		Debug.Log (h.henchmenName + " Traits: " + traits.Count);
 		for (int i = 0; i < 9; i++) {
 
 			GameObject thisT = (GameObject)(Instantiate (m_traitButton, m_traitPanel));

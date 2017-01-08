@@ -275,6 +275,57 @@ public class MissionBase : ScriptableObject, IMission {
 			}
 		}
 
+		// check for dynamic traits
+		int dynamicTraits = CalculateDynamicTraitBonus(combinedTraitList, mw);
+
+		completionPercentage = Mathf.Clamp (completionPercentage + dynamicTraits, 0, 100);
+
 		return completionPercentage;
+	}
+
+	public int CalculateDynamicTraitBonus (List<TraitData> traitList, MissionWrapper mw)
+	{
+		int bonus = 0;
+
+		// check for allies & rivals
+
+		foreach (TraitData td in traitList) {
+
+			if (td.m_class == TraitData.TraitClass.Dynamic) {
+
+				DynamicTrait dt = (DynamicTrait)td;
+
+				if (dt.m_linkType == DynamicTrait.LinkType.Ally || dt.m_linkType == DynamicTrait.LinkType.Rival) {
+
+					if (dt.m_henchmen != null && mw.m_henchmen.Contains (dt.m_henchmen)) {
+
+						if (dt.m_linkType == DynamicTrait.LinkType.Ally) {
+
+							bonus += 10;
+
+						} else if (dt.m_linkType == DynamicTrait.LinkType.Rival) {
+
+							bonus -= 10;
+						}
+
+					}
+				} else if (dt.m_linkType == DynamicTrait.LinkType.Wanted || dt.m_linkType == DynamicTrait.LinkType.Citizen) {
+
+					if (mw.m_region != null && dt.m_region != null && mw.m_region == dt.m_region) {
+
+						if (dt.m_linkType == DynamicTrait.LinkType.Citizen) {
+
+							bonus += 10;
+
+						} else if (dt.m_linkType == DynamicTrait.LinkType.Wanted) {
+
+							bonus -= 10;
+						}
+					}
+				}
+			}
+		}
+
+		return bonus;
 	}
 }

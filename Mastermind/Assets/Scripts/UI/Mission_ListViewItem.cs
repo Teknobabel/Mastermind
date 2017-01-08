@@ -64,7 +64,15 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 			if (i < traits.Length) {
 				MissionBase.MissionTrait mT = traits [i];
-				tb.Initialize (mT.m_trait, true);
+
+				if (mT.m_trait != null) {
+					
+					tb.Initialize (mT.m_trait, true);
+
+				} else if (mT.m_trait == null && mT.m_asset != null) {
+
+					tb.Initialize (mT.m_asset, true);
+				}
 			} else {
 				tb.Deactivate ();
 			}

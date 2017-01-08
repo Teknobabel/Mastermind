@@ -63,6 +63,7 @@ public class TraitData : ScriptableObject {
 		Gift = 3,
 		Flaw = 4,
 		Status = 5,
+		Dynamic = 99,
 	}
 
 	public string m_name = "Null";
@@ -72,6 +73,10 @@ public class TraitData : ScriptableObject {
 	// Use this for initialization
 	void OnEnable () {
 	
+	}
+	public virtual string GetName ()
+	{
+		return m_name;
 	}
 
 }

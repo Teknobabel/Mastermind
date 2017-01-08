@@ -95,6 +95,8 @@ public class Henchmen : ScriptableObject {
 
 	public void AddTrait (TraitData t)
 	{
+		Debug.Log ("Adding Trait: " + t.GetName () + " / " + t.m_type);
+
 		if (m_traitDict.ContainsKey (t.m_class)) {
 
 			List<TraitData> l = m_traitDict [t.m_class];
@@ -128,6 +130,10 @@ public class Henchmen : ScriptableObject {
 		if (m_traitDict.ContainsKey (TraitData.TraitClass.Flaw)) {
 			List<TraitData> flaws = m_traitDict [TraitData.TraitClass.Flaw];
 			t.AddRange (flaws);
+		}
+		if (m_traitDict.ContainsKey (TraitData.TraitClass.Dynamic)) {
+			List<TraitData> dynamic = m_traitDict [TraitData.TraitClass.Dynamic];
+			t.AddRange (dynamic);
 		}
 
 		return t;

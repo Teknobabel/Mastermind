@@ -24,6 +24,23 @@ public class Research : MissionBase {
 //				t.m_resultsText += "\nNew floor type: " + m_unlockedBaseUpgrade.m_name.ToUpper () + " can now be built in your Lair!";
 //			}
 
+			// debug
+
+//			if (a.m_henchmen.Count > 1)
+//			{
+//				
+//				Henchmen h1 = a.m_henchmen[0];
+//				Henchmen h2 = a.m_henchmen[1];
+//				DynamicTrait d = DynamicTrait.CreateInstance<DynamicTrait>();
+//				d.m_class = TraitData.TraitClass.Dynamic;
+//				d.m_linkType = DynamicTrait.LinkType.Ally;
+//				d.m_henchmen = h2;
+//
+//				Debug.Log ("Granting Ally Trait to: " + h1.henchmenName);
+//
+//				h1.AddTrait (d);
+//			}
+
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);

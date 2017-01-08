@@ -29,18 +29,18 @@ public class TraitButton : MonoBehaviour {
 
 	public void Initialize (TraitData t, bool activeTrait)
 	{
-
 		// start text crawl for trait name
+
 		TextCrawl tc = (TextCrawl) m_traitName.transform.GetComponent<TextCrawl>();
 		if (tc != null) {
 
 			if (m_positionInList != -1) {
 
 				float delay = 0.2f * ((float)(m_positionInList));
-				tc.Initialize (t.m_name.ToUpper (), delay);
+				tc.Initialize (t.GetName().ToUpper (), delay);
 			} else {
 				
-				tc.Initialize (t.m_name.ToUpper ());
+				tc.Initialize (t.GetName().ToUpper ());
 			}
 		}
 
@@ -118,6 +118,20 @@ public class TraitButton : MonoBehaviour {
 			}
 
 				break;
+
+		case TraitData.TraitClass.Dynamic:
+
+			m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Status);
+
+			if (activeTrait) {
+				m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Status);
+				m_traitButtonBGImage.color =  ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG);
+			} else {
+				m_traitName.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_Text_Inactive);
+				m_traitButtonBGImage.color = ColorManager.instance.GetColor(ColorManager.UIElement.TraitButton_BG_None);
+			}
+
+			break;
 			} 
 
 //		} else {
