@@ -11,9 +11,10 @@ public class CaptureAgent : MissionBase {
 	{
 		base.CompleteMission (a);
 
+		TurnResultsEntry t = new TurnResultsEntry ();
+
 		if (a.m_success) {
 
-			TurnResultsEntry t = new TurnResultsEntry ();
 			if (a.m_henchmenInFocus != null) {t.m_henchmenIDs.Add (a.m_henchmenInFocus.id);}
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission underway!";
 			t.m_resultsText += "\n";
@@ -213,16 +214,17 @@ public class CaptureAgent : MissionBase {
 
 
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
 		} else {
-
-			TurnResultsEntry t = new TurnResultsEntry ();
+			
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultsText += a.m_agentInFocus.m_agent.henchmenName.ToUpper() + " eludes the henchmen.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 		}
+
+		t.m_resultsText += CheckForNewTraits (a);
+
+		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 	}
 
 	public override bool IsValid ()

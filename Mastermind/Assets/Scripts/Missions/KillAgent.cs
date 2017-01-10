@@ -219,15 +219,17 @@ public class KillAgent : MissionBase {
 			}
 
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
 		} else {
 
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultsText += a.m_agentInFocus.m_agent.henchmenName.ToUpper() + " eludes the henchmen.";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 		}
+
+		t.m_resultsText += CheckForNewTraits (a);
+
+		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 	}
 
 	public override bool IsValid ()

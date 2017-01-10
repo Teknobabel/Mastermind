@@ -121,7 +121,19 @@ public class TraitButton : MonoBehaviour {
 
 		case TraitData.TraitClass.Dynamic:
 
-			m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Status);
+			DynamicTrait dt = (DynamicTrait)t;
+
+			if (dt.m_linkType == DynamicTrait.LinkType.Rival || dt.m_linkType == DynamicTrait.LinkType.Wanted || dt.m_linkType == DynamicTrait.LinkType.Fear) {
+
+				m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Flaw);
+
+			} else {
+
+				m_traitTypeIndicator.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_BG_Gift);
+
+			}
+
+
 
 			if (activeTrait) {
 				m_traitName.color = ColorManager.instance.GetColor (ColorManager.UIElement.TraitButton_Text_Status);

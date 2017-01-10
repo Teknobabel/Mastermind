@@ -29,7 +29,6 @@ public class RevealControl : MissionBase {
 
 			if (hiddenTokens.Count > 0) {
 				TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
-//				tB.ChangeState (TokenBase.State.Revealed);
 				tB.m_state = TokenSlot.State.Revealed;
 
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
@@ -46,6 +45,10 @@ public class RevealControl : MissionBase {
 			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
 		}
+
+		t.m_resultsText += CheckForNewTraits (a);
+
+		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
 	}
 

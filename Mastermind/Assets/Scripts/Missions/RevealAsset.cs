@@ -42,51 +42,54 @@ public class RevealAsset : MissionBase {
 				t.m_resultsText += "\n" + tB.m_assetToken.m_name.ToUpper() + " is revealed!";
 				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
 
 
 				// debug
 
-				if (a.m_henchmen.Count > 1)
-				{
-					
-					Henchmen h1 = a.m_henchmen[0];
-					Henchmen h2 = a.m_henchmen[1];
-
-					DynamicTrait d = DynamicTrait.CreateInstance<DynamicTrait>();
-					d.m_class = TraitData.TraitClass.Dynamic;
-					d.m_linkType = DynamicTrait.LinkType.Rival;
-					d.m_henchmen = h2;
-					h1.AddTrait (d);
-
-					DynamicTrait d2 = DynamicTrait.CreateInstance<DynamicTrait>();
-					d2.m_class = TraitData.TraitClass.Dynamic;
-					d2.m_linkType = DynamicTrait.LinkType.Wanted;
-					d2.m_region = a.m_region;
-					h1.AddTrait (d2);
-
-					DynamicTrait d4 = DynamicTrait.CreateInstance<DynamicTrait>();
-					d4.m_class = TraitData.TraitClass.Dynamic;
-					d4.m_linkType = DynamicTrait.LinkType.Wanted;
-					d4.m_region = a.m_region;
-					h2.AddTrait (d4);
-
-					DynamicTrait d3 = DynamicTrait.CreateInstance<DynamicTrait>();
-					d3.m_class = TraitData.TraitClass.Dynamic;
-					d3.m_linkType = DynamicTrait.LinkType.Rival;
-					d3.m_henchmen = h1;
-					h2.AddTrait (d3);
-				}
+//				if (a.m_henchmen.Count > 1)
+//				{
+//					
+//					Henchmen h1 = a.m_henchmen[0];
+//					Henchmen h2 = a.m_henchmen[1];
+//
+//					DynamicTrait d = DynamicTrait.CreateInstance<DynamicTrait>();
+//					d.m_class = TraitData.TraitClass.Dynamic;
+//					d.m_linkType = DynamicTrait.LinkType.Rival;
+//					d.m_henchmen = h2;
+//					h1.AddTrait (d);
+//
+//					DynamicTrait d2 = DynamicTrait.CreateInstance<DynamicTrait>();
+//					d2.m_class = TraitData.TraitClass.Dynamic;
+//					d2.m_linkType = DynamicTrait.LinkType.Wanted;
+//					d2.m_region = a.m_region;
+//					h1.AddTrait (d2);
+//
+//					DynamicTrait d4 = DynamicTrait.CreateInstance<DynamicTrait>();
+//					d4.m_class = TraitData.TraitClass.Dynamic;
+//					d4.m_linkType = DynamicTrait.LinkType.Wanted;
+//					d4.m_region = a.m_region;
+//					h2.AddTrait (d4);
+//
+//					DynamicTrait d3 = DynamicTrait.CreateInstance<DynamicTrait>();
+//					d3.m_class = TraitData.TraitClass.Dynamic;
+//					d3.m_linkType = DynamicTrait.LinkType.Rival;
+//					d3.m_henchmen = h1;
+//					h2.AddTrait (d3);
+//				}
 			}
 		} else {
 
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
 
 		}
 
+		t.m_resultsText += CheckForNewTraits (a);
+
+		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 	}
 
 	public override bool IsValid ()

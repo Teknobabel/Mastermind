@@ -29,7 +29,6 @@ public class RevealPolicy : MissionBase {
 
 			if (hiddenTokens.Count > 0) {
 				TokenSlot tB = hiddenTokens [Random.Range (0, hiddenTokens.Count)];
-//				tB.ChangeState (TokenBase.State.Revealed);
 				tB.m_state = TokenSlot.State.Revealed;
 
 				t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
@@ -40,17 +39,18 @@ public class RevealPolicy : MissionBase {
 				}
 				t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 				t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-				GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 		} else {
 
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
 			t.m_resultType = GameEvent.Henchmen_MissionCompleted;
-			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
+
 
 		}
 
+		t.m_resultsText += CheckForNewTraits (a);
+		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 	}
 
 	public override bool IsValid ()
