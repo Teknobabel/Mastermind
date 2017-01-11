@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObserver {
+public class AgentOrganization : OrganizationBase, IObserver {
 
 	private Dictionary<int, List<TurnResultsEntry>> m_turnResults = new Dictionary<int, List<TurnResultsEntry>> (); // by turn number
 	private Dictionary<GameEvent, List<TurnResultsEntry>> m_turnResultsByType = new Dictionary<GameEvent, List<TurnResultsEntry>> ();
@@ -10,12 +10,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 	private List<AgentWrapper> m_currentAgents = new List<AgentWrapper>();
 	private Dictionary<IAgentAIState, List<AgentWrapper>> m_agentsByState = new Dictionary<IAgentAIState, List<AgentWrapper>>();
 
-	private List<MissionWrapper> m_activeMissions = new List<MissionWrapper>();
-
 	private int m_agentsToSpawn = 0;
-
-	private List<IObserver>
-	m_observers = new List<IObserver> ();
 
 	private AgentAIState_Idle m_agentAIState_Idle;
 	private AgentAIState_AttackBase m_agentAIState_AttackBase;
@@ -23,7 +18,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 	private AgentAIState_FreeRegion m_agentAIState_FreeRegion;
 	private AgentAIState_CaptureIntel m_agentAIState_CaptureIntel;
 
-	public void Initialize (string orgName)
+	public override void Initialize (string orgName)
 	{
 		// spawn any starting agent as per director
 
@@ -96,15 +91,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 
 	public void AddMission (MissionWrapper mw)
 	{
-		Debug.Log ("Adding Mission: " + mw.m_mission.m_name);
-
-		mw.m_mission.InitializeMission(mw);
-
-		foreach (Henchmen thisH in mw.m_henchmen) {
-			if (thisH.currentState != Henchmen.state.OnMission) {
-				thisH.ChangeState (Henchmen.state.OnMission);
-			}
-		}
+		base.AddMission (mw);
 
 		foreach (AgentWrapper aw in mw.m_agents) {
 			if (aw.m_agent.currentState != Henchmen.state.OnMission) {
@@ -112,17 +99,10 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 			}
 		}
 
-		if (mw.m_henchmenInFocus != null) {
-
-			mw.m_henchmenInFocus.ChangeState(Henchmen.state.OnMission);
-		}
-
 		if (mw.m_agentInFocus != null) {
 
 			mw.m_agentInFocus.m_agent.ChangeState(Henchmen.state.OnMission);
 		}
-
-		m_activeMissions.Add (mw);
 	}
 
 	public void PlayerWantedLevelIncreased ()
@@ -130,22 +110,12 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 		m_agentsToSpawn++;
 	}
 
-	public void MissionCompleted (MissionWrapper a)
+	public override void MissionCompleted (MissionWrapper a)
 	{
-		foreach (Henchmen h in a.m_henchmen) {
-			h.ChangeState (Henchmen.state.Idle);
-		}
-
-		if (a.m_henchmenInFocus != null) {
-			a.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
-		}
+		base.MissionCompleted (a);
 
 		if (a.m_agentInFocus != null) {
 			a.m_agentInFocus.m_agent.ChangeState (Henchmen.state.Idle);
-		}
-
-		if (m_activeMissions.Contains (a)) {
-			m_activeMissions.Remove (a);
 		}
 
 		foreach (AgentWrapper aw in a.m_agents) {
@@ -153,91 +123,21 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 		}
 	}
 
-//	public void RemoveAgentFromMission (AgentWrapper agent)
-//	{
-//		List<MissionWrapper> cancelledMissions = new List<MissionWrapper> ();
-//
-//		for (int i = 0; i < m_activeMissions.Count; i++) {
-//
-//			MissionWrapper activeMission = m_activeMissions [i];
-//
-//			if (activeMission.m_agentInFocus == agent) {
-//
-//				cancelledMissions.Add (activeMission);
-//
-//			} else if (activeMission.m_agents.Contains (agent)) {
-//				
-//				if (activeMission.m_agents.Count == 1) {
-//
-//					cancelledMissions.Add (activeMission);
-//				} else {
-//
-//					activeMission.m_agents.Remove (agent);
-//					agent.m_agent.ChangeState (Henchmen.state.Idle);
-//				}
-//			}
-//		}
-//
-//		while (cancelledMissions.Count > 0) {
-//
-//			MissionWrapper mw = cancelledMissions [0];
-//			cancelledMissions.RemoveAt (0);
-//
-//			CancelMission (mw);
-//		}
-//	}
-
-	public void CancelMission (MissionWrapper mw)
+	public override void CancelMission (MissionWrapper mw)
 	{
-		for (int i = 0; i < m_activeMissions.Count; i++) {
+		base.CancelMission (mw);
 
-			MissionWrapper activeMission = m_activeMissions [i];
+		foreach (AgentWrapper a in mw.m_agents) {
 
-			if (activeMission == mw) {
+			if (a.m_agent.currentState == Henchmen.state.OnMission) {
 
-				m_activeMissions.RemoveAt (i);
-				mw.m_mission.CancelMission (mw);
-
-				foreach (AgentWrapper a in mw.m_agents) {
-
-					if (a.m_agent.currentState == Henchmen.state.OnMission) {
-
-						a.m_agent.ChangeState (Henchmen.state.Idle);
-					}
-				}
-
-				if (activeMission.m_agentInFocus != null && activeMission.m_agentInFocus.m_agent.currentState == Henchmen.state.OnMission) {
-
-					activeMission.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
-				}
-
-				break;
+				a.m_agent.ChangeState (Henchmen.state.Idle);
 			}
 		}
-	}
 
-	public void AddTurnResults (int turn, TurnResultsEntry t)
-	{
-		t.m_turnNumber = turn;
+		if (mw.m_agentInFocus != null && mw.m_agentInFocus.m_agent.currentState == Henchmen.state.OnMission) {
 
-		if (m_turnResults.ContainsKey (turn)) {
-			List<TurnResultsEntry> tRE = m_turnResults [turn];
-			tRE.Add (t);
-			m_turnResults [turn] = tRE;
-		} else {
-			List<TurnResultsEntry> newTRE = new List<TurnResultsEntry> ();
-			newTRE.Add (t);
-			m_turnResults.Add (turn, newTRE);
-		}
-
-		if (m_turnResultsByType.ContainsKey (t.m_resultType)) {
-			List<TurnResultsEntry> tRE = m_turnResultsByType [t.m_resultType];
-			tRE.Add (t);
-			m_turnResultsByType [t.m_resultType] = tRE;
-		} else {
-			List<TurnResultsEntry> newTRE = new List<TurnResultsEntry> ();
-			newTRE.Add (t);
-			m_turnResultsByType.Add (t.m_resultType, newTRE);
+			mw.m_agentInFocus.m_agent.ChangeState (Henchmen.state.Idle);
 		}
 	}
 
@@ -352,34 +252,7 @@ public class AgentOrganization : ScriptableObject, IOrganization, ISubject, IObs
 		}
 	}
 
-	public void AddObserver (IObserver observer)
-	{
-		if (!m_observers.Contains(observer))
-		{
-			m_observers.Add (observer);
-		}
-	}
-
-	public void RemoveObserver (IObserver observer)
-	{
-		if (m_observers.Contains(observer))
-		{
-			m_observers.Remove(observer);
-		}
-	}
-
-	public void Notify (ISubject subject, GameEvent thisGameEvent)
-	{
-		List<IObserver> observers = new List<IObserver> (m_observers);
-
-		for (int i=0; i < observers.Count; i++)
-		{
-			observers[i].OnNotify(subject, thisGameEvent);
-		}
-	}
-
 	public List<AgentWrapper> currentAgents {get{ return m_currentAgents;}}
-	public List<MissionWrapper> activeMissions {get{return m_activeMissions;}}
 	public int agentsToSpawn {get{ return m_agentsToSpawn;} set{m_agentsToSpawn = value;}}
 	public Dictionary<IAgentAIState, List<AgentWrapper>> agentsByState {get{ return m_agentsByState; } set{ m_agentsByState = value; }}
 

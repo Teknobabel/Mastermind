@@ -89,7 +89,7 @@ public class HenchmenMenu : MenuState, IObserver {
 
 		GameObject h2 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h2.transform.localScale = Vector3.one;
-		h2.GetComponent<SectionHeader> ().Initialize ("CURRENT HENCHMEN (" + player.currentHenchmen.Count.ToString() + ")");
+		SectionHeader sh = (SectionHeader)h2.GetComponent<SectionHeader> ();
 		m_listViewItems.Add (h2);
 
 		if (player.currentHenchmen.Count > 0) {
@@ -99,12 +99,16 @@ public class HenchmenMenu : MenuState, IObserver {
 				g.transform.localScale = Vector3.one;
 				m_listViewItems.Add (g);
 				g.GetComponent<Henchmen_ListViewItem> ().Initialize (thisHenchmen);
+
+				sh.m_children.Add (g);
 			}
 		}
 
+		sh.Initialize ("CURRENT HENCHMEN");
+
 		GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h.transform.localScale = Vector3.one;
-		h.GetComponent<SectionHeader> ().Initialize ("AVAILABLE FOR HIRE (" + player.availableHenchmen.Count.ToString() + ")");
+		SectionHeader sh2 = (SectionHeader)h.GetComponent<SectionHeader> ();
 		m_listViewItems.Add (h);
 
 		for (int i = 0; i < player.availableHenchmen.Count; i++) {
@@ -113,7 +117,11 @@ public class HenchmenMenu : MenuState, IObserver {
 			g.transform.localScale = Vector3.one;
 			m_listViewItems.Add (g);
 			g.GetComponent<HenchmenForHire_ListViewItem> ().Initialize (thisHenchmen);
+
+			sh2.m_children.Add (g);
 		}
+
+		sh2.Initialize ("AVAILABLE FOR HIRE");
 	}
 
 	public override void OnDeactivate()

@@ -79,12 +79,12 @@ public class WorldMenu : MenuState, IObserver {
 				GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 				h.transform.localScale = Vector3.one;
 				SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
-				sh.Initialize (pair.Key.ToUpper ());
+
 //				sh.AddObserver (this);
 
 				m_listViewItems.Add (h);
 
-				if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
+//				if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
 					
 					for (int i = 0; i < pair.Value.Count; i++) {
 						Region thisRegion = pair.Value [i];
@@ -92,8 +92,11 @@ public class WorldMenu : MenuState, IObserver {
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+					sh.m_children.Add (g);
 					}
-				}
+//				}
+
+				sh.Initialize (pair.Key.ToUpper ());
 			}
 		} else {
 
@@ -108,13 +111,13 @@ public class WorldMenu : MenuState, IObserver {
 					GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 					h.transform.localScale = Vector3.one;
 				SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
-					sh.Initialize (pair.Key.ToUpper ());
+					
 //				sh.AddObserver (this);
 					m_listViewItems.Add (h);
 
 				if (sortedRegionList.Count == 1) {
 
-					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
+//					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
 						
 						List<Region> regions = new List<Region> (pair.Value);
 
@@ -124,12 +127,13 @@ public class WorldMenu : MenuState, IObserver {
 							g.transform.localScale = Vector3.one;
 							m_listViewItems.Add (g);
 							g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+						sh.m_children.Add (g);
 						}
-					}
+//					}
 
 				} else {
 
-					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
+//					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
 						
 						for (int i = 0; i < pair.Value.Count; i++) {
 							Region thisRegion = pair.Value [i];
@@ -137,9 +141,13 @@ public class WorldMenu : MenuState, IObserver {
 							g.transform.localScale = Vector3.one;
 							m_listViewItems.Add (g);
 							g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
+						sh.m_children.Add (g);
 						}
-					}
+//					}
 				}
+
+				sh.Initialize (pair.Key.ToUpper ());
+
 				}
 //			}
 		}
@@ -465,7 +473,7 @@ public class WorldMenu : MenuState, IObserver {
 			
 			foreach (Henchmen h in player.currentHenchmen) {
 
-				MissionWrapper a = player.GetMissionForHenchmen (h);
+				MissionWrapper a = player.GetMission (h);
 
 				if (a == null && h.currentRegion.id != regionID && h.currentRegion.id != GameManager.instance.game.limbo.id) {
 					validHenchmen.Add (h);

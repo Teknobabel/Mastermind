@@ -87,7 +87,7 @@ public class HenchmenDetailMenu : MenuState {
 
 				GameObject h3 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 				h3.transform.localScale = Vector3.one;
-				h3.GetComponent<SectionHeader> ().Initialize ("CURRENTLY ACTIVE MISSIONS");
+				SectionHeader sh = (SectionHeader)h3.GetComponent<SectionHeader> ();
 				m_listViewItems.Add (h3);
 
 				foreach (MissionWrapper a in currentMissions) {
@@ -97,7 +97,10 @@ public class HenchmenDetailMenu : MenuState {
 					m_listViewItems.Add (g4);
 					g4.GetComponent<Mission_Active_ListViewItem> ().Initialize (a);
 
+					sh.m_children.Add (g4);
 				}
+
+				sh.Initialize ("CURRENTLY ACTIVE MISSIONS");
 			}
 
 
@@ -106,7 +109,7 @@ public class HenchmenDetailMenu : MenuState {
 
 			GameObject h2 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 			h2.transform.localScale = Vector3.one;
-			h2.GetComponent<SectionHeader> ().Initialize ("MISSIONS");
+			SectionHeader sh2 = (SectionHeader)h2.GetComponent<SectionHeader> ();
 			m_listViewItems.Add (h2);
 
 			List<MissionBase> validMissions = new List<MissionBase> ();
@@ -127,14 +130,18 @@ public class HenchmenDetailMenu : MenuState {
 					g2.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g2);
 					g2.GetComponent<Mission_ListViewItem> ().Initialize (m, m.m_maxRank);
+
+					sh2.m_children.Add (g2);
 				}
 			}
+
+			sh2.Initialize ("MISSIONS");
 
 			// show turn results history
 
 			GameObject h4 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 			h4.transform.localScale = Vector3.one;
-			h4.GetComponent<SectionHeader> ().Initialize ("HISTORY");
+			SectionHeader sh3 = (SectionHeader)h4.GetComponent<SectionHeader> ();
 			m_listViewItems.Add (h4);
 
 			List<TurnResultsEntry> validEntries = new List<TurnResultsEntry> ();
@@ -161,7 +168,11 @@ public class HenchmenDetailMenu : MenuState {
 				m_listViewItems.Add (g3);
 				g3.GetComponent<TurnResults_ListViewItem> ().Initialize (thisT, position);
 				position++;
+
+				sh3.m_children.Add(g3);
 			}
+
+			sh3.Initialize ("HISTORY");
 		}
 	}
 

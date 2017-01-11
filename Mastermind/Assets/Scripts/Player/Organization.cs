@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Organization : ScriptableObject, ISubject, IOrganization {
+public class Organization : OrganizationBase {
 
 	private string m_name = "Null";
 
@@ -26,14 +26,6 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 
 	private Dictionary<int, OmegaPlan> m_omegaPlansByID = new Dictionary<int, OmegaPlan> ();
 //	private Dictionary<int, MenuTab> m_menuTabs;
-
-	private Dictionary<int, List<TurnResultsEntry>> m_turnResults = new Dictionary<int, List<TurnResultsEntry>> (); // by turn number
-	private Dictionary<GameEvent, List<TurnResultsEntry>> m_turnResultsByType = new Dictionary<GameEvent, List<TurnResultsEntry>> ();
-
-	private List<IObserver>
-	m_observers = new List<IObserver> ();
-
-	private List<MissionWrapper> m_activeMissions = new List<MissionWrapper>();
 
 	private Region m_homeRegion = null;
 
@@ -152,28 +144,17 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		}
 	}
 
-	public void AddMission (MissionWrapper mw)
+	public override void AddMission (MissionWrapper mw)
 	{
+		base.AddMission (mw);
+
 		UseCommandPoints (mw.m_mission.m_cost);
 
-		mw.m_mission.InitializeMission(mw);
-
-		foreach (Henchmen thisH in mw.m_henchmen) {
-			if (thisH.currentState != Henchmen.state.OnMission) {
-				thisH.ChangeState (Henchmen.state.OnMission);
-			}
-		}
-
-		if (mw.m_henchmenInFocus != null) {
-
-			mw.m_henchmenInFocus.ChangeState(Henchmen.state.OnMission);
-		}
-
-		m_activeMissions.Add (mw);
 	}
 
-	public void MissionCompleted (MissionWrapper a)
+	public override void MissionCompleted (MissionWrapper a)
 	{
+		base.MissionCompleted (a);
 
 		if (a.m_success && a.m_mission.m_infamyGain > 0) {
 
@@ -183,75 +164,11 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			
 			GainInfamy (a.m_mission.m_missionFailInfamyGain);
 		}
-
-		foreach (Henchmen h in a.m_henchmen) {
-			h.ChangeState (Henchmen.state.Idle);
-		}
-
-		if (a.m_henchmenInFocus != null) {
-			a.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
-		}
-
-		if (m_activeMissions.Contains (a)) {
-			m_activeMissions.Remove (a);
-		}
-	}
-
-	public MissionBase GetMission (Henchmen h)
-	{
-		MissionBase m = null;
-
-		foreach (MissionWrapper a in m_activeMissions) {
-			foreach (Henchmen thisH in a.m_henchmen)
-			{
-				if (h.id == thisH.id) {
-					return a.m_mission;
-				}
-			}
-		}
-
-		return m;
-	}
-
-	public MissionBase GetMission (Region r)
-	{
-		foreach (MissionWrapper a in m_activeMissions) {
-			if (a.m_region != null && r.id == a.m_region.id) {
-				return a.m_mission;
-			}
-		}
-
-		return null;
 	}
 
 	public void AddHenchmenToAvailablePool (Henchmen h)
 	{
 		m_availableHenchmen.Add (h);
-	}
-
-	public void AddTurnResults (int turn, TurnResultsEntry t)
-	{
-		t.m_turnNumber = turn;
-
-		if (m_turnResults.ContainsKey (turn)) {
-			List<TurnResultsEntry> tRE = m_turnResults [turn];
-			tRE.Add (t);
-			m_turnResults [turn] = tRE;
-		} else {
-			List<TurnResultsEntry> newTRE = new List<TurnResultsEntry> ();
-			newTRE.Add (t);
-			m_turnResults.Add (turn, newTRE);
-		}
-
-		if (m_turnResultsByType.ContainsKey (t.m_resultType)) {
-			List<TurnResultsEntry> tRE = m_turnResultsByType [t.m_resultType];
-			tRE.Add (t);
-			m_turnResultsByType [t.m_resultType] = tRE;
-		} else {
-			List<TurnResultsEntry> newTRE = new List<TurnResultsEntry> ();
-			newTRE.Add (t);
-			m_turnResultsByType.Add (t.m_resultType, newTRE);
-		}
 	}
 
 	public void GainCommandPoints (int points)
@@ -335,43 +252,22 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 			Notify (a, GameEvent.Organization_AssetRemoved);
 		}
 	}
-
-	public MissionWrapper GetMissionForHenchmen (Henchmen h)
+		
+	public override void CancelMission (MissionWrapper mw)
 	{
-		foreach (MissionWrapper a in m_activeMissions) {
-			if (a.m_henchmen.Contains (h)) {
-				return (a);
+		base.CancelMission (mw);
+
+		foreach (Henchmen h in mw.m_henchmen) {
+
+			if (h.currentState == Henchmen.state.OnMission) {
+
+				h.ChangeState (Henchmen.state.Idle);
 			}
 		}
-		return null;
-	}
 
-	public void CancelMission (MissionWrapper mw)
-	{
-		for (int i = 0; i < m_activeMissions.Count; i++) {
+		if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.currentState == Henchmen.state.OnMission) {
 
-			MissionWrapper activeMission = m_activeMissions [i];
-
-			if (activeMission == mw) {
-
-				m_activeMissions.RemoveAt (i);
-				mw.m_mission.CancelMission (mw);
-
-				foreach (Henchmen h in mw.m_henchmen) {
-
-					if (h.currentState == Henchmen.state.OnMission) {
-
-						h.ChangeState (Henchmen.state.Idle);
-					}
-				}
-
-				if (activeMission.m_henchmenInFocus != null && activeMission.m_henchmenInFocus.currentState == Henchmen.state.OnMission) {
-
-					activeMission.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
-				}
-
-				break;
-			}
+			mw.m_henchmenInFocus.ChangeState (Henchmen.state.Idle);
 		}
 	}
 
@@ -417,7 +313,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		}
 	}
 
-	public void Initialize (string orgName)
+	public override void Initialize (string orgName)
 	{
 		Game g = GameManager.instance.game;
 		Director d = g.director;
@@ -631,6 +527,7 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 				t.m_iconType = TurnResultsEntry.IconType.Henchmen;
 				t.m_resultsText = h.henchmenName + " joins " + m_name;
 				t.m_resultType = GameEvent.Organization_HenchmenHired;
+				t.m_henchmenIDs.Add (h.id);
 				AddTurnResults (GameManager.instance.game.turnNumber, t);
 			}
 		}
@@ -677,32 +574,6 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 		AddObserver (TabMenu.instance);
 
 		Notify (this, GameEvent.Organization_Initialized);
-	}
-
-	public void AddObserver (IObserver observer)
-	{
-		if (!m_observers.Contains(observer))
-		{
-			m_observers.Add (observer);
-		}
-	}
-
-	public void RemoveObserver (IObserver observer)
-	{
-		if (m_observers.Contains(observer))
-		{
-			m_observers.Remove(observer);
-		}
-	}
-
-	public void Notify (ISubject subject, GameEvent thisGameEvent)
-	{
-		List<IObserver> observers = new List<IObserver> (m_observers);
-
-		for (int i=0; i < observers.Count; i++)
-		{
-			observers[i].OnNotify(subject, thisGameEvent);
-		}
 	}
 
 	private int GetCostPerTurn ()
@@ -762,9 +633,6 @@ public class Organization : ScriptableObject, ISubject, IOrganization {
 	public List<Asset> currentAssets {get{return m_currentAssets;}}
 	public List<Asset> currentResearch {get{return m_currentResearch;}}
 	public List<Asset> assetsInOrbit {get{return m_assetsInOrbit;}}
-	public List<MissionWrapper> activeMissions {get{return m_activeMissions;}}
-	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}
-	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}
 	public Region homeRegion {get{return m_homeRegion;}}
 	public Base orgBase {get{return m_base;}}
 	public int maxAssets {get{return m_maxAssets;} set { m_maxAssets = value; }}

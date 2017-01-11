@@ -65,7 +65,7 @@ public class MissionMenu : MenuState {
 
 		GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h.transform.localScale = Vector3.one;
-		h.GetComponent<SectionHeader> ().Initialize ("CURRENTLY ACTIVE MISSIONS");
+		SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
 		m_listViewItems.Add (h);
 
 		foreach (MissionWrapper a in player.activeMissions) {
@@ -73,7 +73,11 @@ public class MissionMenu : MenuState {
 			g.transform.localScale = Vector3.one;
 			m_listViewItems.Add (g);
 			g.GetComponent<Mission_Active_ListViewItem> ().Initialize (a);
+
+			sh.m_children.Add (g);
 		}
+
+		sh.Initialize ("CURRENTLY ACTIVE MISSIONS");
 
 
 		// display all unlocked missions
@@ -96,7 +100,7 @@ public class MissionMenu : MenuState {
 
 		GameObject h2 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h2.transform.localScale = Vector3.one;
-		h2.GetComponent<SectionHeader> ().Initialize ("UNLOCKED MISSIONS");
+		SectionHeader sh2 = (SectionHeader)h2.GetComponent<SectionHeader> ();
 		m_listViewItems.Add (h2);
 
 		foreach (MissionBase m in availableMissions) {
@@ -108,15 +112,18 @@ public class MissionMenu : MenuState {
 			mlv.Initialize (m, m.m_maxRank);
 			mlv.m_missionSuccessChance.gameObject.SetActive (false);
 			mlv.m_button.gameObject.SetActive (false);
+
+			sh2.m_children.Add (g);
 		}
 
+		sh2.Initialize ("UNLOCKED MISSIONS");
 
 
 		// display linked missions for all henchmen
 
 		GameObject h3 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h3.transform.localScale = Vector3.one;
-		h3.GetComponent<SectionHeader> ().Initialize ("HENCHMEN MISSIONS");
+		SectionHeader sh3 = (SectionHeader)h3.GetComponent<SectionHeader> ();
 		m_listViewItems.Add (h3);
 
 		Dictionary<int, List<MissionBase>> henchmenMissions = new Dictionary<int, List<MissionBase>> ();
@@ -147,20 +154,30 @@ public class MissionMenu : MenuState {
 				m_listViewItems.Add (g);
 				g.GetComponent<Henchmen_ListViewItem> ().Initialize (thisH);
 
+				sh3.m_children.Add (g);
+
 				foreach (MissionBase m in pair.Value) {
 
 					GameObject g2 = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
 					g2.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g2);
 					g2.GetComponent<Mission_ListViewItem> ().Initialize (m, m.m_maxRank);
+
+					sh3.m_children.Add (g2);
 				}
+
+
 
 				GameObject h4 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 				h4.transform.localScale = Vector3.one;
-				h4.GetComponent<SectionHeader> ().Initialize ("");
+//				h4.GetComponent<SectionHeader> ().Initialize ("");
 				m_listViewItems.Add (h4);
+
+				sh3.m_children.Add (h4);
 			}
 		}
+
+		sh3.Initialize ("HENCHMEN MISSIONS");
 	}
 
 	public override void OnDeactivate()

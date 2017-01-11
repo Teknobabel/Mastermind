@@ -20,16 +20,18 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	private List<TraitButton> m_traitButtons = new List<TraitButton>();
 
-	private MissionBase m_mission = null;
-	private Henchmen m_henchmen = null;
-	private AgentWrapper m_agent = null;
-	private TokenSlot m_token = null;
-	private Asset m_asset = null;
-	private Region m_region = null;
+//	private MissionBase m_mission = null;
+//	private Henchmen m_henchmen = null;
+//	private AgentWrapper m_agent = null;
+//	private TokenSlot m_token = null;
+//	private Asset m_asset = null;
+//	private Region m_region = null;
+
+	private MissionWrapper m_missionWrapper = null;
 
 	public void Initialize (MissionBase m, int rank)
 	{
-		m_mission = m;
+//		m_mission = m;
 		m_missionName.text = m.GetNameText().ToUpper();
 		m_missionDescription.text = m.m_description;
 
@@ -79,14 +81,16 @@ public class Mission_ListViewItem : MonoBehaviour {
 		}
 	}
 
-	public void Initialize ()
+	public void Initialize (MissionWrapper mw)
 	{
-		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
+//		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
 
-		m_mission = mw.m_mission;
+//		m_mission = mw.m_mission;
+
+		m_missionWrapper = mw;
 		m_missionName.text = mw.m_mission.GetNameText().ToUpper();
 		m_missionDescription.text = mw.m_mission.m_description;
-		m_missionSuccessChance.text = m_mission.CalculateCompletionPercentage(mw).ToString() + "% SUCCESS";
+		m_missionSuccessChance.text = mw.m_mission.CalculateCompletionPercentage(mw).ToString() + "% SUCCESS";
 
 		NumberCrawl nc = (NumberCrawl)m_missionCost.GetComponent<NumberCrawl> ();
 		if (nc != null) {
@@ -109,21 +113,21 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 		DrawTraits (mw, mw.m_mission.GetMissionRank(mw));
 
-		if (mw.m_mission.m_targetType == MissionBase.TargetType.Henchmen && mw.m_henchmenInFocus != null) {
-
-			m_henchmen = mw.m_henchmenInFocus;
-		} else if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus != null) {
-			m_token = mw.m_tokenInFocus;
-		} 
-		else if (mw.m_mission.m_targetType == MissionBase.TargetType.Agent && mw.m_agentInFocus != null) {
-			m_agent = mw.m_agentInFocus;
-		}
-		else if (mw.m_mission.m_targetType == MissionBase.TargetType.OwnedAsset && mw.m_assetInFocus != null) {
-			m_asset = mw.m_assetInFocus;
-		}
-		else if (mw.m_mission.m_targetType == MissionBase.TargetType.RemoteRegion && mw.m_regionInFocus != null) {
-			m_region = mw.m_regionInFocus;
-		}
+//		if (mw.m_mission.m_targetType == MissionBase.TargetType.Henchmen && mw.m_henchmenInFocus != null) {
+//
+//			m_henchmen = mw.m_henchmenInFocus;
+//		} else if (mw.m_mission.m_targetType == MissionBase.TargetType.AssetToken && mw.m_tokenInFocus != null) {
+//			m_token = mw.m_tokenInFocus;
+//		} 
+//		else if (mw.m_mission.m_targetType == MissionBase.TargetType.Agent && mw.m_agentInFocus != null) {
+//			m_agent = mw.m_agentInFocus;
+//		}
+//		else if (mw.m_mission.m_targetType == MissionBase.TargetType.OwnedAsset && mw.m_assetInFocus != null) {
+//			m_asset = mw.m_assetInFocus;
+//		}
+//		else if (mw.m_mission.m_targetType == MissionBase.TargetType.RemoteRegion && mw.m_regionInFocus != null) {
+//			m_region = mw.m_regionInFocus;
+//		}
 	}
 
 	private void DrawTraits (MissionWrapper mw, int rank)
@@ -168,28 +172,29 @@ public class Mission_ListViewItem : MonoBehaviour {
 	}
 	public void StartMissionButtonPressed ()
 	{
-		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
+//		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
+		if (m_missionWrapper.m_mission != null && m_missionWrapper.m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
 
-			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {
+//			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {
+//
+//				if (m_henchmen != null) {
+//					GameManager.instance.currentMissionWrapper.m_henchmenInFocus = m_henchmen;
+//				}
+//				if (m_token != null) {
+//					GameManager.instance.currentMissionWrapper.m_tokenInFocus = m_token;
+//				} 
+//				if (m_agent != null) {
+//					GameManager.instance.currentMissionWrapper.m_agentInFocus = m_agent;
+//				}
+//				if (m_asset != null) {
+//					GameManager.instance.currentMissionWrapper.m_assetInFocus = m_asset;
+//				}
+//				if (m_region != null) {
+//					GameManager.instance.currentMissionWrapper.m_regionInFocus = m_region;
+//				}
+//			}
 
-				if (m_henchmen != null) {
-					GameManager.instance.currentMissionWrapper.m_henchmenInFocus = m_henchmen;
-				}
-				if (m_token != null) {
-					GameManager.instance.currentMissionWrapper.m_tokenInFocus = m_token;
-				} 
-				if (m_agent != null) {
-					GameManager.instance.currentMissionWrapper.m_agentInFocus = m_agent;
-				}
-				if (m_asset != null) {
-					GameManager.instance.currentMissionWrapper.m_assetInFocus = m_asset;
-				}
-				if (m_region != null) {
-					GameManager.instance.currentMissionWrapper.m_regionInFocus = m_region;
-				}
-			}
-
-			GameManager.instance.currentMenu.SelectMission(m_mission);
+			GameManager.instance.currentMenu.SelectMission(m_missionWrapper);
 		}
 	}
 

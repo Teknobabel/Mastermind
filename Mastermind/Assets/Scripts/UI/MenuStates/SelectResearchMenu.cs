@@ -58,7 +58,8 @@ public class SelectResearchMenu : MenuState {
 
 		GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h.transform.localScale = Vector3.one;
-		h.GetComponent<SectionHeader> ().Initialize ("RESEARCH");
+		SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
+
 		m_listViewItems.Add (h);
 
 
@@ -66,7 +67,10 @@ public class SelectResearchMenu : MenuState {
 		GameObject g2 = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
 		g2.transform.localScale = Vector3.one;
 		m_listViewItems.Add (g2);
-		g2.GetComponent<Mission_ListViewItem> ().Initialize ();
+		g2.GetComponent<Mission_ListViewItem> ().Initialize (GameManager.instance.currentMissionWrapper);
+		sh.m_children.Add (g2);
+
+		sh.Initialize ("RESEARCH");
 
 
 
@@ -84,7 +88,7 @@ public class SelectResearchMenu : MenuState {
 
 		GameObject h2 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 		h2.transform.localScale = Vector3.one;
-		h2.GetComponent<SectionHeader> ().Initialize ("NEW MISSIONS");
+		SectionHeader sh2 = (SectionHeader)h2.GetComponent<SectionHeader> ();
 		m_listViewItems.Add (h2);
 
 		foreach (MissionBase m in unlockedMissions) {
@@ -94,9 +98,12 @@ public class SelectResearchMenu : MenuState {
 			GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
 			g.transform.localScale = Vector3.one;
 			m_listViewItems.Add (g);
-			g.GetComponent<Mission_ListViewItem> ().Initialize ();
+			g.GetComponent<Mission_ListViewItem> ().Initialize (GameManager.instance.currentMissionWrapper);
 //			m_missionsInList.Add (m);
+			sh2.m_children.Add (g);
 		}
+
+		sh2.Initialize ("NEW MISSIONS");
 
 		GameManager.instance.currentMissionWrapper.m_mission = null;
 	}
@@ -114,12 +121,10 @@ public class SelectResearchMenu : MenuState {
 
 	}
 
-	public override void SelectMission (MissionBase m)
+	public override void SelectMission (MissionWrapper mw)
 	{
-
-		if (GameManager.instance.game.player.currentCommandPool >= m.m_cost) {
-
-			GameManager.instance.currentMissionWrapper.m_mission = m;
+		if (GameManager.instance.game.player.currentCommandPool >= mw.m_mission.m_cost) {
+			GameManager.instance.currentMissionWrapper = mw;
 			GameManager.instance.currentMissionWrapper.m_organization = GameManager.instance.game.player;
 			GameManager.instance.ProcessMissionWrapper ();
 			GameManager.instance.PopMenuState ();

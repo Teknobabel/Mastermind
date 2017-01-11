@@ -31,7 +31,7 @@ public class SwitchStatusTrait : MissionBase {
 	{
 		string s = m_name + " - ";
 
-		if (GameManager.instance.currentMissionWrapper.m_henchmenInFocus != null) {
+		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_henchmenInFocus != null) {
 			s += GameManager.instance.currentMissionWrapper.m_henchmenInFocus.henchmenName;
 		}
 

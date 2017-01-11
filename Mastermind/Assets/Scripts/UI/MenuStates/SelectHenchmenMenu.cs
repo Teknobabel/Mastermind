@@ -36,7 +36,7 @@ public class SelectHenchmenMenu : MenuState {
 
 			GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 			h.transform.localScale = Vector3.one;
-			h.GetComponent<SectionHeader> ().Initialize ("AVAILABLE HENCHMEN");
+			SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
 			m_listViewItems.Add (h);
 
 			for (int i = 0; i < r.m_henchmen.Count; i++) {
@@ -45,8 +45,11 @@ public class SelectHenchmenMenu : MenuState {
 				g.transform.localScale = Vector3.one;
 				m_listViewItems.Add (g);
 				g.GetComponent<Henchmen_ListViewItem> ().Initialize (thisHenchmen);
+
+				sh.m_children.Add (g);
 			}
 
+			sh.Initialize ("AVAILABLE HENCHMEN");
 		}
 	}
 

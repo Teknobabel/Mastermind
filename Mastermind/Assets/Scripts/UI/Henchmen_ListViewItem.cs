@@ -41,7 +41,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 
 		string mission = "MISSION:\n";
 		if (h.currentState == Henchmen.state.OnMission) {
-			MissionBase m = GameManager.instance.game.player.GetMission (h);
+			MissionBase m = GameManager.instance.game.player.GetMission (h).m_mission;
 			mission += m.m_name.ToUpper ();
 		} else {
 			mission += "NONE";
@@ -78,7 +78,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_henchmenPortrait.texture = h.portrait.texture;
 
 		List<TraitData> traits = h.GetAllTraits ();
-		Debug.Log (h.henchmenName + " Traits: " + traits.Count);
+//		Debug.Log (h.henchmenName + " Traits: " + traits.Count);
 		for (int i = 0; i < 9; i++) {
 
 			GameObject thisT = (GameObject)(Instantiate (m_traitButton, m_traitPanel));
