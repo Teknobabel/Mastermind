@@ -47,10 +47,6 @@ public class MissionMenu : MenuState {
 
 	}
 
-	public override void OnReturn()
-	{
-	}
-
 	public void UpdateMissionMenu ()
 	{
 		while (m_listViewItems.Count > 0) {

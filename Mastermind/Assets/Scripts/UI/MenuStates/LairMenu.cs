@@ -63,16 +63,7 @@ public class LairMenu : MenuState {
 
 	public override void OnReturn()
 	{
-		// continue going back up the stack if this is not the target menu
-
-		if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState != m_state)
-		{
-			GameManager.instance.PopMenuState();
-			return;
-		} else if (GameManager.instance.targetMenuState != MenuState.State.None && GameManager.instance.targetMenuState == m_state)
-		{
-			GameManager.instance.targetMenuState = MenuState.State.None;
-		}
+		base.OnReturn ();
 
 		m_lairMenu.gameObject.SetActive (true);
 //		m_sortPanelParent.gameObject.SetActive (false);

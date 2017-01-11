@@ -181,10 +181,6 @@ public class HenchmenDetailMenu : MenuState {
 
 	}
 
-	public override void OnReturn()
-	{
-	}
-
 	public override void OnDeactivate()
 	{
 		m_henchmenID = -1;

@@ -40,10 +40,6 @@ public class SelectResearchMenu : MenuState {
 
 	}
 
-	public override void OnReturn()
-	{
-	}
-
 	private void UpdateResearchList ()
 	{
 		while (m_listViewItems.Count > 0) {

@@ -59,6 +59,8 @@ public class HenchmenMenu : MenuState, IObserver {
 
 	public override void OnReturn()
 	{
+		base.OnReturn ();
+
 		m_scrollView.gameObject.SetActive (true);
 		m_sortPanelParent.gameObject.SetActive (true);
 

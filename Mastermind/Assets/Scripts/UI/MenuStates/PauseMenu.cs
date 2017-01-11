@@ -15,10 +15,6 @@ public class PauseMenu : MenuState {
 	{
 	}
 
-	public override void OnReturn()
-	{
-	}
-
 	public override void OnDeactivate()
 	{
 		m_pauseMenu.gameObject.SetActive (false);

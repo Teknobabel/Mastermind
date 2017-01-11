@@ -32,6 +32,8 @@ public class DatabaseMenu : MenuState {
 
 	public override void OnReturn()
 	{
+		base.OnReturn ();
+
 		m_databaseMenuParent.gameObject.SetActive (true);
 	}
 

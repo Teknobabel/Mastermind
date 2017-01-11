@@ -41,6 +41,7 @@ public class AgentsMenu : MenuState {
 
 	public override void OnReturn()
 	{
+		base.OnReturn ();
 	}
 
 	public override void OnUpdate()

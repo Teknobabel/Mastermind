@@ -71,6 +71,8 @@ public class ActivityMenu : MenuState, ISubject {
 
 	public override void OnReturn()
 	{
+		base.OnReturn ();
+
 		m_turnResultsMenu.SetActive (true);
 	}
 

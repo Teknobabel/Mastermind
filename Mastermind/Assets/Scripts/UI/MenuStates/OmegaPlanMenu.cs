@@ -71,10 +71,6 @@ public class OmegaPlanMenu : MenuState {
 		}
 	}
 
-	public override void OnReturn()
-	{
-	}
-
 	public override void OnDeactivate()
 	{
 		while (m_listViewItems.Count > 0) {
