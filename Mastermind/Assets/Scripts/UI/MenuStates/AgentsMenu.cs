@@ -74,7 +74,7 @@ public class AgentsMenu : MenuState {
 					GameObject g = (GameObject)(Instantiate (m_agentListViewItem, m_scrollViewContent.transform));
 					g.transform.localScale = Vector3.one;
 					m_listViewItems.Add (g);
-					g.GetComponent<Henchmen_ListViewItem> ().Initialize (thisAgent);
+					g.GetComponent<Henchmen_ListViewItem> ().InitializeAgent (thisAgent);
 				}
 			}
 		}

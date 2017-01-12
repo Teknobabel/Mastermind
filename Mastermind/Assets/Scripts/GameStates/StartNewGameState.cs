@@ -139,7 +139,7 @@ public class StartNewGameState : IGameState {
 		TabMenu.instance.menuTabs = menuTabs;
 
 
-//		GameManager.instance.game.SpawnIntel (); // debug
+//		WorldMenu.instance.UpdateRegionList ();
 
 		GameManager.instance.PushMenuState(MenuState.State.TabMenu);
 

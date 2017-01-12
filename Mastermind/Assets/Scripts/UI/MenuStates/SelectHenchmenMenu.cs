@@ -44,7 +44,7 @@ public class SelectHenchmenMenu : MenuState {
 				GameObject g = (GameObject)(Instantiate (m_henchmenListViewItem, m_scrollViewContent.transform));
 				g.transform.localScale = Vector3.one;
 				m_listViewItems.Add (g);
-				g.GetComponent<Henchmen_ListViewItem> ().Initialize (thisHenchmen);
+				g.GetComponent<Henchmen_ListViewItem> ().InitializeHenchmen (thisHenchmen);
 
 				sh.m_children.Add (g);
 			}

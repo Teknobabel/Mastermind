@@ -10,8 +10,15 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_currentMission;
 	public TextMeshProUGUI m_currentLocation;
 	public TextMeshProUGUI m_buttonText;
-//	public TextMeshProUGUI m_turnCost;
+	public TextMeshProUGUI m_hireCost;
+	public TextMeshProUGUI m_costPerTurn;
 	public RawImage m_henchmenPortrait;
+
+	public Button 
+		m_callButton,
+		m_fireButton,
+		m_dismissButton,
+		m_hireButton;
 
 	public Transform m_traitPanel;
 	public GameObject m_traitButton;
@@ -19,49 +26,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 	private List<TraitButton> m_traitButtons = new List<TraitButton>();
 	private TraitButton m_statusTrait;
 	private int m_henchmenID = -1;
-
-	public void Initialize (AgentWrapper a)
-	{
-		DisplayMenu(a.m_agent);
-
-		m_currentMission.gameObject.SetActive (false);
-
-		string location = "REGION:\n";
-		if (a.m_vizState == AgentWrapper.VisibilityState.Hidden) {
-			location += "UNKNOWN";
-		} else {
-			location += a.m_agent.currentRegion.regionName.ToUpper ();
-		}
-		m_currentLocation.text = location;
-	}
-
-	public void Initialize (Henchmen h)
-	{
-		DisplayMenu (h);
-
-		string mission = "MISSION:\n";
-		if (h.currentState == Henchmen.state.OnMission) {
-			MissionBase m = GameManager.instance.game.player.GetMission (h).m_mission;
-			mission += m.m_name.ToUpper ();
-		} else {
-			mission += "NONE";
-		}
-		m_currentMission.text = mission;
-
-		string location = "REGION:\n";
-		location += h.currentRegion.regionName.ToUpper ();
-		m_currentLocation.text = location;
-
-		// update button text
-		if (GameManager.instance.currentMenuState == MenuState.State.HenchmenMenu) {
-
-			m_buttonText.text = "INSPECT";
-		}
-		else if (GameManager.instance.currentMenuState == MenuState.State.HenchmenDetailMenu) {
-
-			m_buttonText.text = "DISMISS";
-		}
-	}
+	private int m_cost = 99;
 
 	private void DisplayMenu ( Henchmen h)
 	{
@@ -78,7 +43,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_henchmenPortrait.texture = h.portrait.texture;
 
 		List<TraitData> traits = h.GetAllTraits ();
-//		Debug.Log (h.henchmenName + " Traits: " + traits.Count);
+
 		for (int i = 0; i < 9; i++) {
 
 			GameObject thisT = (GameObject)(Instantiate (m_traitButton, m_traitPanel));
@@ -127,5 +92,78 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		if (m_henchmenID > -1) {
 			GameManager.instance.game.player.FireHenchmen (m_henchmenID);
 		}
+	}
+
+	public void HireButtonClicked ()
+	{
+		
+		if (m_henchmenID > -1 && GameManager.instance.game.player.currentCommandPool >= m_cost ) {
+			GameManager.instance.game.player.HireHenchmen (m_henchmenID);
+		}
+	}
+
+	public void DismissButtonClicked ()
+	{
+		if (m_henchmenID > -1) {
+			GameManager.instance.game.player.DismissHenchmen (m_henchmenID);
+		}
+	}
+
+	public void InitializeHenchmen (Henchmen h)
+	{
+		DisplayMenu(h);
+
+		m_costPerTurn.gameObject.SetActive (false);
+		m_hireCost.gameObject.SetActive (false);
+		m_hireButton.gameObject.SetActive (false);
+		m_dismissButton.gameObject.SetActive (false);
+
+		string mission = "MISSION:\n";
+		if (h.currentState == Henchmen.state.OnMission) {
+			MissionBase m = GameManager.instance.game.player.GetMission (h).m_mission;
+			mission += m.m_name.ToUpper ();
+		} else {
+			mission += "NONE";
+		}
+		m_currentMission.text = mission;
+
+		string location = "REGION:\n";
+		location += h.currentRegion.regionName.ToUpper ();
+		m_currentLocation.text = location;
+	}
+
+	public void InitializeHenchmenForHire (Henchmen h)
+	{
+		DisplayMenu(h);
+
+		m_cost = h.hireCost;
+
+		m_currentMission.gameObject.SetActive (false);
+		m_currentLocation.gameObject.SetActive (false);
+		m_fireButton.gameObject.SetActive (false);
+		m_callButton.gameObject.SetActive (false);
+
+		m_hireCost.text = h.hireCost.ToString() + "<size=36>CP</size>";
+		m_costPerTurn.text = h.costPerTurn.ToString() + " CP / TURN";
+	}
+
+	public void InitializeAgent (AgentWrapper a)
+	{
+		DisplayMenu(a.m_agent);
+
+		m_currentMission.gameObject.SetActive (false);
+		m_fireButton.gameObject.SetActive (false);
+		m_dismissButton.gameObject.SetActive (false);
+		m_callButton.gameObject.SetActive (false);
+		m_hireButton.gameObject.SetActive (false);
+
+		string location = "REGION:\n";
+		if (a.m_vizState == AgentWrapper.VisibilityState.Hidden) {
+			location += "UNKNOWN";
+		} else {
+			location += a.m_agent.currentRegion.regionName.ToUpper ();
+		}
+
+		m_currentLocation.text = location;
 	}
 }

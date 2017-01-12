@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ColorManager : MonoBehaviour {
 	public static ColorManager instance;
 
-	public enum UIElement // next ID: 164
+	public enum UIElement // next ID: 165
 	{
 		None = 0,
 		Background_Main = 1,
@@ -45,6 +45,7 @@ public class ColorManager : MonoBehaviour {
 		ContentView_SortPanel_SortDirection_Text_Selected = 112,
 		SectionHeader_BG = 26,
 		SectionHeader_Text = 27,
+		SectionHeader_Minimize_Icon = 164,
 		TurnResultsButton_BG_Unselected = 28,
 		TurnResultsButton_BG_Selected = 29,
 		TurnResultsButton_Text_Unselected = 30,

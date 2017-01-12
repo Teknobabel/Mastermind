@@ -95,7 +95,7 @@ public class Henchmen : ScriptableObject {
 
 	public void AddTrait (TraitData t)
 	{
-		Debug.Log ("Adding Trait: " + t.GetName () + " / " + t.m_type);
+//		Debug.Log ("Adding Trait: " + t.GetName () + " / " + t.m_type);
 
 		if (m_traitDict.ContainsKey (t.m_class)) {
 

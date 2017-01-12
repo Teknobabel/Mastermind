@@ -62,7 +62,7 @@ public class WorldMenu : MenuState, IObserver {
 		UpdateRegionList ();
 	}
 
-	private void UpdateRegionList ()
+	public void UpdateRegionList ()
 	{
 		while (m_listViewItems.Count > 0) {
 			GameObject g = m_listViewItems [0];
@@ -302,23 +302,6 @@ public class WorldMenu : MenuState, IObserver {
 
 		}
 
-//		if (Input.GetKeyUp (KeyCode.Alpha1) && m_sortType != SortType.RegionGroup) {
-//
-//			m_sortType = SortType.RegionGroup;
-//			UpdateRegionList ();
-//
-//		} else if (Input.GetKeyUp (KeyCode.Alpha2) && m_sortType != SortType.Occupied) {
-//
-//			m_sortType = SortType.Occupied;
-//			UpdateRegionList ();
-//
-//		} else if (Input.GetKeyUp (KeyCode.Alpha3) && m_sortType != SortType.RegionRank) {
-//
-//			m_sortType = SortType.RegionRank;
-//			UpdateRegionList ();
-//
-//		} 
-
 	}
 
 	public void SelectMissionForRegion (int regionID)
@@ -332,10 +315,6 @@ public class WorldMenu : MenuState, IObserver {
 
 				MissionWrapper mr = new MissionWrapper ();
 				mr.m_region = r;
-
-//				foreach (Henchmen h in r.currentHenchmen) {
-//					mr.m_henchmen.Add (h);
-//				}
 
 				foreach (Region.HenchmenSlot hs in r.henchmenSlots) {
 

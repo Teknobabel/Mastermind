@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class HenchmenMenu : MenuState, IObserver {
 	public static HenchmenMenu instance;
 
-	public GameObject m_henchmanForHireListViewItem;
+//	public GameObject m_henchmanForHireListViewItem;
 	public GameObject m_henchmenListViewItem;
 	public GameObject m_sectionHeader;
 	public GameObject m_scrollView;
@@ -100,7 +100,7 @@ public class HenchmenMenu : MenuState, IObserver {
 				GameObject g = (GameObject)(Instantiate (m_henchmenListViewItem, m_scrollViewContent.transform));
 				g.transform.localScale = Vector3.one;
 				m_listViewItems.Add (g);
-				g.GetComponent<Henchmen_ListViewItem> ().Initialize (thisHenchmen);
+				g.GetComponent<Henchmen_ListViewItem> ().InitializeHenchmen (thisHenchmen);
 
 				sh.m_children.Add (g);
 			}
@@ -115,10 +115,10 @@ public class HenchmenMenu : MenuState, IObserver {
 
 		for (int i = 0; i < player.availableHenchmen.Count; i++) {
 			Henchmen thisHenchmen = player.availableHenchmen [i];
-			GameObject g = (GameObject)(Instantiate (m_henchmanForHireListViewItem, m_scrollViewContent.transform));
+			GameObject g = (GameObject)(Instantiate (m_henchmenListViewItem, m_scrollViewContent.transform));
 			g.transform.localScale = Vector3.one;
 			m_listViewItems.Add (g);
-			g.GetComponent<HenchmenForHire_ListViewItem> ().Initialize (thisHenchmen);
+			g.GetComponent<Henchmen_ListViewItem> ().InitializeHenchmenForHire (thisHenchmen);
 
 			sh2.m_children.Add (g);
 		}
