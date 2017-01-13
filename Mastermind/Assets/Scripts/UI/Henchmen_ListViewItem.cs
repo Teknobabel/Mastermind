@@ -156,6 +156,8 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_dismissButton.gameObject.SetActive (false);
 		m_callButton.gameObject.SetActive (false);
 		m_hireButton.gameObject.SetActive (false);
+		m_costPerTurn.gameObject.SetActive (false);
+		m_hireCost.gameObject.SetActive (false);
 
 		string location = "REGION:\n";
 		if (a.m_vizState == AgentWrapper.VisibilityState.Hidden) {

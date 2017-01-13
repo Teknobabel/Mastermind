@@ -333,9 +333,9 @@ public class MissionBase : ScriptableObject, IMission {
 	{
 		string s = "";
 
-		float baseRegionTraitChance = 1.1f;
-		float baseHenchmenTraitChance = 1.1f;
-		float baseTeachTraitChance = 1.1f;
+		float baseRegionTraitChance = 0.1f;
+		float baseHenchmenTraitChance = 0.1f;
+		float baseTeachTraitChance = 0.1f;
 
 		if (Random.Range (0.0f, 1.0f) <= baseRegionTraitChance) {
 

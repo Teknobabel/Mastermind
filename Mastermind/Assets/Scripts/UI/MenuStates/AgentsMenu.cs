@@ -14,6 +14,11 @@ public class AgentsMenu : MenuState {
 
 	public override void OnActivate(MenuTab tabInfo)
 	{
+		m_tabInfo = tabInfo;
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
+		}
+
 		m_agentsMenu.SetActive (true);
 
 		UpdateAgentList ();
@@ -25,6 +30,11 @@ public class AgentsMenu : MenuState {
 			GameObject g = m_listViewItems [0];
 			m_listViewItems.RemoveAt (0);
 			Destroy (g);
+		}
+
+		if (m_tabInfo != null) {
+			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Unselected);
+			m_tabInfo = null;
 		}
 
 		m_agentsMenu.SetActive (false);

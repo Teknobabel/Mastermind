@@ -40,6 +40,8 @@ public class AgentOrganization : OrganizationBase, IObserver {
 				SpawnAgentInWorld (h);
 			}
 		}
+
+		AddObserver (TabMenu.instance);
 	}
 
 	public void RemoveAgentFromMissions (AgentWrapper aw)
@@ -244,9 +246,11 @@ public class AgentOrganization : OrganizationBase, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
+		
 		switch (thisGameEvent) {
 
 		case GameEvent.Agent_BecameVisible:
+			
 			Notify (subject, GameEvent.Agent_BecameVisible);
 			break;
 		}

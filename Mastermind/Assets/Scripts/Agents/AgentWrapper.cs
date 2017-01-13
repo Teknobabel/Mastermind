@@ -46,10 +46,17 @@ public class AgentWrapper : ISubject {
 
 		switch (newState) {
 
+		case VisibilityState.Tracked:
 		case VisibilityState.Visible:
 
-			if (!m_hasBeenRevealed) {
+			TurnResultsEntry t = new TurnResultsEntry ();
+			t.m_resultsText = m_agent.henchmenName.ToUpper () + " appears in " + m_agent.currentRegion.regionName.ToUpper () + "!";
+			t.m_resultType = GameEvent.Agent_BecameVisible;
+			t.m_henchmenIDs.Add (m_agent.id);
+			GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 
+
+			if (!m_hasBeenRevealed) {
 				m_hasBeenRevealed = true;
 				Notify (this, GameEvent.Agent_BecameVisible);
 			}

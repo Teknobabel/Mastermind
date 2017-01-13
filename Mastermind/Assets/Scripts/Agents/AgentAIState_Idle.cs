@@ -8,6 +8,10 @@ public class AgentAIState_Idle : IAgentAIState {
 	{
 		Debug.Log ("Starting Agent AI State: Idle");
 
+//		if (aw.m_vizState == AgentWrapper.VisibilityState.Hidden) { // debug
+//			aw.ChangeVisibilityState (AgentWrapper.VisibilityState.Visible);
+//		}
+
 		if (!aw.m_agentEvents.Contains (AgentWrapper.AgentEvents.RegionSearched)) {
 
 			// search region

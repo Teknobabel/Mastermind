@@ -31,10 +31,8 @@ public class HenchmenMenu : MenuState, IObserver {
 		GameManager.instance.game.player.AddObserver (this);
 
 		Debug.Log ("Starting Henchmen Menu");
-//		MenuTab t = GameManager.instance.game.player.menuTabs [m_state];
-//		t.m_tabButton.ChangeState (TabButton.State.Selected);
+
 		m_tabInfo = tabInfo;
-//		Debug.Log(m_tabInfo);
 		if (m_tabInfo != null) {
 			m_tabInfo.m_tabButton.ChangeState (TabButton.State.Selected);
 		}

@@ -468,11 +468,11 @@ public class WorldMenu : MenuState, IObserver {
 
 	public void OnNotify (ISubject subject, GameEvent thisGameEvent)
 	{
-		switch (thisGameEvent) {
-		case GameEvent.UI_SectionHeader_MinimizeButtonClicked:
-			
-			UpdateRegionList ();
-			break;
-		}
+//		switch (thisGameEvent) {
+//		case GameEvent.UI_SectionHeader_MinimizeButtonClicked:
+//			
+//			UpdateRegionList ();
+//			break;
+//		}
 	}
 }

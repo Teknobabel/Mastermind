@@ -14,6 +14,7 @@ public class SectionHeader : MonoBehaviour {
 	}
 
 	public TextMeshProUGUI m_sectionHeaderTitle;
+	public Button m_minimizeButton;
 
 	private MinimizeState m_minimizeState = MinimizeState.Normal;
 
@@ -28,6 +29,11 @@ public class SectionHeader : MonoBehaviour {
 		s += " (" + m_children.Count.ToString () + ")";
 
 		m_sectionHeaderTitle.text = s;
+
+		if (m_children.Count == 0) {
+
+			m_minimizeButton.gameObject.SetActive (false);
+		}
 	}
 
 	public void MinimizeButtonClicked ()

@@ -290,6 +290,7 @@ public class TabMenu : MenuState, IObserver {
 					m_tabButtonList.Add (tb);
 
 					tb.Initialize (m);
+					tb.ChangeState (TabButton.State.Unselected);
 
 					break;
 				}
