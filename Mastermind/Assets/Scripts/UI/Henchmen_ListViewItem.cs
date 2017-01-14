@@ -18,6 +18,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_callButton,
 		m_fireButton,
 		m_dismissButton,
+		m_dismissButton_Mini,
 		m_hireButton;
 
 	public Transform m_traitPanel;
@@ -117,6 +118,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_hireCost.gameObject.SetActive (false);
 		m_hireButton.gameObject.SetActive (false);
 		m_dismissButton.gameObject.SetActive (false);
+		m_dismissButton_Mini.gameObject.SetActive (false);
 
 		string mission = "MISSION:\n";
 		if (h.currentState == Henchmen.state.OnMission) {
@@ -158,6 +160,7 @@ public class Henchmen_ListViewItem : MonoBehaviour {
 		m_hireButton.gameObject.SetActive (false);
 		m_costPerTurn.gameObject.SetActive (false);
 		m_hireCost.gameObject.SetActive (false);
+		m_dismissButton_Mini.gameObject.SetActive (false);
 
 		string location = "REGION:\n";
 		if (a.m_vizState == AgentWrapper.VisibilityState.Hidden) {

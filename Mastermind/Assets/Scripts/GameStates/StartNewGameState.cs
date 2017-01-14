@@ -60,17 +60,28 @@ public class StartNewGameState : IGameState {
 
 		Dictionary<int, MenuTab> menuTabs = new Dictionary<int, MenuTab> ();
 
+		foreach (OmegaPlan op in player.omegaPlans) {
+
+			MenuTab opTab = new MenuTab ();
+			opTab.m_name = "OMEGA PLAN";
+			opTab.objectID = op.id;
+			opTab.m_menuState = MenuState.State.OmegaPlanMenu;
+			opTab.Initialize ();
+			menuTabs.Add (opTab.id, opTab);
+
+			if (op.state == OmegaPlan.State.Hidden) {
+
+				opTab.drawTab = false;
+				op.AddObserver (opTab);
+			}
+		}
+
 		MenuTab henchTab = new MenuTab ();
 		henchTab.m_name = "HENCHMEN";
 		henchTab.m_menuState = MenuState.State.HenchmenMenu;
 		henchTab.Initialize ();
 		menuTabs.Add (henchTab.id, henchTab);
 
-		MenuTab missionTab = new MenuTab ();
-		missionTab.m_name = "MISSIONS";
-		missionTab.m_menuState = MenuState.State.MissionMenu;
-		missionTab.Initialize ();
-		menuTabs.Add (missionTab.id, missionTab);
 
 		MenuTab lairTab = new MenuTab ();
 		lairTab.m_name = "LAIR";
@@ -90,21 +101,11 @@ public class StartNewGameState : IGameState {
 		activityTab.Initialize ();
 		menuTabs.Add (activityTab.id, activityTab);
 
-		foreach (OmegaPlan op in player.omegaPlans) {
-
-			MenuTab opTab = new MenuTab ();
-			opTab.m_name = "OMEGA PLAN";
-			opTab.objectID = op.id;
-			opTab.m_menuState = MenuState.State.OmegaPlanMenu;
-			opTab.Initialize ();
-			menuTabs.Add (opTab.id, opTab);
-
-			if (op.state == OmegaPlan.State.Hidden) {
-
-				opTab.drawTab = false;
-				op.AddObserver (opTab);
-			}
-		}
+		MenuTab missionTab = new MenuTab ();
+		missionTab.m_name = "MISSIONS";
+		missionTab.m_menuState = MenuState.State.MissionMenu;
+		missionTab.Initialize ();
+		menuTabs.Add (missionTab.id, missionTab);
 
 		MenuTab agentTab = new MenuTab ();
 		agentTab.m_name = "AGENTS";

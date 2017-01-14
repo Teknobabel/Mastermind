@@ -63,7 +63,12 @@ public class HenchmenDetailMenu : MenuState {
 			GameObject g = (GameObject)(Instantiate (m_henchmenListViewItem, m_scrollViewContent.transform));
 			g.transform.localScale = Vector3.one;
 			m_listViewItems.Add (g);
-			g.GetComponent<Henchmen_ListViewItem> ().InitializeHenchmen (thisHenchmen);
+
+			if (GameManager.instance.game.player.currentHenchmen.Contains (thisHenchmen)) {
+				g.GetComponent<Henchmen_ListViewItem> ().InitializeHenchmen (thisHenchmen);
+			} else {
+				g.GetComponent<Henchmen_ListViewItem> ().InitializeHenchmenForHire (thisHenchmen);
+			}
 
 
 

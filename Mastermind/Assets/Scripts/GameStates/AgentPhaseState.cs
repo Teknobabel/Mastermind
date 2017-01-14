@@ -48,7 +48,8 @@ public class AgentPhaseState : IGameState {
 			mw.m_turnsPassed++;
 
 			if (mw.m_turnsPassed >= mw.m_mission.m_numTurns) {
-
+				
+//				Debug.Log ("Completing Agent Mission: " + mw.m_mission.m_name);
 				mw.m_mission.CompleteMission (mw);
 				completedMissions.Add (mw);
 			}
