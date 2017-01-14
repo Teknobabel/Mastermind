@@ -63,7 +63,7 @@ public class SelectResearchMenu : MenuState {
 		GameObject g2 = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
 		g2.transform.localScale = Vector3.one;
 		m_listViewItems.Add (g2);
-		g2.GetComponent<Mission_ListViewItem> ().Initialize (GameManager.instance.currentMissionWrapper);
+		g2.GetComponent<Mission_ListViewItem> ().Initialize ((MissionWrapper)GameManager.instance.currentMissionWrapper.Clone());
 		sh.m_children.Add (g2);
 
 		sh.Initialize ("RESEARCH");
