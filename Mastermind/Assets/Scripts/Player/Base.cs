@@ -10,18 +10,6 @@ public class Base {
 		Occupied,
 		UpgradeInProgress,
 	}
-	public class Floor 
-	{
-		public int m_floorNumber = -1;
-		public Asset m_installedUpgrade = null;
-		public FloorState m_floorState = FloorState.None;
-		public List<Henchmen> m_guards = new List<Henchmen> ();
-		public int m_baseDefense = 0;
-
-		// dependant on type of installed upgrade
-
-		public AgentWrapper m_capturedAgent = null;
-	}
 
 	public Floor m_lair;
 	public List<Floor> m_floors = new List<Floor>();
@@ -50,6 +38,8 @@ public class Base {
 		m_lair.m_installedUpgrade = GameManager.instance.m_lairAsset;
 		m_lair.m_floorNumber = m_floors.Count+1;
 		m_lair.m_baseDefense = m_lair.m_installedUpgrade.m_defenseValue;
+		m_lair.Initialize ();
+
 	}
 
 	public void AddNewFloor (int floorNum)
@@ -57,6 +47,7 @@ public class Base {
 		Floor f = new Floor ();
 		f.m_floorState = FloorState.Empty;
 		f.m_floorNumber = floorNum;
+		f.Initialize ();
 		m_floors.Add (f);
 
 		if (m_lair != null) {
@@ -73,6 +64,7 @@ public class Base {
 				f.m_floorState = FloorState.Occupied;
 				f.m_installedUpgrade = asset;
 				f.m_baseDefense = asset.m_defenseValue;
+
 				m_currentAssets.Add (asset);
 
 				if (GameManager.instance.game != null) {

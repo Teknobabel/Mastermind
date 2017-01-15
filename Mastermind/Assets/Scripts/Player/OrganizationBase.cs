@@ -52,7 +52,7 @@ public class OrganizationBase : ScriptableObject, ISubject {
 			}
 		}
 
-		if (mw.m_henchmenInFocus != null) {
+		if (mw.m_henchmenInFocus != null && mw.m_henchmenInFocus.currentState != Henchmen.state.OnMission) {
 
 			mw.m_henchmenInFocus.ChangeState(Henchmen.state.OnMission);
 		}

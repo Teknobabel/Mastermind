@@ -91,20 +91,21 @@ public class AgentOrganization : OrganizationBase, IObserver {
 		}
 	}
 
-	public void AddMission (MissionWrapper mw)
+	public override void AddMission (MissionWrapper mw)
 	{
-		base.AddMission (mw);
-
+		
 		foreach (AgentWrapper aw in mw.m_agents) {
 			if (aw.m_agent.currentState != Henchmen.state.OnMission) {
 				aw.m_agent.ChangeState (Henchmen.state.OnMission);
 			}
 		}
 
-		if (mw.m_agentInFocus != null) {
+		if (mw.m_agentInFocus != null && mw.m_agentInFocus.m_agent.currentState != Henchmen.state.OnMission) {
 
 			mw.m_agentInFocus.m_agent.ChangeState(Henchmen.state.OnMission);
 		}
+
+		base.AddMission (mw);
 	}
 
 	public void PlayerWantedLevelIncreased ()
@@ -114,8 +115,6 @@ public class AgentOrganization : OrganizationBase, IObserver {
 
 	public override void MissionCompleted (MissionWrapper a)
 	{
-		base.MissionCompleted (a);
-
 		if (a.m_agentInFocus != null) {
 			a.m_agentInFocus.m_agent.ChangeState (Henchmen.state.Idle);
 		}
@@ -123,6 +122,8 @@ public class AgentOrganization : OrganizationBase, IObserver {
 		foreach (AgentWrapper aw in a.m_agents) {
 			aw.m_agent.ChangeState (Henchmen.state.Idle);
 		}
+
+		base.MissionCompleted (a);
 	}
 
 	public override void CancelMission (MissionWrapper mw)

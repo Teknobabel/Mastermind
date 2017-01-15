@@ -6,7 +6,7 @@ public class AgentAIState_Idle : IAgentAIState {
 
 	public void DoAgentTurn (AgentWrapper aw)
 	{
-		Debug.Log ("Starting Agent AI State: Idle");
+		Debug.Log ("<color=red>Starting Agent AI State: Idle</color>");
 
 //		if (aw.m_vizState == AgentWrapper.VisibilityState.Hidden) { // debug
 //			aw.ChangeVisibilityState (AgentWrapper.VisibilityState.Visible);
@@ -163,9 +163,9 @@ public class AgentAIState_Idle : IAgentAIState {
 
 				// attempt to hide if currently visible and not tracked
 
-				Debug.Log ("Attempting to hide");
-
 				if (aw.m_vizState == AgentWrapper.VisibilityState.Visible) {
+
+					Debug.Log ("Attempting to hide");
 
 					MissionWrapper mw = new MissionWrapper ();
 					mw.m_mission = GameManager.instance.m_agentMissionBank[4];

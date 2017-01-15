@@ -48,7 +48,11 @@ public class TravelToRegion : MissionBase {
 		bool ambush = false;
 		TurnResultsEntry t = new TurnResultsEntry ();
 
-		if (a.m_agentInFocus != null) {
+		if (a.m_agentInFocus != null || a.m_agents.Count > 0) {
+
+			if (a.m_agents.Count > 0) {
+				a.m_agentInFocus = a.m_agents [0];
+			}
 
 			if (a.m_henchmenSlotInFocus.m_state == Region.HenchmenSlot.State.Occupied_Player) {
 

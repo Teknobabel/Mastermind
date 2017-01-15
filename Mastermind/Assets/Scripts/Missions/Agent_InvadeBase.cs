@@ -70,17 +70,17 @@ public class Agent_InvadeBase : MissionBase {
 			foreach (Henchmen h in henchmen) {
 				
 				t.m_resultsText += h.name.ToUpper() + ", ";
-				Base.Floor randFloor = b.m_floors[Random.Range(0, b.m_floors.Count)];
+				Floor randFloor = b.m_floors[Random.Range(0, b.m_floors.Count)];
 				randFloor.m_guards.Add (h);
 
 			}
 
 			// go through each floor while there are agents left
 
-			List<Base.Floor> floors = new List<Base.Floor> (b.m_floors);
+			List<Floor> floors = new List<Floor> (b.m_floors);
 			floors.Add (b.m_lair);
 
-			foreach (Base.Floor f in floors) {
+			foreach (Floor f in floors) {
 
 				t.m_resultsText += "\n\nThe Agents reach Floor " + f.m_floorNumber.ToString() + ": ";
 				if (f.m_floorState == Base.FloorState.Empty) {
@@ -358,7 +358,7 @@ public class Agent_InvadeBase : MissionBase {
 
 				// Remove all guards from base
 
-				foreach (Base.Floor f in b.m_floors) {
+				foreach (Floor f in b.m_floors) {
 
 					f.m_guards.Clear ();
 				}

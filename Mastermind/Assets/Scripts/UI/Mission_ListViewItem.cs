@@ -173,7 +173,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public void StartMissionButtonPressed ()
 	{
 //		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
-		Debug.Log(m_missionWrapper.m_mission);
+
 		if (m_missionWrapper.m_mission != null && m_missionWrapper.m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
 
 //			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {

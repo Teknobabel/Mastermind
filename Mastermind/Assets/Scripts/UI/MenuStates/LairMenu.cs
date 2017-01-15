@@ -222,7 +222,7 @@ public class LairMenu : MenuState {
 		m_lairText.text = s;
 	}
 
-	public void SelectUpgradeForFloor (Base.Floor targetFloor)
+	public void SelectUpgradeForFloor (Floor targetFloor)
 	{
 		MissionWrapper mr = new MissionWrapper ();
 		mr.m_scope = MissionBase.TargetType.BaseUpgrade;
@@ -237,7 +237,7 @@ public class LairMenu : MenuState {
 		GameManager.instance.PushMenuState (State.SelectMissionMenu);
 	}
 
-	public void SelectMissionForFloor (Base.Floor targetFloor)
+	public void SelectMissionForFloor (Floor targetFloor)
 	{
 		MissionWrapper mr = new MissionWrapper ();
 		mr.m_scope = MissionBase.TargetType.Floor;
@@ -269,5 +269,34 @@ public class LairMenu : MenuState {
 			GameManager.instance.PushMenuState (State.SelectResearchMenu);
 
 		}
+	}
+
+	public void SelectHenchmenForFloor (Floor f)
+	{
+		
+		MissionWrapper mr = new MissionWrapper ();
+		mr.m_mission = GameManager.instance.m_travelMission;
+		mr.m_scope = MissionBase.TargetType.Floor;
+		mr.m_floorInFocus = f;
+		mr.m_region = f.m_region;
+		mr.m_henchmenSlotInFocus = f.m_henchmenSlot;
+		mr.m_organization = GameManager.instance.game.player;
+
+		foreach (Henchmen h in GameManager.instance.game.player.homeRegion.currentHenchmen) {
+			mr.m_henchmen.Add (h);
+		}
+
+		foreach (Floor thisF in GameManager.instance.game.player.orgBase.m_floors) {
+
+			if (thisF != f && f.m_henchmenSlot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+
+				if (f.m_henchmenSlot.m_henchmen.currentState != Henchmen.state.OnMission) {
+					mr.m_henchmen.Add (f.m_henchmenSlot.m_henchmen);
+				}
+			}
+		}
+
+		GameManager.instance.currentMissionWrapper = mr;
+		GameManager.instance.PushMenuState (State.SelectHenchmenMenu);
 	}
 }

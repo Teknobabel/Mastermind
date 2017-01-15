@@ -9,13 +9,15 @@ public class BaseFloorButton : MonoBehaviour {
 
 	public RawImage m_floorButtonBG;
 
-	private Base.Floor m_floor;
+	public RegionHenchmenButton m_henchmenButton;
 
-	public void Initialize (Base.Floor floor)
+	private Floor m_floor;
+
+	public void Initialize (Floor floor)
 	{
 		m_floor = floor;
 
-		string s = "FLOOR " + floor.m_floorNumber.ToString () + ": ";
+		string s = "FLOOR " + floor.m_floorNumber.ToString () + ": \n";
 
 		if (floor.m_floorState == Base.FloorState.Empty) {
 			
@@ -53,6 +55,8 @@ public class BaseFloorButton : MonoBehaviour {
 				}
 			}
 		}
+//		Debug.Log(floor.m_henchmenSlot);
+		m_henchmenButton.Initialize (floor.m_henchmenSlot);
 
 		m_text.text = s;
 	}
@@ -64,6 +68,17 @@ public class BaseFloorButton : MonoBehaviour {
 			LairMenu.instance.SelectUpgradeForFloor (m_floor);
 		} else if (m_floor.m_floorState == Base.FloorState.Occupied && m_floor.m_installedUpgrade.m_assetType != Asset.AssetType.TrapRoom) {
 			LairMenu.instance.SelectMissionForFloor (m_floor);
+		}
+	}
+
+	public void HenchmenButtonClicked ()
+	{
+		
+		if (m_floor.m_henchmenSlot.m_state == Region.HenchmenSlot.State.Empty) {
+
+			// player can move any henchmen at the lair or in the base to this slot
+
+			LairMenu.instance.SelectHenchmenForFloor(m_floor);
 		}
 	}
 }

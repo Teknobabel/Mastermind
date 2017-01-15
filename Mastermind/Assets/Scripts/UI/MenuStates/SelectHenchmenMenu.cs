@@ -102,6 +102,7 @@ public class SelectHenchmenMenu : MenuState {
 
 	public void SelectHenchmen (int hID)
 	{
+		Debug.Log ("YTFHGKHGJHKJHGJHGKHGLIUYL");
 		GameManager.instance.currentMissionWrapper.m_henchmen.Clear();
 		Henchmen h = GameManager.instance.game.GetHenchmenByID (hID);
 		GameManager.instance.currentMissionWrapper.m_henchmen.Add (h);

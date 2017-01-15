@@ -279,7 +279,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 	public void ReserveSlot (Henchmen h, HenchmenSlot hs)
 	{
 		foreach (HenchmenSlot s in m_henchmenSlots) {
-			
+			Debug.Log ("Reserving slot in : " + m_regionName);
 			if (s.m_id == hs.m_id) {
 				
 //				s.m_state = HenchmenSlot.State.Reserved;
@@ -481,17 +481,17 @@ public class Region : ScriptableObject, ISubject, IObserver {
 		}
 	}
 
-	public int id {get{return m_id;}}
+	public int id {get{return m_id;} set{ m_id = value; }}
 	public int numHenchmenSlots {get{return m_numHenchmenSlots;}}
 	public int rank {get{return m_rank; }}
-	public string regionName {get{return m_regionName; }}
+	public string regionName {get{return m_regionName; } set{ m_regionName = value; }}
 	public RegionData.RegionGroup regionGroup {get{return m_regionGroup; }}
 	public List<TokenSlot> assetTokens {get{return m_assetTokens;}}
 	public List<TokenSlot> policyTokens {get{return m_policyTokens;}}
 	public List<TokenSlot> controlTokens {get{return m_controlTokens;}}
 	public List<TokenSlot> allTokens {get{return m_allTokens;}}
-	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen;}}
-	public List<HenchmenSlot> henchmenSlots {get{return m_henchmenSlots;}}
+	public List<Henchmen> currentHenchmen {get{return m_currentHenchmen;} set{ m_currentHenchmen = value; }}
+	public List<HenchmenSlot> henchmenSlots {get{return m_henchmenSlots;} set{ m_henchmenSlots = value; }}
 	public Sprite portrait {get{return m_portrait;}}
 	public Owner owner {get{return m_owner; }}
 }
