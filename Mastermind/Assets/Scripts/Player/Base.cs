@@ -23,12 +23,32 @@ public class Base {
 	m_chanceToNegateAmbushBonus = 0,
 	m_chanceToRevealHiddenAgents = 0;
 
-	public void Initialize (int numFloors)
+	public void Initialize (Director d, OrganizationBase org)
 	{
-		for (int i = 0; i < numFloors; i++) {
+		// add any starting base upgrades
 
-			AddNewFloor (i + 1);
+		AddNewFloor (m_floors.Count + 1);
+
+		if (d.m_startingBaseUpgrades.Length > 0) {
+
+			for (int i = 0; i < d.m_startingBaseUpgrades.Length; i++) {
+
+				BaseFloor a = d.m_startingBaseUpgrades [i];
+				InstallAsset (a);
+
+				TurnResultsEntry t = new TurnResultsEntry ();
+				t.m_iconType = TurnResultsEntry.IconType.Organization;
+				t.m_resultsText = org.orgName.ToUpper() + " gains Base Upgrade: " + a.m_name.ToUpper();
+				//				t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
+
+				org.AddTurnResults (0, t);
+			}
 		}
+
+//		for (int i = 0; i < numFloors; i++) {
+
+//			AddNewFloor (i + 1);
+//		}
 
 		// install layer at top of base
 
@@ -55,11 +75,11 @@ public class Base {
 		}
 	}
 
-	public void InstallAsset (Asset asset)
+	public void InstallAsset (BaseFloor asset)
 	{
 		foreach (Floor f in m_floors) {
 
-			if (f.m_floorState == FloorState.Empty) {
+			if (f.m_floorState == FloorState.UpgradeInProgress || f.m_floorState == FloorState.Empty) {
 
 				f.m_floorState = FloorState.Occupied;
 				f.m_installedUpgrade = asset;
@@ -67,8 +87,12 @@ public class Base {
 
 				m_currentAssets.Add (asset);
 
-				if (GameManager.instance.game != null) {
+				if (GameManager.instance.game != null && GameManager.instance.game.player != null) {
 					GameManager.instance.game.player.Notify (asset, GameEvent.Organization_AssetGained);
+				}
+
+				if (m_floors.Count < m_maxFloors) {
+					AddNewFloor (m_floors.Count + 1);
 				}
 
 				return;
@@ -76,7 +100,7 @@ public class Base {
 		}
 	}
 
-	public void InstallAsset (int floorNumber, Asset asset)
+	public void InstallAsset (int floorNumber, BaseFloor asset)
 	{
 		foreach (Floor f in m_floors) {
 

@@ -25,7 +25,7 @@ public class BuildFloor : MissionBase {
 //
 		} else {
 
-			a.m_floorInFocus.m_floorState = Base.FloorState.Empty;
+//			a.m_floorInFocus.m_floorState = Base.FloorState.Empty;
 
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission fails.";
 			t.m_resultsText += "\n +" + a.m_mission.m_infamyGain.ToString () + " Infamy";
@@ -36,12 +36,18 @@ public class BuildFloor : MissionBase {
 
 	public override bool IsValid ()
 	{
-		if (!base.IsValid ()) { return false;}		
+		Debug.Log ("D;SLKFJS;LKFJLAKSDJFLSKFJ;SLFD");
+//		if (!base.IsValid ()) { return false;}		
 
 		Organization player = GameManager.instance.game.player;
-		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
+//		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
 
-		if (mw.m_scope == m_targetType && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_Workshop  && player.orgBase.m_floors.Count < player.orgBase.maxFloors)
+//		if (mw.m_scope == m_targetType && mw.m_floorInFocus.m_installedUpgrade.m_assetType == Asset.AssetType.LairUpgrade_Workshop  && player.orgBase.m_floors.Count < player.orgBase.maxFloors)
+//		{
+//			return true;
+//		}
+
+		if (player.orgBase.m_floors.Count < player.orgBase.maxFloors)
 		{
 			return true;
 		}

@@ -10,6 +10,7 @@ public class SelectMissionMenu : MenuState {
 	public GameObject m_backButton;
 
 	public GameObject m_missionListViewItem;
+	public GameObject m_henchmenListViewItem;
 	public GameObject m_sectionHeader;
 
 	public GameObject m_scrollViewContent;
@@ -36,7 +37,7 @@ public class SelectMissionMenu : MenuState {
 		m_backButton.gameObject.SetActive (true);
 
 		UpdateMissionList ();
-		UpdateHenchmenList ();
+//		UpdateHenchmenList ();
 
 	}
 
@@ -58,7 +59,7 @@ public class SelectMissionMenu : MenuState {
 		m_selectMissionMenu.gameObject.SetActive (true);
 
 		UpdateMissionList ();
-		UpdateHenchmenList ();
+//		UpdateHenchmenList ();
 	}
 
 	public override void OnDeactivate()
@@ -118,7 +119,87 @@ public class SelectMissionMenu : MenuState {
 		}
 	}
 
+
+
 	private void UpdateMissionList ()
+	{
+		m_selectMissionMenu.gameObject.SetActive (true);
+
+		List<MissionBase> validMissions = new List<MissionBase> ();
+
+		if (GameManager.instance.currentMissionWrapper.m_floorInFocus.m_floorState == Base.FloorState.Empty) {
+
+			// if floor is empty, gather list of upgrades that can be build
+
+			GameManager.instance.currentMissionWrapper.m_scope = MissionBase.TargetType.Floor;
+
+			foreach (MissionBase mb in GameManager.instance.game.director.m_baseUpgrades) {
+
+				if (mb.IsValid ()) {
+					validMissions.Add (mb);
+				}
+			}
+
+		} else {
+
+			// if not empty, gather missions list gated by floor level
+
+			foreach (BaseFloor.BaseFloorMissions bfm in GameManager.instance.currentMissionWrapper.m_floorInFocus.m_installedUpgrade.m_missions) {
+	
+				if (bfm.m_level <= GameManager.instance.currentMissionWrapper.m_floorInFocus.m_level) {
+	
+					foreach (MissionBase mb in bfm.m_availableMissions) {
+
+						if (mb.IsValid ()) {
+							validMissions.Add (mb);
+						}
+					}
+				}
+			}
+		}
+
+		// spawn mission list view items
+
+		GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+		h.transform.localScale = Vector3.one;
+		SectionHeader header = (SectionHeader) h.GetComponent<SectionHeader> ();
+		m_listViewItems.Add (h);
+
+		foreach (MissionBase mb in validMissions) {
+
+			GameObject g = (GameObject)(Instantiate (m_missionListViewItem, m_scrollViewContent.transform));
+			g.transform.localScale = Vector3.one;
+			m_listViewItems.Add (g);
+			g.GetComponent<Mission_ListViewItem> ().Initialize (mb, mb.m_maxRank);
+			header.m_children.Add (g);
+		}
+
+		header.Initialize ("AVAILABLE MISSIONS");
+
+		// spawn participating henchmen list view items
+
+		MissionWrapper r = GameManager.instance.currentMissionWrapper;
+
+		GameObject h2 = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+		h2.transform.localScale = Vector3.one;
+		SectionHeader sh = (SectionHeader)h2.GetComponent<SectionHeader> ();
+		m_listViewItems.Add (h2);
+
+		for (int i = 0; i < r.m_henchmen.Count; i++) {
+			Henchmen thisHenchmen = r.m_henchmen [i];
+			GameObject g = (GameObject)(Instantiate (m_henchmenListViewItem, m_scrollViewContent.transform));
+			g.transform.localScale = Vector3.one;
+			m_listViewItems.Add (g);
+			g.GetComponent<Henchmen_ListViewItem> ().InitializeHenchmen (thisHenchmen);
+
+			sh.m_children.Add (g);
+		}
+
+		sh.Initialize ("PARTICIPATING HENCHMEN");
+
+	}
+
+	private void UpdateMissionList_TempDisabled ()
 	{
 		m_selectMissionMenu.gameObject.SetActive (true);
 
@@ -292,7 +373,7 @@ public class SelectMissionMenu : MenuState {
 					}
 				}
 
-//				if (GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.RemoteRegion) {
+
 
 				foreach (Region r in GameManager.instance.game.regions) {
 
@@ -304,7 +385,7 @@ public class SelectMissionMenu : MenuState {
 
 					}
 				}
-//				}
+
 			}
 
 			if (GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.Research) {
@@ -340,23 +421,43 @@ public class SelectMissionMenu : MenuState {
 
 		m_validMissions.Clear ();
 	}
-
-//	public override void SelectMission (MissionBase m)
-	public override void SelectMission (MissionWrapper mw)
-	{
 		
-//		if (GameManager.instance.game.player.currentCommandPool >= m.m_cost) {
-//			GameManager.instance.currentMissionWrapper.m_mission = m;
+//	public override void SelectMission (MissionWrapper mw)
+//	{
+//		if (GameManager.instance.game.player.currentCommandPool >= mw.m_mission.m_cost) {
+//			GameManager.instance.currentMissionWrapper = mw;
 //			GameManager.instance.currentMissionWrapper.m_organization = GameManager.instance.game.player;
 //			GameManager.instance.ProcessMissionWrapper ();
 //			GameManager.instance.PopMenuState ();
 //		}
+//	}
 
-		if (GameManager.instance.game.player.currentCommandPool >= mw.m_mission.m_cost) {
-			GameManager.instance.currentMissionWrapper = mw;
+	public override void SelectMission (MissionBase m)
+	{
+
+		if (GameManager.instance.game.player.currentCommandPool >= m.m_cost) {
+			
+			GameManager.instance.currentMissionWrapper.m_mission = m;
+			GameManager.instance.currentMissionWrapper.m_scope = m.m_targetType;
 			GameManager.instance.currentMissionWrapper.m_organization = GameManager.instance.game.player;
-			GameManager.instance.ProcessMissionWrapper ();
-			GameManager.instance.PopMenuState ();
+
+			if (m.m_targetType == MissionBase.TargetType.Floor) {
+
+				GameManager.instance.ProcessMissionWrapper ();
+				GameManager.instance.PopMenuState ();
+			} else if (GameManager.instance.currentMissionWrapper.m_regionInFocus == null) {
+
+				// select region
+
+				GameManager.instance.PushMenuState (State.SelectRegionMenu);
+
+			} else if (GameManager.instance.currentMissionWrapper.m_regionInFocus != null) {
+
+				// start mission
+
+				GameManager.instance.ProcessMissionWrapper ();
+				GameManager.instance.PopMenuState ();
+			}
 		}
 	}
 

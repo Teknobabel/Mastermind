@@ -117,15 +117,15 @@ public class SelectResearchMenu : MenuState {
 
 	}
 
-	public override void SelectMission (MissionWrapper mw)
-	{
-		if (GameManager.instance.game.player.currentCommandPool >= mw.m_mission.m_cost) {
-			GameManager.instance.currentMissionWrapper = mw;
-			GameManager.instance.currentMissionWrapper.m_organization = GameManager.instance.game.player;
-			GameManager.instance.ProcessMissionWrapper ();
-			GameManager.instance.PopMenuState ();
-		}
-	}
+//	public override void SelectMission (MissionWrapper mw)
+//	{
+//		if (GameManager.instance.game.player.currentCommandPool >= mw.m_mission.m_cost) {
+//			GameManager.instance.currentMissionWrapper = mw;
+//			GameManager.instance.currentMissionWrapper.m_organization = GameManager.instance.game.player;
+//			GameManager.instance.ProcessMissionWrapper ();
+//			GameManager.instance.PopMenuState ();
+//		}
+//	}
 
 	public override void OnUpdate()
 	{

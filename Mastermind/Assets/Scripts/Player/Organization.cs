@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Organization : OrganizationBase {
 
-	private string m_name = "Null";
-
 	private int m_currentInfamy = 0;
 	private int m_maxInfamy = 0;
 	private int m_currentWantedLevel = 0;
@@ -148,7 +146,9 @@ public class Organization : OrganizationBase {
 	{
 		base.AddMission (mw);
 
-		UseCommandPoints (mw.m_mission.m_cost);
+		if (mw.m_mission.m_cost > 0) {
+			UseCommandPoints (mw.m_mission.m_cost);
+		}
 
 	}
 
@@ -354,24 +354,8 @@ public class Organization : OrganizationBase {
 		// initialize base
 
 		m_base = new Base ();
-		m_base.Initialize (d.m_startingBaseFloors);
+		m_base.Initialize (d, this);
 
-		// add any starting base upgrades
-
-		if (d.m_startingBaseUpgrades.Length > 0) {
-			
-			for (int i = 0; i < d.m_startingBaseUpgrades.Length; i++) {
-				
-				Asset a = d.m_startingBaseUpgrades [i];
-				m_base.InstallAsset (a);
-
-				TurnResultsEntry t = new TurnResultsEntry ();
-				t.m_iconType = TurnResultsEntry.IconType.Organization;
-				t.m_resultsText = m_name.ToUpper() + " gains Base Upgrade: " + a.m_name.ToUpper();
-//				t.m_resultType = GameEvent.Organization_OmegaPlanRevealed;
-				AddTurnResults (0, t);
-			}
-		}
 
 		// add any starting research
 
@@ -629,7 +613,6 @@ public class Organization : OrganizationBase {
 	public int maxInfamy {get{return m_maxInfamy; }}
 	public int currentIntel {get{return m_currentIntel; } set{ m_currentIntel = value; }}
 	public int maxIntel {get{return m_maxIntel; }}
-	public string orgName {get{return m_name;}}
 	public List<Asset> currentAssets {get{return m_currentAssets;}}
 	public List<Asset> currentResearch {get{return m_currentResearch;}}
 	public List<Asset> assetsInOrbit {get{return m_assetsInOrbit;}}

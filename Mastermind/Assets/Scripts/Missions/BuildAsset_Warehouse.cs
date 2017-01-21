@@ -4,7 +4,7 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Build Asset: Warehouse")]
 public class BuildAsset_Warehouse : MissionBase {
 
-	public Asset m_asset;
+	public BaseFloor m_asset;
 
 	public int m_numAssetSlots = 6;
 

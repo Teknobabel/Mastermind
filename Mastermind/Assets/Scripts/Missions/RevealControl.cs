@@ -54,22 +54,24 @@ public class RevealControl : MissionBase {
 
 	public override bool IsValid ()
 	{
-		bool hasPreRequisites = base.IsValid ();	
+//		bool hasPreRequisites = base.IsValid ();	
+//
+//		// valid if there are any hidden tokens in the region
+//
+//		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
+//
+//			Region r = GameManager.instance.currentMissionWrapper.m_region;
+//
+//			foreach (TokenSlot c in r.controlTokens) {
+//
+//				if (c.m_state == TokenSlot.State.Hidden && hasPreRequisites) {
+//					return true;
+//				}
+//			}
+//		}
+//
+//		return false;
 
-		// valid if there are any hidden tokens in the region
-
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
-
-			Region r = GameManager.instance.currentMissionWrapper.m_region;
-
-			foreach (TokenSlot c in r.controlTokens) {
-
-				if (c.m_state == TokenSlot.State.Hidden && hasPreRequisites) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return true;
 	}
 }

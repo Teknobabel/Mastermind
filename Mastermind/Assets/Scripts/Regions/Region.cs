@@ -278,6 +278,7 @@ public class Region : ScriptableObject, ISubject, IObserver {
 
 	public void ReserveSlot (Henchmen h, HenchmenSlot hs)
 	{
+		Debug.Log (hs);
 		foreach (HenchmenSlot s in m_henchmenSlots) {
 			Debug.Log ("Reserving slot in : " + m_regionName);
 			if (s.m_id == hs.m_id) {

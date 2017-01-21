@@ -22,7 +22,7 @@ public class RevealAsset : MissionBase {
 
 			// gather all hidden tokens
 
-			Region r = a.m_region;
+			Region r = a.m_regionInFocus;
 
 			List<TokenSlot> hiddenTokens = new List<TokenSlot> ();
 
@@ -92,24 +92,29 @@ public class RevealAsset : MissionBase {
 		GameManager.instance.game.player.AddTurnResults (GameManager.instance.game.turnNumber, t);
 	}
 
+//	public override bool IsValid ()
+//	{
+//		bool hasPreRequisites = base.IsValid ();
+//			
+//		// valid if there are any hidden tokens in the region
+//
+//		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
+//
+//			Region r = GameManager.instance.currentMissionWrapper.m_region;
+//
+//			foreach (TokenSlot t in r.assetTokens) {
+//
+//				if (t.m_state == TokenSlot.State.Hidden && hasPreRequisites) {
+//					return true;
+//				}
+//			}
+//		}
+//
+//		return false;
+//	}
+
 	public override bool IsValid ()
 	{
-		bool hasPreRequisites = base.IsValid ();
-			
-		// valid if there are any hidden tokens in the region
-
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
-
-			Region r = GameManager.instance.currentMissionWrapper.m_region;
-
-			foreach (TokenSlot t in r.assetTokens) {
-
-				if (t.m_state == TokenSlot.State.Hidden && hasPreRequisites) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return true;
 	}
 }

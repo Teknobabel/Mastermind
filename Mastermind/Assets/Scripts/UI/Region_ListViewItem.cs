@@ -100,13 +100,17 @@ public class Region_ListViewItem : MonoBehaviour {
 
 		for (int i = 0; i < r.henchmenSlots.Count; i++) {
 
-			GameObject h = (GameObject)(Instantiate (m_henchmenSlot, m_henchmenSlotPanel));
-			h.transform.localScale = Vector3.one;
-			RegionHenchmenButton rhb = (RegionHenchmenButton)h.GetComponent<RegionHenchmenButton> ();
-
 			Region.HenchmenSlot hSlot = r.henchmenSlots[i];
-			rhb.Initialize (hSlot);
-			rhb.m_parent = this;
+
+			if (hSlot.m_state == Region.HenchmenSlot.State.Occupied_Agent && hSlot.m_agent.m_vizState != AgentWrapper.VisibilityState.Hidden) {
+
+				GameObject h = (GameObject)(Instantiate (m_henchmenSlot, m_henchmenSlotPanel));
+				h.transform.localScale = Vector3.one;
+				RegionHenchmenButton rhb = (RegionHenchmenButton)h.GetComponent<RegionHenchmenButton> ();
+			
+				rhb.Initialize (hSlot);
+				rhb.m_parent = this;
+			}
 		}
 
 		m_regionRank.text = "R" + r.rank.ToString();
@@ -123,7 +127,13 @@ public class Region_ListViewItem : MonoBehaviour {
 
 	public void MissionButtonClicked ()
 	{
-		if (m_regionID != -1) {
+		if (GameManager.instance.currentMenuState == MenuState.State.SelectRegionMenu) {
+
+			Region r = GameManager.instance.game.regionsByID [m_regionID];
+			GameManager.instance.currentMissionWrapper.m_regionInFocus = r;
+			GameManager.instance.PopMenuState ();
+		}
+		else if (m_regionID != -1) {
 			WorldMenu.instance.SelectMissionForRegion (m_regionID);
 		}
 	}
@@ -132,9 +142,23 @@ public class Region_ListViewItem : MonoBehaviour {
 	{
 		Debug.Log ("Token Button Clicked");
 
-//		if (tb.tokenSlot.m_state == TokenSlot.State.Revealed) {
-			WorldMenu.instance.SelectMissionForToken (tb.tokenSlot);
-//		}
+		Debug.Log (tb.tokenSlot.m_type);
+		Debug.Log (tb.tokenSlot.m_state);
+		Debug.Log (tb.tokenSlot.m_assetToken);
+		Debug.Log (GameManager.instance.currentMissionWrapper.m_scope);
+
+		if (GameManager.instance.currentMenuState == MenuState.State.SelectRegionMenu && tb.tokenSlot.m_type == TokenSlot.TokenType.Asset 
+			&& tb.tokenSlot.m_state == TokenSlot.State.Revealed && tb.tokenSlot.m_assetToken != null && GameManager.instance.currentMissionWrapper.m_scope == MissionBase.TargetType.AssetToken) {
+
+			Region r = GameManager.instance.game.regionsByID [m_regionID];
+			GameManager.instance.currentMissionWrapper.m_regionInFocus = r;
+			GameManager.instance.currentMissionWrapper.m_tokenInFocus = tb.tokenSlot;
+			GameManager.instance.PopMenuState ();
+
+		}
+
+
+//		WorldMenu.instance.SelectMissionForToken (tb.tokenSlot);
 	}
 
 }

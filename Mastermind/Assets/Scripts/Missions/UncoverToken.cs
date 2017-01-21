@@ -77,36 +77,41 @@ public class UncoverToken : MissionBase {
 
 	}
 
+//	public override bool IsValid ()
+//	{
+//		if (!base.IsValid ()) { return false;}		// valid if there are any hidden tokens in the region
+//
+//		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
+//
+//			Region r = GameManager.instance.currentMissionWrapper.m_region;
+//
+//			foreach (TokenSlot a in r.assetTokens) {
+//
+//				if (a.m_state == TokenSlot.State.Hidden) {
+//					return true;
+//				}
+//			}
+//
+//			foreach (TokenSlot p in r.policyTokens) {
+//
+//				if (p.m_state == TokenSlot.State.Hidden) {
+//					return true;
+//				}
+//			}
+//
+//			foreach (TokenSlot c in r.controlTokens) {
+//
+//				if (c.m_state == TokenSlot.State.Hidden) {
+//					return true;
+//				}
+//			}
+//		}
+//
+//		return false;
+//	}
+
 	public override bool IsValid ()
 	{
-		if (!base.IsValid ()) { return false;}		// valid if there are any hidden tokens in the region
-
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_region != null) {
-
-			Region r = GameManager.instance.currentMissionWrapper.m_region;
-
-			foreach (TokenSlot a in r.assetTokens) {
-
-				if (a.m_state == TokenSlot.State.Hidden) {
-					return true;
-				}
-			}
-
-			foreach (TokenSlot p in r.policyTokens) {
-
-				if (p.m_state == TokenSlot.State.Hidden) {
-					return true;
-				}
-			}
-
-			foreach (TokenSlot c in r.controlTokens) {
-
-				if (c.m_state == TokenSlot.State.Hidden) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		return true;
 	}
 }

@@ -4,7 +4,7 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Build Asset")]
 public class BuildAsset : MissionBase {
 
-	public Asset m_asset;
+	public BaseFloor m_asset;
 
 
 	public override void InitializeMission (MissionWrapper a)
@@ -27,7 +27,7 @@ public class BuildAsset : MissionBase {
 
 //			GameManager.instance.game.player.AddAsset (m_asset);
 
-			GameManager.instance.game.player.orgBase.InstallAsset (a.m_floorInFocus.m_floorNumber, m_asset);
+			GameManager.instance.game.player.orgBase.InstallAsset (m_asset);
 
 			t.m_resultsText = a.m_mission.m_name.ToUpper () + " mission is a success!";
 			t.m_resultsText += "\n" + GameManager.instance.game.player.orgName.ToUpper() + " GAINS A " + m_asset.m_name.ToUpper() + " ASSET.";
@@ -48,14 +48,23 @@ public class BuildAsset : MissionBase {
 
 	public override bool IsValid ()
 	{
-		if (!base.IsValid ()) { return false;}		
-		if (GameManager.instance.currentMissionWrapper.m_scope == m_targetType) {
-
-			Region r = GameManager.instance.currentMissionWrapper.m_region;
-			if (r == GameManager.instance.game.player.homeRegion && !GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_asset)) {
-				return true;
-			}
+		if (GameManager.instance.currentMissionWrapper.m_scope == m_targetType && GameManager.instance.currentMissionWrapper.m_floorInFocus.m_floorState == Base.FloorState.Empty) {
+				
+			return true;
 		}
 		return false;
 	}
+
+//	public override bool IsValid ()
+//	{
+//		if (!base.IsValid ()) { return false;}		
+//		if (GameManager.instance.currentMissionWrapper.m_scope == m_targetType) {
+//
+//			Region r = GameManager.instance.currentMissionWrapper.m_region;
+//			if (r == GameManager.instance.game.player.homeRegion && !GameManager.instance.game.player.orgBase.m_currentAssets.Contains(m_asset)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 }

@@ -76,18 +76,17 @@ public class StartNewGameState : IGameState {
 			}
 		}
 
-		MenuTab henchTab = new MenuTab ();
-		henchTab.m_name = "HENCHMEN";
-		henchTab.m_menuState = MenuState.State.HenchmenMenu;
-		henchTab.Initialize ();
-		menuTabs.Add (henchTab.id, henchTab);
-
-
 		MenuTab lairTab = new MenuTab ();
 		lairTab.m_name = "LAIR";
 		lairTab.m_menuState = MenuState.State.LairMenu;
 		lairTab.Initialize ();
 		menuTabs.Add (lairTab.id, lairTab);
+
+		MenuTab henchTab = new MenuTab ();
+		henchTab.m_name = "HENCHMEN";
+		henchTab.m_menuState = MenuState.State.HenchmenMenu;
+		henchTab.Initialize ();
+		menuTabs.Add (henchTab.id, henchTab);
 
 		MenuTab worldTab = new MenuTab ();
 		worldTab.m_name = "WORLD";

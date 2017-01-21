@@ -14,6 +14,37 @@ public class RegionHenchmenButton : MonoBehaviour {
 	private int m_henchmenID = -1;
 	private Region.HenchmenSlot m_henchmenSlot;
 
+	public void InitializeRosterSlot (Henchmen h)
+	{
+		if (h == null) {
+
+			m_text.text = "EMPTY";
+			m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_BG_Empty);
+			m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_Text_Empty);
+
+		} else {
+
+			m_henchmenID = h.id;
+
+
+			if (h.currentRegion.id != GameManager.instance.game.player.homeRegion.id) {
+
+				m_text.color = Color.gray;
+				m_text.text = h.henchmenName.ToUpper ();
+				m_buttonImage.color = Color.gray;
+				m_buttonImage.texture = h.portraitShort.texture;
+
+			} else {
+
+				m_text.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_Text_OccupiedHenchmen);
+				m_text.text = h.henchmenName.ToUpper ();
+				m_buttonImage.color = ColorManager.instance.GetColor (ColorManager.UIElement.RegionListView_HenchmenSlot_BG_OccupiedHenchmen);
+				m_buttonImage.texture = h.portraitShort.texture;
+			}
+
+		}
+	}
+
 	public void Initialize (Region.HenchmenSlot hSlot)
 	{
 		m_henchmenSlot = hSlot;

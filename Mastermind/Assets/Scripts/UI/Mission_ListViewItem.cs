@@ -11,6 +11,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 	public TextMeshProUGUI m_missionCost;
 	public TextMeshProUGUI m_missionDuration;
 	public TextMeshProUGUI m_missionSuccessChance;
+	public TextMeshProUGUI m_buttonText;
 	public Image m_missionPortrait;
 	public Button m_button;
 
@@ -20,7 +21,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	private List<TraitButton> m_traitButtons = new List<TraitButton>();
 
-//	private MissionBase m_mission = null;
+	private MissionBase m_mission = null;
 //	private Henchmen m_henchmen = null;
 //	private AgentWrapper m_agent = null;
 //	private TokenSlot m_token = null;
@@ -31,7 +32,7 @@ public class Mission_ListViewItem : MonoBehaviour {
 
 	public void Initialize (MissionBase m, int rank)
 	{
-//		m_mission = m;
+		m_mission = m;
 		m_missionName.text = m.GetNameText().ToUpper();
 		m_missionDescription.text = m.m_description;
 
@@ -78,6 +79,13 @@ public class Mission_ListViewItem : MonoBehaviour {
 			} else {
 				tb.Deactivate ();
 			}
+		}
+
+		MissionWrapper mw = GameManager.instance.currentMissionWrapper;
+
+		if (m.m_targetType == MissionBase.TargetType.Region && mw != null && mw.m_regionInFocus == null) {
+
+			m_buttonText.text = "SELECT REGION";
 		}
 	}
 
@@ -172,9 +180,13 @@ public class Mission_ListViewItem : MonoBehaviour {
 	}
 	public void StartMissionButtonPressed ()
 	{
+		if (GameManager.instance.currentMissionWrapper.m_henchmen.Count > 0) {
+			GameManager.instance.currentMenu.SelectMission (m_mission);
+		}
+
 //		if (m_mission != null && m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
 
-		if (m_missionWrapper.m_mission != null && m_missionWrapper.m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
+//		if (m_missionWrapper.m_mission != null && m_missionWrapper.m_mission.m_cost <= GameManager.instance.game.player.currentCommandPool) {
 
 //			if (GameManager.instance.currentMenuState == MenuState.State.SelectMissionMenu) {
 //
@@ -195,8 +207,10 @@ public class Mission_ListViewItem : MonoBehaviour {
 //				}
 //			}
 
-			GameManager.instance.currentMenu.SelectMission(m_missionWrapper);
-		}
+//			GameManager.instance.currentMenu.SelectMission(m_missionWrapper);
+
+
+//		}
 	}
 
 }

@@ -22,6 +22,7 @@ public abstract class MenuState : MonoBehaviour {
 		DatabaseMenu,
 		SelectResearchMenu,
 		MissionMenu,
+		SelectRegionMenu,
 	}
 
 	public State m_state = State.None;
@@ -41,7 +42,10 @@ public abstract class MenuState : MonoBehaviour {
 	public virtual void BackButtonPressed (){
 	}
 
-	public virtual void SelectMission (MissionWrapper mw) {
+//	public virtual void SelectMission (MissionWrapper mw) {
+//	}
+
+	public virtual void SelectMission (MissionBase m) {
 	}
 
 	public virtual void OnReturn()

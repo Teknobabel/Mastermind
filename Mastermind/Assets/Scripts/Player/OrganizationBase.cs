@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class OrganizationBase : ScriptableObject, ISubject {
 
+	protected string m_name = "Null";
+
 	protected List<MissionWrapper> m_activeMissions = new List<MissionWrapper>();
 
 	protected Dictionary<int, List<TurnResultsEntry>> m_turnResults = new Dictionary<int, List<TurnResultsEntry>> (); // by turn number
@@ -44,7 +46,7 @@ public class OrganizationBase : ScriptableObject, ISubject {
 
 	public virtual void AddMission (MissionWrapper mw)
 	{
-		mw.m_mission.InitializeMission(mw);
+		
 
 		foreach (Henchmen thisH in mw.m_henchmen) {
 			if (thisH.currentState != Henchmen.state.OnMission) {
@@ -58,6 +60,8 @@ public class OrganizationBase : ScriptableObject, ISubject {
 		}
 
 		m_activeMissions.Add (mw);
+
+		mw.m_mission.InitializeMission(mw);
 	}
 
 	public virtual void MissionCompleted (MissionWrapper a)
@@ -153,6 +157,7 @@ public class OrganizationBase : ScriptableObject, ISubject {
 		}
 	}
 
+	public string orgName {get{return m_name;}}
 	public List<MissionWrapper> activeMissions {get{return m_activeMissions;}}
 	public Dictionary<int, List<TurnResultsEntry>> turnResults {get{return m_turnResults; }}
 	public Dictionary<GameEvent, List<TurnResultsEntry>> turnResultsByType {get{return m_turnResultsByType; }}

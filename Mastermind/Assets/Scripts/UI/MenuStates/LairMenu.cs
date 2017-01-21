@@ -9,7 +9,9 @@ public class LairMenu : MenuState {
 
 	public GameObject m_lairMenu;
 
-	public TextMeshProUGUI m_lairText;
+	public TextMeshProUGUI 
+	m_lairText,
+	m_floorsHeader;
 
 	public Transform 
 	m_assetsPanel,
@@ -17,16 +19,19 @@ public class LairMenu : MenuState {
 	m_researchPanel_Influence,
 	m_researchPanel_Force,
 	m_researchPanel_Tech,
-	m_researchPanel_Lair;
+	m_researchPanel_Lair,
+	m_currentHenchmenPanel;
 
 	public GameObject 
 		m_tokenButton,
 		m_researchButton,
-		m_baseFloor;
+		m_baseFloor,
+		m_henchmenSlot;
 
 	private List<GameObject> m_assetGO = new List<GameObject>();
 	private List<GameObject> m_baseFloorGO = new List<GameObject>();
 	private List<GameObject> m_researchGO = new List<GameObject>();
+	private List<GameObject> m_henchmenGO = new List<GameObject>();
 
 	void Awake ()
 	{
@@ -52,7 +57,8 @@ public class LairMenu : MenuState {
 		UpdateText ();
 		UpdateBase ();
 		UpdateAssets ();
-		UpdateResearch ();
+//		UpdateResearch ();
+		UpdateHenchmen ();
 	}
 
 	public override void OnHold()
@@ -71,7 +77,8 @@ public class LairMenu : MenuState {
 		UpdateText ();
 		UpdateBase ();
 		UpdateAssets ();
-		UpdateResearch ();
+		UpdateHenchmen ();
+//		UpdateResearch ();
 	}
 
 	public override void OnDeactivate()
@@ -89,62 +96,82 @@ public class LairMenu : MenuState {
 
 	}
 
-	private void UpdateResearch ()
+	public void UpdateHenchmen ()
 	{
-		while (m_researchGO.Count > 0) {
+		while (m_henchmenGO.Count > 0) {
 
-			GameObject go = m_researchGO [0];
-			m_researchGO.RemoveAt (0);
+			GameObject go = m_henchmenGO [0];
+			m_henchmenGO.RemoveAt (0);
 			Destroy (go);
 		}
 
-		TechTree techTree = GameManager.instance.m_techTree;
+		for (int i=0; i < GameManager.instance.game.player.homeRegion.numHenchmenSlots; i++)
+		{
+			GameObject thisHS = (GameObject)(Instantiate (m_henchmenSlot, m_currentHenchmenPanel));
+			thisHS.transform.localScale = Vector3.one;
+			m_henchmenGO.Add (thisHS);
+			RegionHenchmenButton hSlot = (RegionHenchmenButton)thisHS.GetComponent<RegionHenchmenButton> ();
 
-		foreach (TechTree.ResearchBranch b in techTree.m_branches) {
+			if (i < GameManager.instance.game.player.currentHenchmen.Count) {
 
-			foreach (ResearchObject r in b.m_researchObjects)
-			{
-				Transform t = null;
-
-				switch (b.m_branchType) {
-
-				case TechTree.BranchType.Influence:
-					t = m_researchPanel_Influence;
-					break;
-				case TechTree.BranchType.Force:
-					t = m_researchPanel_Force;
-					break;
-				case TechTree.BranchType.Tech:
-					t = m_researchPanel_Tech;
-					break;
-				case TechTree.BranchType.Lair:
-					t = m_researchPanel_Lair;
-					break;
-
-				}
-
-				if (t != null) {
-
-					GameObject thisR = (GameObject)(Instantiate (m_researchButton, t));
-					thisR.transform.localScale = Vector3.one;
-					m_researchGO.Add (thisR);
-					ResearchButton rb = (ResearchButton)thisR.GetComponent<ResearchButton> ();
-
-					rb.Initialize (r, b);
-				}
+				hSlot.InitializeRosterSlot (GameManager.instance.game.player.currentHenchmen [i]);
+			} else {
+				
+				hSlot.InitializeRosterSlot (null);
 			}
-
 		}
+	}
 
-//		foreach (ResearchButton rb in m_researchButtons) {
+	private void UpdateResearch ()
+	{
+//		while (m_researchGO.Count > 0) {
 //
-//			rb.Initialize ();
+//			GameObject go = m_researchGO [0];
+//			m_researchGO.RemoveAt (0);
+//			Destroy (go);
+//		}
+//
+//		TechTree techTree = GameManager.instance.m_techTree;
+//
+//		foreach (TechTree.ResearchBranch b in techTree.m_branches) {
+//
+//			foreach (ResearchObject r in b.m_researchObjects)
+//			{
+//				Transform t = null;
+//
+//				switch (b.m_branchType) {
+//
+//				case TechTree.BranchType.Influence:
+//					t = m_researchPanel_Influence;
+//					break;
+//				case TechTree.BranchType.Force:
+//					t = m_researchPanel_Force;
+//					break;
+//				case TechTree.BranchType.Tech:
+//					t = m_researchPanel_Tech;
+//					break;
+//				case TechTree.BranchType.Lair:
+//					t = m_researchPanel_Lair;
+//					break;
+//
+//				}
+//
+//				if (t != null) {
+//
+//					GameObject thisR = (GameObject)(Instantiate (m_researchButton, t));
+//					thisR.transform.localScale = Vector3.one;
+//					m_researchGO.Add (thisR);
+//					ResearchButton rb = (ResearchButton)thisR.GetComponent<ResearchButton> ();
+//
+//					rb.Initialize (r, b);
+//				}
+//			}
+//
 //		}
 	}
 
 	private void UpdateBase ()
 	{
-
 		while (m_baseFloorGO.Count > 0) {
 
 			GameObject go = m_baseFloorGO [0];
@@ -153,6 +180,8 @@ public class LairMenu : MenuState {
 		}
 
 		Base b = GameManager.instance.game.player.orgBase;
+
+		m_floorsHeader.text = "FLOORS (" + b.m_floors.Count.ToString () + "/" + b.maxFloors.ToString () + ")";
 
 		for (int i = 0; i < b.m_floors.Count; i++) {
 
@@ -228,10 +257,19 @@ public class LairMenu : MenuState {
 		mr.m_scope = MissionBase.TargetType.BaseUpgrade;
 		mr.m_floorInFocus = targetFloor;
 		mr.m_region = GameManager.instance.game.player.homeRegion;
+//		mr.m_region = targetFloor.m_region;
 
-		foreach (Henchmen h in mr.m_region.currentHenchmen) {
-			mr.m_henchmen.Add (h);
+//		foreach (Henchmen h in mr.m_region.currentHenchmen) {
+//			mr.m_henchmen.Add (h);
+//		}
+
+		foreach (Region.HenchmenSlot hs in targetFloor.m_region.henchmenSlots) {
+			
+			if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+				mr.m_henchmen.Add (hs.m_henchmen);
+			}
 		}
+//		Debug.Log (mr.m_henchmen.Count);
 
 		GameManager.instance.currentMissionWrapper = mr;
 		GameManager.instance.PushMenuState (State.SelectMissionMenu);
@@ -240,46 +278,48 @@ public class LairMenu : MenuState {
 	public void SelectMissionForFloor (Floor targetFloor)
 	{
 		MissionWrapper mr = new MissionWrapper ();
-		mr.m_scope = MissionBase.TargetType.Floor;
+//		mr.m_scope = MissionBase.TargetType.Floor;
 		mr.m_floorInFocus = targetFloor;
-		mr.m_region = GameManager.instance.game.player.homeRegion;
+		mr.m_region = targetFloor.m_region;
 
-		foreach (Henchmen h in mr.m_region.currentHenchmen) {
-			mr.m_henchmen.Add (h);
+		foreach (Region.HenchmenSlot hs in targetFloor.m_region.henchmenSlots) {
+			
+			if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+				mr.m_henchmen.Add (hs.m_henchmen);
+			}
 		}
-
+//		Debug.Log (mr.m_henchmen.Count);
 		GameManager.instance.currentMissionWrapper = mr;
 		GameManager.instance.PushMenuState (State.SelectMissionMenu);
 	}
 
 	public void SelectMissionForResearchButton (ResearchButton r)
 	{
-		if (r.researchState == ResearchButton.ResearchState.Available) {
-
-			MissionWrapper mr = new MissionWrapper ();
-			mr.m_scope = MissionBase.TargetType.Research;
-			mr.m_researchButtonInFocus = r;
-			mr.m_region = GameManager.instance.game.player.homeRegion;
-
-			foreach (Henchmen h in mr.m_region.currentHenchmen) {
-				mr.m_henchmen.Add (h);
-			}
-
-			GameManager.instance.currentMissionWrapper = mr;
-			GameManager.instance.PushMenuState (State.SelectResearchMenu);
-
-		}
+//		if (r.researchState == ResearchButton.ResearchState.Available) {
+//
+//			MissionWrapper mr = new MissionWrapper ();
+//			mr.m_scope = MissionBase.TargetType.Research;
+//			mr.m_researchButtonInFocus = r;
+//			mr.m_region = GameManager.instance.game.player.homeRegion;
+//
+//			foreach (Henchmen h in mr.m_region.currentHenchmen) {
+//				mr.m_henchmen.Add (h);
+//			}
+//
+//			GameManager.instance.currentMissionWrapper = mr;
+//			GameManager.instance.PushMenuState (State.SelectResearchMenu);
+//
+//		}
 	}
 
 	public void SelectHenchmenForFloor (Floor f)
 	{
-		
+
 		MissionWrapper mr = new MissionWrapper ();
-		mr.m_mission = GameManager.instance.m_travelMission;
+		mr.m_mission = GameManager.instance.m_moveHenchmenMission;
 		mr.m_scope = MissionBase.TargetType.Floor;
 		mr.m_floorInFocus = f;
 		mr.m_region = f.m_region;
-		mr.m_henchmenSlotInFocus = f.m_henchmenSlot;
 		mr.m_organization = GameManager.instance.game.player;
 
 		foreach (Henchmen h in GameManager.instance.game.player.homeRegion.currentHenchmen) {
@@ -288,10 +328,13 @@ public class LairMenu : MenuState {
 
 		foreach (Floor thisF in GameManager.instance.game.player.orgBase.m_floors) {
 
-			if (thisF != f && f.m_henchmenSlot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+			if (thisF != f) {
 
-				if (f.m_henchmenSlot.m_henchmen.currentState != Henchmen.state.OnMission) {
-					mr.m_henchmen.Add (f.m_henchmenSlot.m_henchmen);
+				foreach (Region.HenchmenSlot hs in thisF.m_region.henchmenSlots) {
+
+					if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player && hs.m_henchmen.currentState != Henchmen.state.OnMission) {
+						mr.m_henchmen.Add (hs.m_henchmen);
+					}
 				}
 			}
 		}
@@ -299,4 +342,43 @@ public class LairMenu : MenuState {
 		GameManager.instance.currentMissionWrapper = mr;
 		GameManager.instance.PushMenuState (State.SelectHenchmenMenu);
 	}
+
+//	public void SelectHenchmenForFloor (Floor f)
+//	{
+//		
+//		MissionWrapper mr = new MissionWrapper ();
+//		mr.m_mission = GameManager.instance.m_travelMission;
+//		mr.m_scope = MissionBase.TargetType.Floor;
+//		mr.m_floorInFocus = f;
+//		mr.m_region = f.m_region;
+////		mr.m_henchmenSlotInFocus = f.m_henchmenSlot;
+//		mr.m_organization = GameManager.instance.game.player;
+//
+//		foreach (Henchmen h in GameManager.instance.game.player.homeRegion.currentHenchmen) {
+//			mr.m_henchmen.Add (h);
+//		}
+//
+//		foreach (Floor thisF in GameManager.instance.game.player.orgBase.m_floors) {
+//
+//			if (thisF != f) {
+//				
+//				foreach (Region.HenchmenSlot hs in thisF.m_region.henchmenSlots) {
+//
+//					if (hs.m_state == Region.HenchmenSlot.State.Occupied_Player && hs.m_henchmen.currentState != Henchmen.state.OnMission) {
+//						mr.m_henchmen.Add (hs.m_henchmen);
+//					}
+//				}
+//			}
+//
+////			if (thisF != f && f.m_henchmenSlot.m_state == Region.HenchmenSlot.State.Occupied_Player) {
+////
+////				if (f.m_henchmenSlot.m_henchmen.currentState != Henchmen.state.OnMission) {
+////					mr.m_henchmen.Add (f.m_henchmenSlot.m_henchmen);
+////				}
+////			}
+//		}
+//
+//		GameManager.instance.currentMissionWrapper = mr;
+//		GameManager.instance.PushMenuState (State.SelectHenchmenMenu);
+//	}
 }

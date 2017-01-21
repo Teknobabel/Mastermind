@@ -23,8 +23,8 @@ public class Director : ScriptableObject {
 	m_intelSpawnUpperBounds = 20,
 	m_maxIntelInWorld = 3,
 	m_injuredStatusPenalty = 10,
-	m_criticalStatusPenalty = 20,
-	m_startingBaseFloors = 3;
+	m_criticalStatusPenalty = 20;
+//	m_startingBaseFloors = 3;
 
 	public float
 	m_agentStayInRegionChance = 0.65f;
@@ -33,11 +33,12 @@ public class Director : ScriptableObject {
 		m_maxTokenSlotsInRegion = 6;
 
 	public Asset[] m_startingAssets;
-	public Asset[] m_startingBaseUpgrades;
+	public BaseFloor[] m_startingBaseUpgrades;
 	public Asset[] m_startingResearch;
 	public OmegaPlanData[] m_startingOmegaPlanData;
 	public HenchmenData[] m_startingHenchmenData;
 	public HenchmenData[] m_startingAgentData;
+	public MissionBase[] m_baseUpgrades;
 
 	public EventTriggerBase[] m_events;
 

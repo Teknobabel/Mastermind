@@ -62,24 +62,29 @@ public class StealAsset : MissionBase {
 		return s;
 	}
 
+//	public override bool IsValid ()
+//	{
+//		bool hasPreRequisites = base.IsValid ();	
+//
+//		// valid if there is a revealed, non empty asset token in the region
+//
+//		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null && GameManager.instance.game.player.currentAssets.Count < GameManager.instance.game.player.maxAssets) {
+//
+//			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == TokenSlot.TokenType.Asset &&
+//				GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
+//					
+//				if (hasPreRequisites) {
+//					return true;
+//				}
+//			}
+//
+//		}
+//
+//		return false;
+//	}
+
 	public override bool IsValid ()
 	{
-		bool hasPreRequisites = base.IsValid ();	
-
-		// valid if there is a revealed, non empty asset token in the region
-
-		if (GameManager.instance.currentMissionWrapper != null && GameManager.instance.currentMissionWrapper.m_tokenInFocus != null && GameManager.instance.game.player.currentAssets.Count < GameManager.instance.game.player.maxAssets) {
-
-			if (GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_state == TokenSlot.State.Revealed && GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_type == TokenSlot.TokenType.Asset &&
-				GameManager.instance.currentMissionWrapper.m_tokenInFocus.m_assetToken != GameManager.instance.m_intel) {
-					
-				if (hasPreRequisites) {
-					return true;
-				}
-			}
-
-		}
-
-		return false;
+		return true;
 	}
 }

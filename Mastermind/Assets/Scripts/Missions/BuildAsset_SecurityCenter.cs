@@ -4,7 +4,7 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Missions/Build Asset: Security Center")]
 public class BuildAsset_SecurityCenter: MissionBase {
 
-	public Asset m_asset;
+	public BaseFloor m_asset;
 
 	public float 
 	m_chanceToNegateAmbushBonus = 0,

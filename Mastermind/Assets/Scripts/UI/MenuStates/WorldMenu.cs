@@ -75,50 +75,42 @@ public class WorldMenu : MenuState, IObserver {
 		if (m_sortDirection == SortDirection.Normal) {
 			
 			foreach (KeyValuePair<string, List<Region>> pair in sortedRegionList) {
-
-				GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
-				h.transform.localScale = Vector3.one;
-				SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
-
-//				sh.AddObserver (this);
-
-				m_listViewItems.Add (h);
-
-//				if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
+				
+				if (pair.Key != "None") {
 					
+					GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
+					h.transform.localScale = Vector3.one;
+					SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
+
+					m_listViewItems.Add (h);
+
 					for (int i = 0; i < pair.Value.Count; i++) {
 						Region thisRegion = pair.Value [i];
 						GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
 						g.transform.localScale = Vector3.one;
 						m_listViewItems.Add (g);
 						g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
-					sh.m_children.Add (g);
+						sh.m_children.Add (g);
 					}
-//				}
 
-				sh.Initialize (pair.Key.ToUpper ());
+					sh.Initialize (pair.Key.ToUpper ());
+				}
 			}
 		} else {
 
-//			if (sortedRegionList.Count == 1) {
-//
-//
-//
-//			} else if (sortedRegionList.Count > 1) {
 
-				foreach (KeyValuePair<string, List<Region>> pair in sortedRegionList.Reverse()) {
+			foreach (KeyValuePair<string, List<Region>> pair in sortedRegionList.Reverse()) {
 
+				if (pair.Key != "None") {
+					
 					GameObject h = (GameObject)(Instantiate (m_sectionHeader, m_scrollViewContent.transform));
 					h.transform.localScale = Vector3.one;
-				SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
-					
-//				sh.AddObserver (this);
+					SectionHeader sh = (SectionHeader)h.GetComponent<SectionHeader> ();
+				
 					m_listViewItems.Add (h);
 
-				if (sortedRegionList.Count == 1) {
+					if (sortedRegionList.Count == 1) {
 
-//					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
-						
 						List<Region> regions = new List<Region> (pair.Value);
 
 						for (int i = regions.Count - 1; i >= 0; i--) {
@@ -127,33 +119,28 @@ public class WorldMenu : MenuState, IObserver {
 							g.transform.localScale = Vector3.one;
 							m_listViewItems.Add (g);
 							g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
-						sh.m_children.Add (g);
+							sh.m_children.Add (g);
 						}
-//					}
 
-				} else {
+					} else {
 
-//					if (sh.minimizeState == SectionHeader.MinimizeState.Normal) {
-						
 						for (int i = 0; i < pair.Value.Count; i++) {
 							Region thisRegion = pair.Value [i];
 							GameObject g = (GameObject)(Instantiate (m_regionListViewItem, m_scrollViewContent.transform));
 							g.transform.localScale = Vector3.one;
 							m_listViewItems.Add (g);
 							g.GetComponent<Region_ListViewItem> ().Initialize (thisRegion);
-						sh.m_children.Add (g);
+							sh.m_children.Add (g);
 						}
-//					}
-				}
+					}
 
-				sh.Initialize (pair.Key.ToUpper ());
-
+					sh.Initialize (pair.Key.ToUpper ());
 				}
-//			}
+			}
 		}
 	}
 
-	private Dictionary<string, List<Region>> GetRegionList (SortType sortType)
+	public Dictionary<string, List<Region>> GetRegionList (SortType sortType)
 	{
 		Dictionary<string, List<Region>> regionList = new Dictionary<string, List<Region>> ();
 

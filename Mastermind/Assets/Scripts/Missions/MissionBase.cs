@@ -80,6 +80,11 @@ public class MissionBase : ScriptableObject, IMission {
 
 	}
 
+//	public virtual void EndMission ()
+//	{
+//		// return henchmen to the base on mission completion
+//	}
+
 	public virtual string GetNameText ()
 	{
 		return m_name;
