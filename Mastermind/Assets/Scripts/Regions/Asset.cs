@@ -84,6 +84,7 @@ public class Asset : ScriptableObject, ISubject {
 		LairUpgrade_AdvancedResearch,
 		Research_Default,
 		LairUpgrade_ConferenceRoom,
+		LairUpgrade_LivingQuarters,
 	}
 
 	private List<IObserver>
